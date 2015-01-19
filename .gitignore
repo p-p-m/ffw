@@ -1,0 +1,10 @@
+venv/
+.sublime/
+
+*.pyc
+*~
+
+mails/
+media/
+collected_static/
+ffw/settings/custom.py

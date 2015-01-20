@@ -6,9 +6,16 @@ from .base import *
 
 IS_TEST = True
 
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 TEST_DISCOVER_TOP_LEVEL = BASE_DIR
 TEST_DISCOVER_ROOT = BASE_DIR
 
+NOSE_ARGS = [
+    # '--with-coverage',
+    '--cover-package=ffw',
+    # '--cover-inclusive',
+    '--verbosity=2',
+]
 
 DATABASES = {
     "default": {

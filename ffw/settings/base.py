@@ -22,6 +22,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'products',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -33,15 +35,19 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'ffw.urls'
+ROOT_URLCONF = 'urls'
 
-WSGI_APPLICATION = 'ffw.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
+
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 01:09+0200\n"
+"POT-Creation-Date: 2015-01-21 02:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,106 +19,110 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: products/models.py:12 products/models.py:28
+#: products/apps.py:10
+msgid "Products and Categories"
+msgstr "Продукты и их Категории"
+
+#: products/models.py:15 products/models.py:31
 msgid "Category"
 msgstr "Категория"
 
-#: products/models.py:13
+#: products/models.py:16
 msgid "Categories"
 msgstr "Категории"
 
-#: products/models.py:15
+#: products/models.py:18
 msgid "Category name"
 msgstr "Название категории"
 
-#: products/models.py:24
+#: products/models.py:27
 msgid "Subcategory"
 msgstr "Подкатегория"
 
-#: products/models.py:25
+#: products/models.py:28
 msgid "Subcategories"
 msgstr "Подкатегории"
 
-#: products/models.py:27
+#: products/models.py:30
 msgid "Subcategory name"
 msgstr "Название подкатегории"
 
-#: products/models.py:37
+#: products/models.py:40
 msgid "Product"
 msgstr "Продукт"
 
-#: products/models.py:38
+#: products/models.py:41
 msgid "Products"
 msgstr "Продукты"
 
-#: products/models.py:40
+#: products/models.py:43
 msgid "Product name"
 msgstr "Название продукта"
 
-#: products/models.py:41
+#: products/models.py:44
 msgid "Product code"
 msgstr "Код продукта"
 
-#: products/models.py:43
+#: products/models.py:46
 msgid "Product subcategory"
 msgstr "Подкатегория продукта"
 
-#: products/models.py:46
+#: products/models.py:49
 msgid "Product price in UAH"
 msgstr "Цена(UAH)"
 
-#: products/models.py:48
+#: products/models.py:51
 msgid "Product price in USD"
 msgstr "Цена(USD)"
 
-#: products/models.py:50
+#: products/models.py:53
 msgid "Product price in EUR"
 msgstr "Цена(EUR)"
 
-#: products/models.py:53
+#: products/models.py:56
 msgid "Product short description"
 msgstr "Краткое описание продукта"
 
-#: products/models.py:54
+#: products/models.py:57
 msgid "This description will be shown on page with products list"
 msgstr "Это описание будет показано на странице со списком продуктов"
 
-#: products/models.py:55
+#: products/models.py:58
 msgid "Product description"
 msgstr "Полное описание продукта"
 
-#: products/models.py:57
+#: products/models.py:60
 msgid "Is product active"
 msgstr "Активирован"
 
-#: products/models.py:66
+#: products/models.py:69
 msgid "Product attribute"
 msgstr "Атрибут продукта"
 
-#: products/models.py:67
+#: products/models.py:70
 msgid "Product attributes"
 msgstr "Атрибуты продукта"
 
-#: products/models.py:70
+#: products/models.py:73
 msgid "Attribute name"
 msgstr "Имя"
 
-#: products/models.py:71
+#: products/models.py:74
 msgid "Attribute value"
 msgstr "Значение"
 
-#: products/models.py:79
+#: products/models.py:82
 msgid "Product image"
 msgstr "Изображение продукта"
 
-#: products/models.py:80
+#: products/models.py:83
 msgid "Product images"
 msgstr "Изображения продукта"
 
-#: products/models.py:83
+#: products/models.py:86
 msgid "Image"
 msgstr "Изображение"
 
-#: products/models.py:84
+#: products/models.py:87
 msgid "Image description"
 msgstr "Описание"

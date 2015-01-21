@@ -1,7 +1,10 @@
+# coding: utf-8
+from __future__ import unicode_literals
+
 from decimal import Decimal
 
 from django.db import models
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from model_utils.models import TimeStampedModel
 
@@ -71,7 +74,7 @@ class ProductAttribute(models.Model):
     value = models.CharField(_('Attribute value'), max_length=31)
 
     def __str__(self):
-        return 'Product {}'.format(self.name)
+        return 'Attribute {}'.format(self.name)
 
 
 class ProductImage(models.Model):

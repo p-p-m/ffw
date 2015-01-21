@@ -35,6 +35,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
 ROOT_URLCONF = 'urls'
 
 WSGI_APPLICATION = 'wsgi.application'
@@ -45,6 +49,7 @@ WSGI_APPLICATION = 'wsgi.application'
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
+    os.path.join(PROJECT_ROOT, 'locale'),
 )
 
 LANGUAGE_CODE = 'ru'

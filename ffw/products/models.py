@@ -16,6 +16,9 @@ class Category(models.Model):
         verbose_name_plural = _('Categories')
 
     name = models.CharField(_('Category name'), max_length=127)
+    slug = models.CharField(
+        _('Category slug'), max_length=127,
+        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
 
     def __str__(self):
         return self.name
@@ -28,6 +31,9 @@ class Subcategory(models.Model):
         verbose_name_plural = _('Subcategories')
 
     name = models.CharField(_('Subcategory name'), max_length=127)
+    slug = models.CharField(
+        _('Category slug'), max_length=127,
+        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
 
     def __str__(self):
@@ -43,7 +49,7 @@ class Product(TimeStampedModel):
     name = models.CharField(_('Product name'), max_length=255)
     slug = models.SlugField(
         _('Product slug'), max_length=255,
-        help_text=_('This field will be shown in product URL (for SEO). It will be filled automatically.'))
+        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     code = models.CharField(_('Product code'), max_length=127, unique=True)
     subcategory = models.ForeignKey(
         Subcategory, verbose_name=_('Product subcategory'), related_name='products')

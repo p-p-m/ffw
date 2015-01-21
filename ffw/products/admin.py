@@ -35,9 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
     ordering = ('modified', 'name')
     search_fields = ('name', 'code', 'price_uah', 'price_usd', 'price_eur')
     list_filter = ('is_active',)
-
-    def price(self, product):
-        return str(product.price_uah) + ' UAH ' + str(product.price_usd) + ' USD ' + str(product.price_eur) + ' EUR'
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(models.Category, CategoryAdmin)

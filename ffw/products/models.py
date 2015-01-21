@@ -41,6 +41,9 @@ class Product(TimeStampedModel):
         verbose_name_plural = _('Products')
 
     name = models.CharField(_('Product name'), max_length=255)
+    slug = models.SlugField(
+        _('Product slug'), max_length=255, blank=True,
+        help_text=_('This field will be shown in product URL (for SEO). It will be filled automatically.'))
     code = models.CharField(_('Product code'), max_length=127, unique=True)
     subcategory = models.ForeignKey(
         Subcategory, verbose_name=_('Product subcategory'), related_name='products')

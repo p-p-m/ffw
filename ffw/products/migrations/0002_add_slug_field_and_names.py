@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='product',
             name='slug',
-            field=models.SlugField(help_text='This field will be shown in product URL (for SEO). It will be filled automatically.', max_length=255, verbose_name='Product slug', blank=True),
-            preserve_default=True,
+            field=models.SlugField(default='product_slug', help_text='This field will be shown in product URL (for SEO). It will be filled automatically.', max_length=255, verbose_name='Product slug'),
+            preserve_default=False,
         ),
     ]

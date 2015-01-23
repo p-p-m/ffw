@@ -1,0 +1,11 @@
+<Ul>
+  {% for category in categories %}
+  <li>
+    <ul><a href="{{ category.get_url }}">{{ category.name }}</a>
+      {% for subcategory in category.subcategories.all %}
+      <li><a href="{{ subcategory.get_url }}">{{ subcategory.name }}</a></li>
+      {% endfor %}
+    </ul>
+  </li>
+  {% endfor %}
+</Ul>

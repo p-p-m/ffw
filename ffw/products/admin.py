@@ -7,12 +7,14 @@ class CategoryAdmin(admin.ModelAdmin):
     model = models.Category
     list_display = ('name',)
     search_fields = ('name',)
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class SubcategoryAdmin(admin.ModelAdmin):
     model = models.Subcategory
     list_display = ('name', 'category')
     search_fields = ('name',)
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class ProductAttributeInline(admin.TabularInline):

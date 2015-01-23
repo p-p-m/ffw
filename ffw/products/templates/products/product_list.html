@@ -1,0 +1,7 @@
+Paginate By: {{ paginate_by }}
+
+<ul>
+  {% for product in products %}
+    <li><a href="{{ product.get_url }}">{{ product.name }}</a></li>
+  {% endfor %}
+</ul>

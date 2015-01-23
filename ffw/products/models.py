@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from model_utils.models import TimeStampedModel
@@ -17,11 +18,14 @@ class Category(models.Model):
 
     name = models.CharField(_('Category name'), max_length=127)
     slug = models.CharField(
-        _('Category slug'), max_length=127,
+        _('Category slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
 
     def __str__(self):
         return self.name
+
+    def get_url(self):
+        return reverse('products', args=(self.slug,))
 
 
 @python_2_unicode_compatible
@@ -32,12 +36,15 @@ class Subcategory(models.Model):
 
     name = models.CharField(_('Subcategory name'), max_length=127)
     slug = models.CharField(
-        _('Category slug'), max_length=127,
+        _('Category slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
 
     def __str__(self):
         return '{}-{}'.format(self.category, self.name)
+
+    def get_url(self):
+        return reverse('products', args=(self.category.slug, self.slug))
 
 
 @python_2_unicode_compatible
@@ -48,18 +55,18 @@ class Product(TimeStampedModel):
 
     name = models.CharField(_('Product name'), max_length=255)
     slug = models.SlugField(
-        _('Product slug'), max_length=255,
+        _('Product slug'), max_length=255, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     code = models.CharField(_('Product code'), max_length=127, unique=True)
     subcategory = models.ForeignKey(
         Subcategory, verbose_name=_('Product subcategory'), related_name='products')
 
     price_uah = models.DecimalField(
-        _('Product price in UAH'), default=Decimal(0), max_digits=8, decimal_places=2)
+        _('Product price in UAH'), default=Decimal(0), max_digits=12, decimal_places=2)
     price_usd = models.DecimalField(
-        _('Product price in USD'), default=Decimal(0), max_digits=8, decimal_places=2)
+        _('Product price in USD'), default=Decimal(0), max_digits=12, decimal_places=2)
     price_eur = models.DecimalField(
-        _('Product price in EUR'), default=Decimal(0), max_digits=8, decimal_places=2)
+        _('Product price in EUR'), default=Decimal(0), max_digits=12, decimal_places=2)
 
     short_description = models.CharField(
         _('Product short description'), max_length=1023, blank=True,
@@ -70,6 +77,9 @@ class Product(TimeStampedModel):
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.code)
+
+    def get_url(self):
+        return reverse('product', args=(self.slug, ))
 
 
 @python_2_unicode_compatible

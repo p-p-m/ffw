@@ -2,6 +2,6 @@ Paginate By: {{ paginate_by }}
 
 <ul>
   {% for product in products %}
-    <li><a href="{{ product.get_url }}">{{ product.name }}</a></li>
+    <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})</li>
   {% endfor %}
 </ul>

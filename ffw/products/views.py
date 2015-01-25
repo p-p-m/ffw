@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, View
 
+import forms
 import models
 
 
@@ -26,6 +27,10 @@ class ProductListView(ListView):
             queryset = queryset.filter(subcategory__slug=self.kwargs['subcategory'])
         elif 'category' in self.kwargs:
             queryset = queryset.filter(subcategory__category__slug=self.kwargs['category'])
+
+        sort_form = forms.SortForm(self.request.GET)
+        if sort_form.is_valid():
+            queryset = sort_form.sort(queryset)
 
         return queryset
 

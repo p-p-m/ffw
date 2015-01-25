@@ -39,6 +39,8 @@ class ProductFactory(factory.DjangoModelFactory):
     short_description = factory.Sequence(lambda n: 'Short description for Product #%s' % n)
     description = factory.Sequence(lambda n: 'Description for Product #%s' % n)
 
+    rating = factory.fuzzy.FuzzyFloat(low=0.0, high=5.0)
+
     @factory.post_generation
     def additional_attributes(self, create, extracted, **kwargs):
         if create:

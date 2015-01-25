@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from decimal import Decimal
 
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
@@ -74,6 +75,7 @@ class Product(TimeStampedModel):
     description = models.TextField(_('Product description'), blank=True)
 
     is_active = models.BooleanField(_('Is product active'), default=True)
+    rating = models.FloatField(_('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)])
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.code)

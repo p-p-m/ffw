@@ -13,7 +13,7 @@ def index(request):
 def article(request,slug):
     myObj=StaticPage.objects.get(slug='aaaa')
     
-    return HttpResponse("Article - " + myObj.text)
+    return HttpResponse("Article - article" + myObj.text)
 
 
 

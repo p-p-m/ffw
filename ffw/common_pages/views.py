@@ -1,19 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404,render
 
-# Create your views here.
-
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from common_pages.models import StaticPage
 
-def index(request):
+def pageListGet(request):
+    pageList=StaticPage.objects.all().order_by('-created')
+    context={'pageList':pageList}
+    return render(request,'common_pages/index.html',context)
     
-    #myObj=Staticpage.objects.(slug=
-    return HttpResponse("Hello, world. You're at the common_pages index.")
-
-def article(request,slug):
-    myObj=StaticPage.objects.get(slug='aaaa')
+def pageGet(request,slug):
+    try:
+        page=StaticPage.objects.get(slug=slug)
+    except StaticPage.DoesNotExist:
+        raise Http404("Page does not exist")
     
-    return HttpResponse("Article - article" + myObj.text)
+    return HttpResponse(page) 
 
 
 

@@ -14,7 +14,7 @@ class StaticPage(models.Model):
 
 
 class StaticPageImage(models.Model):
-  static_page = models.ForeignKey(StaticPage, related_name = 'images')
+  staticpage = models.ForeignKey(StaticPage, related_name = 'images')
   image = models.ImageField(upload_to = 'static pages/', verbose_name =
                             ('Image'))
   description = models.CharField(('Image description'), max_length = 127,

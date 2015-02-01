@@ -1,8 +1,8 @@
 
-{% if pageList %}
+{% if page_list %}
     <ul>
-    {% for page in pageList %}
-        <li><a href="{{ page.slug }}/">{{ page.title }}</a></li>
+    {% for page in page_list %}
+        <li><a href="/common_pages/{{ page.slug }}/">{{ page.title }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

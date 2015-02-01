@@ -6,7 +6,7 @@ from common_pages.models import StaticPage
 def page_list_get(request):
     page_list = StaticPage.objects.all().order_by('-created')
     context = {'page_list' : page_list}
-    return render(request, 'common_pages/index.html', context)
+    return render(request, 'common_pages/page_list.html', context)
     
 def page_get(request,slug):
     try:

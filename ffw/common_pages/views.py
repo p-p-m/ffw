@@ -10,7 +10,8 @@ def page_list_get(request):
     
 def page_get(request,slug):    
     page = get_object_or_404(StaticPage.objects, slug = slug)
-    return HttpResponse(page) 
-
+    context = {'page' : page}
+    return render(request,'common_pages/page.html',context) 
+ 
 
 

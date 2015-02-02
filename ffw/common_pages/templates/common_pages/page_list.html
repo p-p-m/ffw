@@ -1,10 +1,6 @@
 
-{% if page_list %}
-    <ul>
+<ul>
     {% for page in page_list %}
-        <li><a href="/common_pages/{{ page.slug }}/">{{ page.title }}</a></li>
+        <li><a href="{{ page.slug }}/">{{ page.title }}</a></li>
     {% endfor %}
-    </ul>
-{% else %}
-    <p>No common_pages are available.</p>
-{% endif %}
+</ul>

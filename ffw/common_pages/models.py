@@ -29,3 +29,4 @@ class StaticPageImage(models.Model):
                             verbose_name =_('Image'))
     description = models.CharField(_('Image description'), max_length = 127,
                             blank = True)
+    

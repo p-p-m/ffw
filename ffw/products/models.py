@@ -138,7 +138,7 @@ class ProductImage(models.Model):
 
     product = models.ForeignKey(Product, related_name='images')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
-    description = models.CharField(_('Image description'), max_length=127)
+    description = models.CharField(_('Image description'), max_length=127, blank=True)
 
 
 @python_2_unicode_compatible

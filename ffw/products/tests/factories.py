@@ -48,8 +48,8 @@ class ProductFactory(factory.DjangoModelFactory):
                 for attribute in extracted:
                     self.attributes.add(attribute)
             else:
-                for _ in range(3):
-                    self.attributes.add(ProductAttributeFactory(product=self))
+                for name in ['Color', 'Width', 'Height']:
+                    self.attributes.add(ProductAttributeFactory(product=self, name=name))
 
 
 class ProductAttributeFactory(factory.DjangoModelFactory):

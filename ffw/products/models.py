@@ -153,8 +153,8 @@ class ProductFilter(models.Model):
         ('NUMERIC_RANGES', _('Intervals filter')),
     )
 
-    subcategory = models.ForeignKey(Subcategory, related_name='product_filters', null=True)
-    category = models.ForeignKey(Category, related_name='product_filters', null=True)
+    subcategory = models.ForeignKey(Subcategory, related_name='product_filters', blank=True, null=True)
+    category = models.ForeignKey(Category, related_name='product_filters', blank=True, null=True)
     attribute_name = models.CharField(_('Attribute name'), max_length=63)
     name = models.CharField(_('Filter displayed name'), max_length=63)
     filter_type = models.CharField(max_length=15, choices=TYPES)
@@ -163,7 +163,8 @@ class ProductFilter(models.Model):
         default=5, validators=[MinValueValidator(2), MaxValueValidator(50)], null=True,
         help_text=_('This field is necessary only for interval filters'),
     )
-    values = JSONField(_('Filter values'), help_text=_('Internal filter values. DO NOT modify them.'), default={})
+    values = JSONField(
+        _('Filter values'), help_text=_('Internal filter values. DO NOT modify them.'), default={}, blank=True)
 
     def __str__(self):
         return '{} filter for {} {}'.format(self.filter_type, self.category, self.subcategory)
@@ -178,8 +179,11 @@ class ProductFilter(models.Model):
                 logger.warning('Cannot update filter with %s value for product %s', attribute.value, self.product)
                 raise exceptions.ProductFilterUpdateException(
                     _('Cannot update filter with %s value for product %s' % attribute.value, self.product))
-            self.values['max'] = max(max_value, attribute_value)
-            self.values['min'] = min(min_value, attribute_value)
+            max_value = max(max_value, attribute_value)
+            min_value = min(min_value, attribute_value)
+
+        self.values['max'] = max_value
+        self.values['min'] = min_value
 
     def _update_choices_filter(self, attributes):
         choices = self.values.get('choices', [])
@@ -187,8 +191,10 @@ class ProductFilter(models.Model):
             attribute_value = str(attribute.value)
             if attribute_value.lower() not in choices:
                 choices.append(attribute_value.lower())
+        self.values['choices'] = choices
 
     def _update_numeric_ranges_filter_ranges(self, attributes):
+        self._update_numeric_filter(attributes)
         if attributes and 'ranges' not in self.values:
             try:
                 max_value = self.values['max']
@@ -212,7 +218,7 @@ class ProductFilter(models.Model):
                 name=self.attribute_name, product__subcategory__category=self.category)
         else:
             return ProductAttribute.objects.filter(
-                name=self.attribute_name, subcategory__category=self.subcategory)
+                name=self.attribute_name, product__subcategory=self.subcategory)
 
     def update(self, attributes):
         if self.filter_type == 'NUMERIC':
@@ -221,7 +227,6 @@ class ProductFilter(models.Model):
             self._update_choices_filter(attributes)
         elif self.filter_type == 'NUMERIC_RANGES':
             self._update_numeric_ranges_filter_ranges(attributes)
-        self.save()
 
     def clean(self):
         if self.subcategory is None and self.category is None:

@@ -25,8 +25,8 @@ class StaticPageImage(models.Model):
         verbose_name_plural = _('StaticPage Images')
 
     staticpage = models.ForeignKey(StaticPage, related_name = 'images')
-    image = models.ImageField(upload_to = 'static pages/',
-                            verbose_name =_('Image'))
+    photo = models.ImageField(upload_to = 'common_pages/static/common_pages',
+                            verbose_name =_('Photo'))
     description = models.CharField(_('Image description'), max_length = 127,
                             blank = True)
     

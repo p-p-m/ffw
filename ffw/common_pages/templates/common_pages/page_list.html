@@ -1,7 +1,5 @@
-
 <ul>
     {% for page in page_list %}
-	{{ page.title }}
-       
+	<li><a href="{{page.slug}}/">{{ page.title }}</a></li>       
     {% endfor %}
 </ul>

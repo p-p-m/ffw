@@ -22,8 +22,8 @@ class BannerImage(models.Model):
         verbose_name_plural = _('Banner Images')
     
     banner = models.ForeignKey(Banner, related_name = 'images')
-    photo = models.ImageField(upload_to = 'banner_images/',
-                            verbose_name =_('Image'))
+    photo = models.ImageField(upload_to = 'gallery/static/gallery',
+                            verbose_name =_('Photo'))
     url_image = models.CharField(_('URL'), max_length = 127,)
     description = models.CharField(_('Image description'), max_length=127,
                                    blank = True)

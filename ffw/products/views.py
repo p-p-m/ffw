@@ -32,6 +32,10 @@ class ProductListView(ListView):
         if sort_form.is_valid():
             queryset = sort_form.sort(queryset)
 
+        filter_form = self._get_filter_form()
+        if filter_form.is_valid():
+            queryset = filter_form.filter_products(queryset)
+
         return queryset
 
     def get_template_names(self):
@@ -62,10 +66,25 @@ class ProductListView(ListView):
             except models.Category.DoesNotExist:
                 pass
 
+    def _get_selected_subcategory(self):
+        if 'subcategory' in self.kwargs:
+            try:
+                return models.Subcategory.objects.get(slug=self.kwargs['subcategory'])
+            except models.Subcategory.DoesNotExist:
+                pass
+
+    def _get_filter_form(self):
+        subcategory = self._get_selected_subcategory()
+        category = self._get_selected_category()
+        return forms.FilterForm(category, subcategory, data=self.request.GET)
+
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
         context['paginate_by'] = self.paginate_by
         context['total_count'] = self.get_queryset().count()
+        context['sort_form'] = forms.SortForm(self.request.GET)
+        context['filter_form'] = self._get_filter_form()
+
         if not self.request.is_ajax():
             context['categories'] = models.Category.objects.all().select_related('subcategories')
             context['selected_category'] = self._get_selected_category()

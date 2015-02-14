@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import django.core.validators
 
 
 class Migration(migrations.Migration):
@@ -26,8 +27,8 @@ class Migration(migrations.Migration):
             name='BannerImage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('image', models.ImageField(upload_to=b'static pages/', verbose_name='Image')),
-                ('url_image', models.CharField(max_length=127, verbose_name='URL')),
+                ('photo', models.ImageField(upload_to=b'gallery', verbose_name=b'Photo')),
+                ('link', models.URLField(default=b'', max_length=127, verbose_name='Link', validators=[django.core.validators.URLValidator])),
                 ('description', models.CharField(max_length=127, verbose_name='Image description', blank=True)),
                 ('is_active', models.BooleanField(default=True, verbose_name='Is image active')),
                 ('banner', models.ForeignKey(related_name='images', to='gallery.Banner')),

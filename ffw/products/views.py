@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, View
-from gallery.models import BannerImage
+from gallery.models import Banner
 import forms
 import models
 
@@ -9,9 +9,11 @@ class HomeView(View):
 
     def get(self, request):
         categories = models.Category.objects.all().select_related('subcategories')
-        images = BannerImage.objects.all() 
+        top =  Banner.objects.get(name='top')
+        main = Banner.objects.get(name='main')       
+        images = main.images.all()
         return render(request, 'products/home.html', {'categories': categories,
-                      'images' : images})
+                      'top': top, 'main': main})
 
 
 class ProductListView(ListView):

@@ -25,6 +25,7 @@ INSTALLED_APPS = (
 
     'products',
     'common_pages',
+    'gallery',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,3 +69,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'collected_static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')

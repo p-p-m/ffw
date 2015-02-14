@@ -1,16 +1,16 @@
 {% load static %}
 {% get_media_prefix as MEDIA_PREFIX %}
 
-<ul>   
-  {%  if top.images.all %}
+<ul>
+  {% if top.images.all %}
     {% for image in top.images.all %}
-       <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
-       {{image}}
+      <li>
+        <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
+        {{ image }}
+       </li>
     {% endfor %}
   {% endif %}
-
 </ul>
-
 
 {% for category in categories %}
     <ul><li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
@@ -23,12 +23,14 @@
 <ul>
   {% if main.images.all %}
     {% for image in main.images.all %}
-      <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
-      {{image}}
+      <li>
+        <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
+        {{ image }}
+      </li>
     {% endfor %}
   {% endif %}
 </ul>
 
 
 
- 
+

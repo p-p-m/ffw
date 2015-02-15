@@ -58,3 +58,6 @@ class GalleryImage(models.Model):
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
+    
+    def __str__(self):
+        return self.description

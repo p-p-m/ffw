@@ -1,7 +1,28 @@
-Paginate By: {{ paginate_by }}
+Paginate By: {{ paginate_by }}<br/>
+Selected category: {{ selected_category }}<hr/>
 
 <ul>
   {% for product in products %}
     <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})</li>
   {% endfor %}
 </ul>
+
+<hr/>
+<strong>Search form</strong><br/><br/>
+<form action='' method='GET'>
+<input type='submit'><br/>
+{% for group in filter_form.fields_groups %}
+  {% if group.type == 'numeric' %}
+    <strong> {{ group.name }}</strong><br/>
+    From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
+    <hr/>
+  {% else %}
+    <strong> {{ group.name }}</strong><br/>
+    {% for field in group.fields %}
+      {{ field }} | {{ field.label }} <br>
+    {% endfor %}
+    <hr/>
+  {% endif %}
+{% endfor %}
+<input type='submit'>
+</form>

@@ -24,7 +24,7 @@ class BannerImage(models.Model):
 
     banner = models.ForeignKey(Banner, related_name='images')
     photo = models.ImageField(upload_to='gallery', verbose_name=('Photo'))
-    link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator])
+    link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
 

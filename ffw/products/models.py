@@ -242,8 +242,11 @@ class ProductFilter(models.Model):
         if self.filter_type != 'NUMERIC':
             raise exceptions.ProductFilterFilterException('Wrong filter function')
         attributes = self.get_related_attributes()
-        return attributes.filter(
-            value_float__gte=min_value, value_float__lte=max_value)
+        if min_value is not None:
+            attributes = attributes.filter(value_float__gte=min_value)
+        if max_value is not None:
+            attributes = attributes.filter(value_float__lte=max_value)
+        return attributes
 
     def get_choices_filtered_attributes(self, selected_values):
         if self.filter_type != 'CHOICES':

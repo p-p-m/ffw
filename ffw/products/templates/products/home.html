@@ -4,6 +4,7 @@
 <ul>
   {% if top.images.all %}
     {% for image in top.images.all %}
+       <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{image.photo}}" alt="{{image.description}}">{{image}}</a>
       <li>
         <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
         {{ image }}
@@ -23,6 +24,7 @@
 <ul>
   {% if main.images.all %}
     {% for image in main.images.all %}
+      <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description}}">{{image}}</a>
       <li>
         <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
         {{ image }}
@@ -30,7 +32,3 @@
     {% endfor %}
   {% endif %}
 </ul>
-
-
-
-

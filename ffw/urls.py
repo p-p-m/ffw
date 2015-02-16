@@ -12,10 +12,11 @@ urlpatterns = patterns(
     # Custom applications
     url(r'^', include('products.urls')),
     url(r'^common_pages/', include('common_pages.urls')),
-
+    url(r'^gallery/', include('gallery.urls')), 
 
     url(r'^admin/', include(admin.site.urls)),
-)
+    )
+
 
 
 if settings.DEBUG:

@@ -4,13 +4,13 @@
 <ul>
   {% if top.images.all %}
     {% for image in top.images.all %}
-      <li>
-        <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
-        {{ image }}
+       <li>
+           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{image.photo}}" alt="{{image.description}}">{{image}}</a>      
        </li>
     {% endfor %}
   {% endif %}
 </ul>
+
 
 {% for category in categories %}
     <ul><li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
@@ -20,17 +20,13 @@
     </ul>
 {% endfor %}
 
+
 <ul>
   {% if main.images.all %}
     {% for image in main.images.all %}
       <li>
-        <img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description }}">
-        {{ image }}
+        <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description}}">{{image}}</a>
       </li>
     {% endfor %}
   {% endif %}
 </ul>
-
-
-
-

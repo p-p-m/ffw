@@ -1,0 +1,23 @@
+{% load static %}
+{% get_media_prefix as MEDIA_PREFIX %}
+
+<ul>
+  {% if prim_images %}
+    {% for prim_image in prim_images %}
+       <li>
+           <a href={{prim_image.link}} ><img src="{{ MEDIA_PREFIX }}{{prim_image.photo}}" alt="{
+               {prim_image.description}}">{{prim_image}}</a>      
+           <ul>
+               {% if prim_image.images %}
+                   {% for image in prim_image.images.all %}
+                       <li>
+                           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ 
+                               image.description}}">{{image}}</a>
+                       </li>
+                  {% endfor %}
+               {% endif %}
+            </ul>
+       </li>
+    {% endfor %}
+  {% endif %}
+</ul>

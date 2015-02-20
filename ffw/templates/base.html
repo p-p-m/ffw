@@ -1,0 +1,31 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<!DOCTYPE html>
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block title %} {% trans 'Water Filters' %} {% endblock %}</title>
+        <meta name="description" content="Water filters">
+
+        {% block css %}{% endblock %}
+
+    </head>
+
+    <body>
+
+        {% block content %}
+        {% comment %} Here will be situated page content {% endcomment %}
+        {% endblock %}
+
+        {% block basejs %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        {% endblock basejs %}
+
+        {% block js %}{% endblock %}
+
+    </body>
+
+</html>

@@ -115,6 +115,7 @@ class FilterForm(forms.Form):
         Returns form fields grouped by filters
         """
         yield {
+            'id': 0,
             'name': _('Price'),
             'type': 'numeric',
             'fields': [f for f in self if f.name in ('price_max', 'price_min')],
@@ -122,6 +123,7 @@ class FilterForm(forms.Form):
         for filt in self.filters:
             field_name_prefix = '%s_%s' % (filt.filter_type.lower(), filt.pk)
             yield {
+                'id': filt.id,
                 'name': filt.name,
                 'type': filt.filter_type.lower(),
                 'fields': [f for f in self if f.name.startswith(field_name_prefix)],

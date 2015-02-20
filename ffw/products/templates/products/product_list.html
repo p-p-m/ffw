@@ -1,28 +1,62 @@
-Paginate By: {{ paginate_by }}<br/>
-Selected category: {{ selected_category }}<hr/>
+{% extends 'base.html' %}
 
-<ul>
-  {% for product in products %}
-    <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})</li>
-  {% endfor %}
-</ul>
+{% load static %}
+{% get_media_prefix as MEDIA_PREFIX %}
+{% get_static_prefix as STATIC_PREFIX %}
 
-<hr/>
-<strong>Search form</strong><br/><br/>
-<form action='' method='GET'>
-<input type='submit'><br/>
-{% for group in filter_form.fields_groups %}
-  {% if group.type == 'numeric' %}
-    <strong> {{ group.name }}</strong><br/>
-    From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
-    <hr/>
-  {% else %}
-    <strong> {{ group.name }}</strong><br/>
-    {% for field in group.fields %}
-      {{ field }} | {{ field.label }} <br>
+{% block content %}
+
+  Paginate By:
+    <select id='paginate-by'>
+      <option value="10" {% if paginate_by == 10 %} selected="selected" {% endif %}>10</option>
+      <option value="25" {% if paginate_by == 20 %} selected="selected" {% endif %}>20</option>
+      <option value="50" {% if paginate_by == 30 %} selected="selected" {% endif %}>30</option>
+    </select><br/>
+
+  Order By:
+      {% for field in sort_form %}
+        {{ field }}
+      {% endfor %}
+    <br/>
+
+  Selected category: {{ selected_category }}<hr/>
+
+  <ul>
+    {% for product in products %}
+      <li>
+        <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
+        (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
+      </li>
     {% endfor %}
-    <hr/>
-  {% endif %}
-{% endfor %}
-<input type='submit'>
-</form>
+  </ul>
+
+  <hr/>
+  <strong>Search form</strong><br/><br/>
+
+  Filtered products: <div id='search-count'> {{ total_count }} </div>
+
+  <form id='search-form' action='' method='GET'>
+    <input type='submit'><br/>
+
+    {% for group in filter_form.fields_groups %}
+      {% if group.type == 'numeric' %}
+        <strong> {{ group.name }}</strong><br/>
+        From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
+        <hr/>
+      {% else %}
+        <strong> {{ group.name }}</strong><br/>
+        {% for field in group.fields %}
+          {{ field }} <a href='javascript:void(0);'> {{ field.label }} </a> <br>
+        {% endfor %}
+        <hr/>
+      {% endif %}
+    {% endfor %}
+
+    <input type='submit'>
+  </form>
+
+{% endblock content %}
+
+{% block js %}
+  <script src="{{ STATIC_URL }}js/product-list.js"></script>
+{% endblock js %}

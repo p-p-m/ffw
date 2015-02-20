@@ -104,7 +104,7 @@ class ProductAttribute(models.Model):
     name = models.CharField(_('Attribute name'), max_length=63)
     value = models.CharField(_('Attribute value'), max_length=31)
     value_float = models.FloatField(
-        _('Attribute value as number'), help_text=_('This field will be defined automatically'), null=True)
+        _('Attribute value as number'), help_text=_('This field will be defined automatically'), blank=True, null=True)
 
     def __str__(self):
         return 'Attribute {}'.format(self.name)

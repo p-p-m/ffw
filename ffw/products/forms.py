@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
 import models
@@ -17,7 +18,7 @@ class SortForm(forms.Form):
     def sort(self, queryset):
         sort_by = self.cleaned_data['sort_by']
         if sort_by == 'PA':
-            queryset = queryset.order_by('price_uah')
+            queryset = queryset.annotate(null_price=Count('price_uah')).order_by('-null_price', 'price_uah')
         elif sort_by == 'PD':
             queryset = queryset.order_by('-price_uah')
         elif sort_by == 'RA':

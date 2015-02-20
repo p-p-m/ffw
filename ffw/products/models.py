@@ -73,11 +73,11 @@ class Product(TimeStampedModel):
         Subcategory, verbose_name=_('Product subcategory'), related_name='products')
 
     price_uah = models.DecimalField(
-        _('Product price in UAH'), default=Decimal(0), max_digits=12, decimal_places=2)
+        _('Product price in UAH'), max_digits=12, decimal_places=2, null=True, blank=True)
     price_usd = models.DecimalField(
-        _('Product price in USD'), default=Decimal(0), max_digits=12, decimal_places=2)
+        _('Product price in USD'), max_digits=12, decimal_places=2, null=True, blank=True)
     price_eur = models.DecimalField(
-        _('Product price in EUR'), default=Decimal(0), max_digits=12, decimal_places=2)
+        _('Product price in EUR'), max_digits=12, decimal_places=2, null=True, blank=True)
 
     short_description = models.CharField(
         _('Product short description'), max_length=1023, blank=True,

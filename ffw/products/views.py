@@ -1,5 +1,9 @@
+import json
+
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, View
+
 from gallery.models import Banner
 import forms
 import models
@@ -20,6 +24,14 @@ class ProductListView(ListView):
 
     paginate_by = 10
     allow_empty = True
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax() and 'count' in request.GET:
+            return HttpResponse(
+                json.dumps(self.get_queryset().count()),
+                content_type='application/json',
+            )
+        return super(ProductListView, self).get(request, *args, **kwargs)
 
     def get_context_object_name(self, object_list):
         return 'products'

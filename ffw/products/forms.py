@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
 import models
@@ -17,7 +18,7 @@ class SortForm(forms.Form):
     def sort(self, queryset):
         sort_by = self.cleaned_data['sort_by']
         if sort_by == 'PA':
-            queryset = queryset.order_by('price_uah')
+            queryset = queryset.annotate(null_price=Count('price_uah')).order_by('-null_price', 'price_uah')
         elif sort_by == 'PD':
             queryset = queryset.order_by('-price_uah')
         elif sort_by == 'RA':
@@ -115,6 +116,7 @@ class FilterForm(forms.Form):
         Returns form fields grouped by filters
         """
         yield {
+            'id': 0,
             'name': _('Price'),
             'type': 'numeric',
             'fields': [f for f in self if f.name in ('price_max', 'price_min')],
@@ -122,6 +124,7 @@ class FilterForm(forms.Form):
         for filt in self.filters:
             field_name_prefix = '%s_%s' % (filt.filter_type.lower(), filt.pk)
             yield {
+                'id': filt.id,
                 'name': filt.name,
                 'type': filt.filter_type.lower(),
                 'fields': [f for f in self if f.name.startswith(field_name_prefix)],

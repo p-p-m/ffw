@@ -19,4 +19,36 @@ function setGetParameter(paramName, paramValue, url) {
     return url;
 }
 
+function executeSearchForm() {
+    var url = window.location.href.split('?')[0] + '?' + $('form#search-form').serialize(),
+        countUrl = setGetParameter('count', 'on', url);
+    window.history.pushState('', '', url);
+    $.ajax({
+        url: countUrl,
+    }).done(function(data) {
+        $('div#search-count').text(data);
+    });
+}
 
+$(document).ready(function() {
+    $('form#search-form input').on('change', function() {
+        executeSearchForm();
+    });
+
+    $('form#search-form input[type="number"]').on('keyup', function() {
+        executeSearchForm();
+    });
+
+    $('select#paginate-by').on('change', function() {
+        var selected = $(this).find(":selected").text(),
+            url = setGetParameter('paginate_by', selected);
+        window.location.href = url;
+    });
+
+    $('select#id_sort_by').on('change', function() {
+        var selected = $(this).find(":selected").attr('value');
+        window.location.href = (window.location.href.split('?')[0] + '?' +
+            $('form#search-form').serialize() + '&sort_by=' + selected);
+    });
+
+});

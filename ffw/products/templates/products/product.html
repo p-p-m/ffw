@@ -3,6 +3,7 @@
 {% load i18n %}
 
 
+<<<<<<< HEAD
 <table>
   <tr>
     <td>Name</td><td>{{ product.name }}  <button>{% trans "Add to cart" %}</button></td> 
@@ -33,3 +34,43 @@
   <li><img src="{{ MEDIA_PREFIX }}{{ image.image }}" alt="{{ image.description }}"></li>
   {% endfor %}
 </ul>
+=======
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <table>
+    <tr>
+      <td>Name</td><td>{{ product.name }}</td>
+    </tr>
+    <tr>
+      <td>Code</td><td>{{ product.code }}</td>
+    </tr>
+    <tr>
+      <td>Price UAH</td><td>{{ product.price_uah }}</td>
+    </tr>
+    <tr>
+      <td>Price USD</td><td>{{ product.price_usd }}</td>
+    </tr>
+    <tr>
+      <td>Price EUR</td><td>{{ product.price_eur }}</td>
+    </tr>
+    <tr>
+      <td>Description</td><td>{{ product.description }}</td>
+    </tr>
+  </table>
+
+  <ul> Attributes:
+    {% for attribute in product.attributes.all %}
+    <li>{{ attribute.name }}: {{ attribute.value }}</li>
+    {% endfor %}
+  </ul>
+
+  <ul> Photos:
+    {% for image in product.images.all %}
+    <li><img src="{{ MEDIA_PREFIX }}{{ image.image }}" alt="{{ image.description }}"></li>
+    {% endfor %}
+  </ul>
+
+{% endblock content %}
+>>>>>>> 26466d49140c6698cbc5bcacc53ea26f0ae19dc1

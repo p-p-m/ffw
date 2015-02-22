@@ -3,6 +3,7 @@ from django.views.generic import ListView, View
 from gallery.models import Banner
 import forms
 import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class HomeView(View):

@@ -1,9 +1,11 @@
 {% load static %}
 {% get_media_prefix as MEDIA_PREFIX %}
+{% load i18n %}
+
 
 <table>
   <tr>
-    <td>Name</td><td>{{ product.name }}</td>
+    <td>Name</td><td>{{ product.name }}  <button>{% trans "Add to cart" %}</button></td> 
   </tr>
   <tr>
     <td>Code</td><td>{{ product.code }}</td>

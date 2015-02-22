@@ -1,9 +1,21 @@
+{% load i18n %}
+
+SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
+
 Paginate By: {{ paginate_by }}<br/>
 Selected category: {{ selected_category }}<hr/>
-
+<script>
+    function add_product() {
+        <a href="{{ product.get_url }}"> </a>   
+    }
+</script>
+ 
 <ul>
   {% for product in products %}
-    <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})</li>
+    <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }}) 
+        <button name= 'add' value = {{product.id}} type="button" onclick ="add_product">{% trans 
+            "Add to cart" %}</button>
+    </li>
   {% endfor %}
 </ul>
 

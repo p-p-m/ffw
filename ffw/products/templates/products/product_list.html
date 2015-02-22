@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% load i18n %}
 
 SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
@@ -33,7 +32,7 @@ Selected category: {{ selected_category }}<hr/>
     <strong> {{ group.name }}</strong><br/>
     {% for field in group.fields %}
       {{ field }} | {{ field.label }} <br>
-=======
+
 {% extends 'base.html' %}
 
 {% load static %}
@@ -86,7 +85,7 @@ Selected category: {{ selected_category }}<hr/>
         {% endfor %}
         <hr/>
       {% endif %}
->>>>>>> 26466d49140c6698cbc5bcacc53ea26f0ae19dc1
+      
     {% endfor %}
 
     <input type='submit'>

@@ -16,7 +16,7 @@ SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output na
       <option value="50" {% if paginate_by == 30 %} selected="selected" {% endif %}>30</option>
     </select><br/>
 
-  Order By:
+ Order By:
       {% for field in sort_form %}
         {{ field }}
       {% endfor %}
@@ -24,19 +24,13 @@ SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output na
 
   Selected category: {{ selected_category }}<hr/>
   
-  <script>
-  
-    function add_product() {
-        <a href="{{ product.get_url }}"> </a>   
-    }
-  </script>
   <ul>
     {% for product in products %}
       <li>
         <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
         (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
         <button 
-          name= 'add' value = {{product.id}} type="button" onclick ="add_product">{% trans "Add to cart" %}
+          name= 'add' value = {{product.id}} type="button" id = "product_add">{% trans "Add to cart" %}
         </button>
       </li>
     {% endfor %}
@@ -71,7 +65,10 @@ SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output na
 {% endblock content %}
 
 {% block js %}
-  <script src="{{ STATIC_URL }}js/product-list.js"></script>
+  <script 
+      src="{{ STATIC_URL }}js/cart.js">
+      //src="{{ STATIC_URL }}js/product-list.js">
+  </script>
 {% endblock js %}
 
 

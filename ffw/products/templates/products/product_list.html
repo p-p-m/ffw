@@ -1,53 +1,19 @@
-<<<<<<< HEAD
 
-
-SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
-
-=======
-{% load i18n %}
-
-SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
-
-Paginate By: {{ paginate_by }}<br/>
-Selected category: {{ selected_category }}<hr/>
-<script>
-    function add_product() {
-        <a href="{{ product.get_url }}"> </a>   
-    }
-</script>
- 
-<ul>
-  {% for product in products %}
-    <li><a href="{{ product.get_url }}">{{ product.name }}</a> (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }}) 
-        <button name= 'add' value = {{product.id}} type="button" onclick ="add_product">{% trans 
-            "Add to cart" %}</button>
-    </li>
-  {% endfor %}
-</ul>
-
-<hr/>
-<strong>Search form</strong><br/><br/>
-<form action='' method='GET'>
-<input type='submit'><br/>
-{% for group in filter_form.fields_groups %}
-  {% if group.type == 'numeric' %}
-    <strong> {{ group.name }}</strong><br/>
-    From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
-    <hr/>
-  {% else %}
-    <strong> {{ group.name }}</strong><br/>
-    {% for field in group.fields %}
-      {{ field }} | {{ field.label }} <br>
 
 {% extends 'base.html' %}
->>>>>>> 53aa29bc186570840076a963e615b92322190d29
 
+{% load i18n %}
 {% load static %}
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}
 
+SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
+<!--
+Paginate By: {{ paginate_by }}<br/>
+Selected category: {{ selected_category }}<hr/>
+-->
 {% block content %}
-{% load i18n %}
+
   Paginate By:
     <select id='paginate-by'>
       <option value="10" {% if paginate_by == 10 %} selected="selected" {% endif %}>10</option>

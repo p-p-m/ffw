@@ -1,0 +1,58 @@
+<!-- cart-display -->
+<div class="cart-display" data-role="cart-display">
+    <div class="cart-content">
+        <div data-role="cart-order">
+            <form action="" class="one-click-order">
+                <div class="fieldset">
+                    <label for="">
+                        <sup>*</sup>Телефон
+                    </label>
+                    <div class="inputs">
+                        <input type="text" data-role="phone-mask">
+                    </div>
+                </div>
+                <div class="fieldset">
+                    <label for="">
+                        <sup>*</sup>Имя
+                    </label>
+                    <div class="inputs">
+                        <input type="text">
+                    </div>
+                </div>
+                <div class="fieldset">
+                    <label for="">
+                        Сообщение
+                    </label>
+                    <div class="inputs">
+                        <textarea name="" id=""></textarea>
+                    </div>
+                </div>
+                <div class="fieldset buttons">
+                    <button class="button button-transparent" data-role="trigger-one-click-hide">Отмена</button>
+                    <button class="button button-blue order">Купить</button>
+                </div>
+                <div class="fieldset required-expl">
+                    <sup>*</sup>обязательное поле
+                </div>
+            </form>
+        </div>
+        <div data-role="cart-items">
+            <!-- cart-items -->
+            <div class="cart-items">
+                @@include('../items/cart-item.html')
+                @@include('../items/cart-item.html')
+                @@include('../items/cart-item.html')
+                @@include('../items/cart-item.html')
+            </div>
+            <!-- /cart-items -->
+            <div class="total-display">
+                3 товара на сумму <strong>1020</strong> грн.
+            </div>
+            <div class="cart-buttons">
+                <button class="button button-blue order">Купить</button>
+                <button class="button button-blue one-click" data-role="trigger-one-click">в один клик</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /cart-display -->

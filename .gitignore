@@ -4,6 +4,7 @@ venv/
 *.mo
 *.pyc
 *~
+db.sqlite3
 
 mails/
 media/

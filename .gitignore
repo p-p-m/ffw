@@ -5,6 +5,7 @@ venv/
 *.pyc
 *~
 db.sqlite3
+static
 
 mails/
 media/

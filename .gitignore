@@ -9,3 +9,7 @@ mails/
 media/
 collected_static/
 ffw/settings/custom.py
+
+npm-debug.log
+node_modules
+bower_components

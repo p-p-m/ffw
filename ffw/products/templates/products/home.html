@@ -5,7 +5,7 @@
   {% if top.images.all %}
     {% for image in top.images.all %}
        <li>
-           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{image.photo}}" alt="{{image.description}}">{{image}}</a>      
+           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{image.photo}}" alt="{{image.description}}">{{image}}</a>
        </li>
     {% endfor %}
   {% endif %}

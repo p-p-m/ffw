@@ -12,11 +12,8 @@ import models
 class HomeView(View):
 
     def get(self, request):
-        categories = models.Category.objects.all().select_related('subcategories')
-        top = Banner.objects.get(name='top')
         main = Banner.objects.get(name='main')
-        return render(request, 'products/home.html', {'categories': categories,
-                      'top': top, 'main': main})
+        return render(request, 'products/home.html', {'main': main})
 
 
 class ProductListView(ListView):

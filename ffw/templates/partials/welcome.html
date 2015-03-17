@@ -8,7 +8,14 @@
         </div>
 
         <div class="welcome-block baner-box">
-            <div class="baner"></div>
+          <div class="banners" data-role="top-baners">
+            {% if top.images.all %}
+                {% for image in top.images.all %}
+                    <a href="{{ image.link }}" class="baner" data-role="top-baner"
+                        style="background: url('{{ MEDIA_PREFIX }}{{ image.photo.url }}');"></a>
+                {% endfor %}
+              {% endif %}
+            </div>
         </div>
 
         <div class="welcome-block info-box">

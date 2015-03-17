@@ -3,6 +3,7 @@ venv/
 
 *.mo
 *.pyc
+*.log
 *~
 
 mails/

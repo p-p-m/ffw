@@ -1,0 +1,28 @@
+// functions & mixins
+@import "animate.scss";
+@import "functions.scss";
+@import "mixins.scss";
+
+@import "base.scss";
+
+// blocks
+@import "../../bower_components/slick.js/slick/slick.scss";
+@import "blocks/components.scss";
+@import "blocks/main-header.scss";
+@import "blocks/welcome.scss";
+@import "blocks/product-menu.scss";
+@import "blocks/footer.scss";
+@import "blocks/products-list.scss";
+@import "blocks/typography.scss";
+@import "blocks/gallery.scss";
+@import "blocks/large-baner.scss";
+@import "blocks/catalogue-directories";
+@import "blocks/home-page-text.scss";
+@import "blocks/popup-menu.scss";
+@import "blocks/pagination.scss";
+@import "blocks/order.scss";
+@import "blocks/product.scss";
+@import "blocks/cart-display.scss";
+@import "blocks/filters.scss";
+@import "blocks/single-page.scss";
+@import "blocks/ui-slider.scss";

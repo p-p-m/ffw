@@ -1,0 +1,21 @@
+.single-page {
+    article {
+        color: #5C5C5C;
+        line-height: 1.4;
+        font-size: rem(18);
+        * {
+            margin-top: 0;
+            margin-bottom: 0;
+            &:nth-last-child(1) {
+                margin-bottom: 40px;
+            } // &:nth-last-child(1)
+        } // *
+        * + * {
+            margin-top: 40px;
+        } // * + *
+        p {
+            padding-right: 50px;
+            padding-left: 50px;
+        } // p
+    } // article
+} // single-page

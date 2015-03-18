@@ -93,6 +93,12 @@ class Product(TimeStampedModel):
     def get_url(self):
         return reverse('product', args=(self.slug, ))
 
+    def get_images(self):
+        return self.images.all()
+
+    def get_first_image(self):
+        return self.images.all()[0]
+
 
 @python_2_unicode_compatible
 class ProductAttribute(models.Model):

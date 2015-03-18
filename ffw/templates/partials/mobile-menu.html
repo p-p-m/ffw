@@ -7,11 +7,11 @@
         </nav>
         <nav class="popup-block menu-box">
             <ul class="menu-list">
-                <li><a href="#">Питьевая вода</a></li>
-                <li><a href="#">Бытовая вода</a></li>
-                <li><a href="#">Для дома</a></li>
-                <li><a href="#">Для предприятий</a></li>
-                <li><a href="#">Картриджи</a></li>
+                {% for category in categories %}
+                    <li>
+                        <a href="{{ category.get_url }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </nav>
     </div>

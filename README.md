@@ -33,3 +33,20 @@ custom database and other settings.
 7. Start site:
 
         make run
+
+8. Static builder
+
+        npm install
+        bower install
+
+also ruby, ruby gems, gem sass-lang is required.
+
+        sudo su -c "gem install sass"
+
+for watch static
+
+        grunt
+
+for compile static
+
+        grunt build

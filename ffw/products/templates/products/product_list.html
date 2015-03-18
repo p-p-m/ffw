@@ -5,58 +5,103 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
+<!-- view-title-box -->
+<div class="view-title-box with-filters">
+    <div class="wrap">
+        <h1 class="view-title">Заголовок представления</h1>
+        <div class="filter-line">
+            <ul class="filters">
+                <li class="price">Цена:</li>
+                <li><span class="filter-button gray freewidth price-tag disabled" data-role="filter-item">200</span></li>
+                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item">600</span></li>
+                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item">1000</span></li>
+                <li class="show-filters">
+                    <span class="filter-button gray freewidth filters-trigger" data-role="filters-trigger">фильтры</span>
+                </li>
+                <li>
+                    <span class="filter-button" data-role="products-view-trigger" data-view="grid">
+                        <span class="filter show-grid active"></span>
+                    </span>
+                </li>
+                <li>
+                    <span class="filter-button" data-role="products-view-trigger" data-view="list">
+                        <span class="filter show-list"></span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /view-title-box -->
 
-  Paginate By:
-    <select id='paginate-by'>
-      <option value="10" {% if paginate_by == 10 %} selected="selected" {% endif %}>10</option>
-      <option value="25" {% if paginate_by == 20 %} selected="selected" {% endif %}>20</option>
-      <option value="50" {% if paginate_by == 30 %} selected="selected" {% endif %}>30</option>
-    </select><br/>
+<!-- basic filters -->
+<div class="filter-block" data-role="filters-block">
+    <div class="wrap">
+        <div class="filters">
+            <div class="basic-filters">
+                <h3 class="filter-title">Основные фильтры</h3>
+                <div class="first-container">
+                    <ul class="main-filters">
+                        <li>
+                            <span class="item" data-role="filter-item">новинка</span>
+                        </li>
+                        <li>
+                            <span class="item" data-role="filter-item">акция</span>
+                        </li>
+                        <li>
+                            <span class="item" data-role="filter-item">скидка</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="second-container">
+                    <div id="slider"></div>
+                </div>
+            </div>
+            <div class="producer">
+                <h3 class="filter-title">Производитель</h3>
+                <ul class="main-filters">
+                    <li><span class="item" data-role="filter-item">XCore</span></li>
+                    <li><span class="item" data-role="filter-item">GoPro</span></li>
+                    <li><span class="item" data-role="filter-item">Soma badge</span></li>
+                    <li><span class="item" data-role="filter-item">LevelsFilters</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /basic filters -->
 
-  Order By:
-      {% for field in sort_form %}
-        {{ field }}
-      {% endfor %}
-    <br/>
+<div class="products-view">
+    <!-- products-list-box -->
+    <div class="products-list-box" data-role="products-view" data-view="grid">
+        <div class="wrap">
+            <ul class="products-list">
+                {% with products as items %}
+                    {% for item in items %}
+                        {% include 'items/product-grid.html' %}
+                    {% endfor %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+    <!-- /products-list-box -->
 
-  Selected category: {{ selected_category }}<hr/>
-
-  <ul>
-    {% for product in products %}
-      <li>
-        <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
-        (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
-      </li>
-    {% endfor %}
-  </ul>
-
-  <hr/>
-  <strong>Search form</strong><br/><br/>
-
-  Filtered products: <div id='search-count'> {{ total_count }} </div>
-
-  <form id='search-form' action='' method='GET'>
-    <input type='submit'><br/>
-
-    {% for group in filter_form.fields_groups %}
-      {% if group.type == 'numeric' %}
-        <strong> {{ group.name }}</strong><br/>
-        From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
-        <hr/>
-      {% else %}
-        <strong> {{ group.name }}</strong><br/>
-        {% for field in group.fields %}
-          {{ field }} <a href='javascript:void(0);'> {{ field.label }} </a> <br>
-        {% endfor %}
-        <hr/>
-      {% endif %}
-    {% endfor %}
-
-    <input type='submit'>
-  </form>
-
+    <!-- products-list-box -->
+    <div class="products-list-box" data-role="products-view" data-view="list">
+        <div class="wrap">
+            <ul class="products-list">
+                {% with products as items %}
+                    {% for item in items %}
+                        {% include 'items/product-list.html' %}
+                    {% endfor %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+    <!-- /products-list-box -->
+</div>
 {% endblock content %}
 
 {% block js %}
-  <script src="{{ STATIC_URL }}js/product-list.js"></script>
+<script src="{{ STATIC_URL }}js/product-list.js"></script>
 {% endblock js %}

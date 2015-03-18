@@ -1,0 +1,22 @@
+<!-- product-box -->
+<li class="product-box">
+    <a href="{{ item.get_url }}" class="product product-grid">
+        <h2 class="title">{{ item.name }} | {{ item.code }}</h2>
+        <div class="description elipsis-box">
+            <span class="elipsis">
+                {{ item.short_description }}
+            </span>
+        </div>
+        <div class="img-box">
+            <img src="{{ item.get_first_image.image.url }}" alt="">
+        </div>
+        <div class="price-tag">
+            <span class="price">{{ item.price_uah }}</span>
+            <span class="currency">грн.</span>
+        </div>
+        <div class="add-to-cart-box">
+            <button class="button button-blue add-to-cart">Купить</button>
+        </div>
+    </a>
+</li>
+<!-- /product-box -->

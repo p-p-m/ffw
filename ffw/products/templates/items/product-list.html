@@ -1,0 +1,27 @@
+<!-- product-box -->
+<li class="product-box list">
+    <a href="{{ item.get_url }}" class="product product-list">
+        <div class="list-image">
+            <div class="img-box">
+                <img src="{{ item.get_first_image.image.url }}" alt="">
+            </div>
+        </div>
+        <div class="list-content">
+            <div class="title-line">
+                <h2 class="title">{{ item.name }} | {{ item.code }}</h2>
+            </div>
+            <div class="description">
+                {{ item.short_description }}
+            </div>
+            <div class="description">
+                {{ item.description }}
+            </div>
+            <div class="price-tag">
+                <span class="price">{{ item.price_uah }}</span>
+                <span class="currency">грн.</span>
+                <button class="button button-blue add-to-cart">Купить</button>
+            </div>
+        </div>
+    </a>
+</li>
+<!-- /product-box -->

@@ -3,18 +3,16 @@
     <div class="wrap">
         <ul class="menu">
             <li class="bar-icon"><span data-role="popup-menu-trigger">Категории</span></li>
+            {% for category in categories %}
             <li>
-                <a href="#">Питьевая вода</a>
+                <a href="{{ category.get_url }}">{{ category.name }}</a>
                 <ul class="submenu">
-                    <li><a href="s">Кремниевая</a></li>
-                    <li><a href="s">С серебром</a></li>
-                    <li><a href="s">Клубничная</a></li>
+                    {% for subcategory in category.get_subcategories %}
+                    <li><a href="{{ subcategory.get_url }}">{{ subcategory.name }}</a></li>
+                    {% endfor %}
                 </ul>
             </li>
-            <li><a href="#">Бытовая вода</a></li>
-            <li><a href="#">Для дома</a></li>
-            <li><a href="#">Для предприятий</a></li>
-            <li><a href="#">Картриджи</a></li>
+            {% endfor %}
             <li class="lens"><span class="lens-trigger" data-role="popup-search-trigger"></span></li>
         </ul>
     </div>

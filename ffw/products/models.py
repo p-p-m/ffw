@@ -38,6 +38,9 @@ class Category(models.Model):
     def get_url(self):
         return reverse('products', args=(self.slug,))
 
+    def get_subcategories(self):
+        return self.subcategories.all()
+
 
 @python_2_unicode_compatible
 class Subcategory(models.Model):

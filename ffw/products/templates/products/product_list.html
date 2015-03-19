@@ -8,7 +8,7 @@
 <!-- view-title-box -->
 <div class="view-title-box with-filters">
     <div class="wrap">
-        <h1 class="view-title">Заголовок представления</h1>
+        <h1 class="view-title">{{ selected_subcategory.name }}</h1>
         <div class="filter-line">
             <ul class="filters">
                 <li class="price">Цена:</li>
@@ -100,6 +100,8 @@
     </div>
     <!-- /products-list-box -->
 </div>
+{% include 'partials/pagination-more.html' %}
+{% include 'partials/pagination.html' %}
 {% endblock content %}
 
 {% block js %}

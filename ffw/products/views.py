@@ -99,7 +99,7 @@ class ProductListView(ListView):
         context['filter_form'] = self._get_filter_form()
 
         if not self.request.is_ajax():
-            context['categories'] = models.Category.objects.all().select_related('subcategories')
+            context['selected_subcategory'] = self._get_selected_subcategory()
             context['selected_category'] = self._get_selected_category()
         return context
 

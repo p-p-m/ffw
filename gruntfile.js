@@ -44,6 +44,15 @@ module.exports = function(grunt) {
                     'assets/js/scripts.js'
                 ],
                 dest: 'static/js/production.js',
+            },
+            dev: {
+                src: [
+                    'bower_components/jquery/dist/jquery.min.js',
+                    'bower_components/jquery-ui/jquery-ui.min.js',
+                    'bower_components/jQuery-Mask-Plugin/dist/jquery.mask.min.js',
+                    'bower_components/slick.js/slick/slick.js',
+                ],
+                dest: 'static/js/dependecies.js',
             }
         },
 
@@ -132,8 +141,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', ['copy', 'concat', 'imagemin', 'sass',
      'autoprefixer', 'uglify', 'cssmin']);
+    grunt.registerTask('builddev', ['copy', 'concat:dev', 'imagemin', 'sass',
+     'autoprefixer', 'cssmin']);
     grunt.registerTask('run', ['copy', 'concat', 'imagemin',
         'sass', 'autoprefixer', 'uglify', 'cssmin', 'watch']);
-    grunt.registerTask('default', ['run'])
+    grunt.registerTask('default', ['run']);
 
 };

@@ -1,6 +1,6 @@
 <li class="list-item">
     <a href="{{ item.get_url }}" class="item">
-        <img src="{{ item.image.url }}" alt="" class="item-icon">
+        <img src="{% if item.image %}{{ item.image.url }}{% endif %}" alt="" class="item-icon">
         <span>{{ item.name }}</span>
     </a>
 </li>

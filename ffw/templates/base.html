@@ -44,7 +44,12 @@
 {% include 'partials/footer.html' %}
 
 {% block basejs %}
-    <script src="/static/js/production.js"></script>
+    {% if debug %}
+        <script src="/static/js/dependecies.js"></script>
+        <script src="/static/jsdev/scripts.js"></script>
+    {% else %}
+        <script src="/static/js/production.js"></script>
+    {% endif %}
 {% endblock basejs %}
 
 {% block js %}{% endblock %}

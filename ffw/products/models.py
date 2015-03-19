@@ -30,6 +30,7 @@ class Category(models.Model):
     slug = models.CharField(
         _('Category slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -50,6 +51,7 @@ class Subcategory(models.Model):
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return '{}-{}'.format(self.category, self.name)

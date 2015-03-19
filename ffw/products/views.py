@@ -13,7 +13,7 @@ class HomeView(View):
 
     def get(self, request):
         main = Banner.objects.get(name='main')
-        subcategories = models.Subcategories.objects.filter(is_active=True)
+        subcategories = models.Subcategory.objects.filter(is_active=True)
         return render(request, 'products/home.html', {'main': main, 'subcategories': subcategories})
 
 

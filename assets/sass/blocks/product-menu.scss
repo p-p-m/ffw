@@ -17,9 +17,8 @@
         padding-right: 60px;
         position: relative;
         li {
-            width: 20%;
             float: left;
-            text-align: center;
+            position: relative;
             @include bp (sm) {
                 display: none;
             } // sm
@@ -75,6 +74,7 @@
                 right: 0px;
                 top: 0px;
                 background-color: #A0D4E9;
+                text-align: center;
                 @include bp (sm) {
                     display: block;
                 } // sm
@@ -103,6 +103,21 @@
                 font-family: PT Sans Narrow;
                 padding: 10px 20px;
             } // a
+            &:hover {
+                .submenu {
+                    display: block;
+                } // .submenu
+            } // hover
+            .submenu {
+                @include clear-list;
+                display: none;
+                padding-top: 14px;
+                background-color: #00A2E2;
+                position: absolute;
+                top: 30px;
+                width: 100%;
+                z-index: 4;
+            } // submenu
         } // li
     } // menu
 } // product-menu

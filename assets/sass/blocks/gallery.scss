@@ -62,7 +62,6 @@
                         @include slide-down;
                     } // expand-overlay
                 .white-box {
-                    // display: none;
                     width: calc(100% - 100px);
                     height: calc(100vh - 100px);
                     background-color: #fff;
@@ -75,7 +74,6 @@
                     text-align: center;
                     @include slide-down;
                     .sub-images {
-                        // width: 100%;
                         .sub-image {
                             a {
                                 display: block;
@@ -95,7 +93,20 @@
                             } // description
                         } // sub-image
                     } // sub-images
-                    .close {} // close
+                    .close {
+                        position: absolute;
+                        z-index: 4;
+                        top: 20px;
+                        right: 20px;
+                        width: 20px;
+                        height: 20px;
+                        background-color: rgb(176, 176, 176);
+                        cursor: pointer;
+                        line-height: 1;
+                        font-size: 19px;
+                        color: white;
+                        border-radius: 2px;
+                    } // close
                 } // white-box
             } // photo-gallery-item
         } // photo-gallery

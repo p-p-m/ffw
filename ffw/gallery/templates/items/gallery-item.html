@@ -5,6 +5,7 @@
         {% if item.images %}
             <div class="expand-overlay" data-role="gallery-overlay" data-trigger="gallery-expand-trigger"></div>
             <div class="white-box" data-role="gallery-expand">
+                <span class="close" data-role="close"><i class="fa fa-times"></i></span>
                 <div class="sub-images" data-role="sub-images">
                     <div class="sub-image" data-role="sub-image">
                         <img src="{{ item.photo.url }}" alt="{{ item.description }}" data-role="sub-image-next">

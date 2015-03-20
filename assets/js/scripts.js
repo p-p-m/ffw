@@ -456,10 +456,26 @@
             var expand = $(this).find('[data-role="gallery-expand"]');
             var expandTrigger = $(this).find('[data-trigger="gallery-expand-trigger"]');
             var overlay = $(this).find('[data-role="gallery-overlay"]');
+            var close = $(this).find('[data-role="close"]');
+
             expandTrigger.click(function() {
                 overlay.toggleClass('active');
                 expand.toggleClass('active');
                 $('body').toggleClass('open-gallery');
+            });
+
+            close.click(function() {
+                overlay.removeClass('active');
+                expand.removeClass('active');
+                $('body').removeClass('open-gallery');
+            });
+
+            $(document).keyup(function(e) {
+                if (e.keyCode == 27) {
+                    overlay.removeClass('active');
+                    expand.removeClass('active');
+                    $('body').removeClass('open-gallery');
+                }
             });
         });
     }

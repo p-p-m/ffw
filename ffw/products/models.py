@@ -104,6 +104,10 @@ class Product(TimeStampedModel):
     def get_first_image(self):
         return self.images.all()[0]
 
+    def get_rating(self):
+        rounded_rating = int(self.rating)
+        return rounded_rating
+
 
 @python_2_unicode_compatible
 class ProductAttribute(models.Model):

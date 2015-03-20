@@ -2,6 +2,9 @@
 <li class="product-box">
     <a href="{{ item.get_url }}" class="product product-grid">
         <h2 class="title">{{ item.name }} | {{ item.code }}</h2>
+        <div class="product-rating-box">
+            <div class="product-rating rating-{{ item.get_rating }}"></div>
+        </div>
         <div class="description elipsis-box">
             <span class="elipsis">
                 {{ item.short_description }}

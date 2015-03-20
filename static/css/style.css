@@ -1439,6 +1439,8 @@ textarea {
   color: #000000;
   line-height: 1;
   margin: 0;
+}
+.products-list-box .products-list .product-box .product.product-grid .product-rating-box {
   margin-bottom: 20px;
 }
 .products-list-box .products-list .product-box .product.product-list {
@@ -1472,7 +1474,6 @@ textarea {
 .products-list-box .products-list .product-box .product.product-list .list-content .title-line {
   display: inline-block;
   vertical-align: middle;
-  margin-bottom: 20px;
 }
 .products-list-box .products-list .product-box .product.product-list .list-content .title-line .title {
   display: inline-block;
@@ -1503,6 +1504,9 @@ textarea {
 }
 .products-list-box .products-list .product-box .product.product-list .list-content .title-line .label.discount {
   background-color: #D0021B;
+}
+.products-list-box .products-list .product-box .product.product-list .list-content .product-rating-box {
+  margin-bottom: 20px;
 }
 .products-list-box .products-list .product-box .product.product-list .list-content .price-tag {
   text-align: right;
@@ -2775,6 +2779,37 @@ h1.typo-primary {
 }
 .product .characteristics .char-container {
   margin-top: 30px;
+}
+
+.product-rating-box {
+  font-size: 0.875rem;
+  color: #c8a414;
+}
+.product-rating-box .product-rating {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+          transform: translate(0, 0);
+}
+.product-rating-box .product-rating.rating-1:before {
+  content: '\f005 \f006 \f006 \f006 \f006 ';
+}
+.product-rating-box .product-rating.rating-2:before {
+  content: '\f005 \f005 \f006 \f006 \f006 ';
+}
+.product-rating-box .product-rating.rating-3:before {
+  content: '\f005 \f005 \f005 \f006 \f006 ';
+}
+.product-rating-box .product-rating.rating-4:before {
+  content: '\f005 \f005 \f005 \f005 \f006 ';
+}
+.product-rating-box .product-rating.rating-5:before {
+  content: '\f005 \f005 \f005 \f005 \f005 ';
 }
 
 .cart-display {

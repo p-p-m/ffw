@@ -272,3 +272,42 @@
         } // char-container
     } // characteristics
 } // product
+
+.product-rating-box {
+    font-size: rem(14);
+    color: rgb(200, 164, 20);
+    .product-rating {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transform: translate(0, 0);
+        &.rating-1 {
+            &:before {
+                content: '\f005 \f006 \f006 \f006 \f006 ';
+            } // &:before
+        } // rating-1
+        &.rating-2 {
+            &:before {
+                content: '\f005 \f005 \f006 \f006 \f006 ';
+            } // &:before
+        } // rating-2
+        &.rating-3 {
+            &:before {
+                content: '\f005 \f005 \f005 \f006 \f006 ';
+            } // &:before
+        } // rating-3
+        &.rating-4 {
+            &:before {
+                content: '\f005 \f005 \f005 \f005 \f006 ';
+            } // &:before
+        } // rating-4
+        &.rating-5 {
+            &:before {
+                content: '\f005 \f005 \f005 \f005 \f005 ';
+            } // &:before
+        } // rate-5
+    } // product-rating
+} // product-rating-box

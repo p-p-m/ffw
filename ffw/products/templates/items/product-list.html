@@ -10,6 +10,9 @@
             <div class="title-line">
                 <h2 class="title">{{ item.name }} | {{ item.code }}</h2>
             </div>
+            <div class="product-rating-box">
+                <div class="product-rating rating-{{ item.get_rating }}"></div>
+            </div>
             <div class="description">
                 {{ item.short_description }}
             </div>

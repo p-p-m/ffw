@@ -186,8 +186,10 @@
                         color: #000000;
                         line-height: 1;
                         margin: 0;
-                        margin-bottom: 20px;
                     } // title
+                    .product-rating-box {
+                        margin-bottom: 20px;
+                    } // .product-rating-box
                 } // product-grid
                 &.product-list {
                     @include table;
@@ -204,7 +206,6 @@
                         @include table-cell;
                         .title-line {
                             @include inline-middle;
-                            margin-bottom: 20px;
                             .title {
                                 @include inline-middle;
                                 font-family: 'PT Sans Narrow';
@@ -233,6 +234,9 @@
                                 } // &.discount
                             } // label
                         } // title-line
+                        .product-rating-box {
+                            margin-bottom: 20px;
+                        } // .product-rating-box
                         .price-tag {
                             text-align: right;
                         } // price-tag

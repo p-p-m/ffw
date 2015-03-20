@@ -78,7 +78,7 @@ $(document).ready(function() {
         $.ajax({
             url: countUrl,
         }).done(function(data) {
-            alert(data);
+            $('[data-role="count"]').html(data);
         });
     });
 

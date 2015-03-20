@@ -1,41 +1,126 @@
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static i18n %}
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
-
-  <table>
-    <tr>
-      <td>Name</td><td>{{ product.name }}</td>
-    </tr>
-    <tr>
-      <td>Code</td><td>{{ product.code }}</td>
-    </tr>
-    <tr>
-      <td>Price UAH</td><td>{{ product.price_uah }}</td>
-    </tr>
-    <tr>
-      <td>Price USD</td><td>{{ product.price_usd }}</td>
-    </tr>
-    <tr>
-      <td>Price EUR</td><td>{{ product.price_eur }}</td>
-    </tr>
-    <tr>
-      <td>Description</td><td>{{ product.description }}</td>
-    </tr>
-  </table>
-
-  <ul> Attributes:
-    {% for attribute in product.attributes.all %}
-    <li>{{ attribute.name }}: {{ attribute.value }}</li>
-    {% endfor %}
-  </ul>
-
-  <ul> Photos:
-    {% for image in product.images.all %}
-    <li><img src="{{ MEDIA_PREFIX }}{{ image.image }}" alt="{{ image.description }}"></li>
-    {% endfor %}
-  </ul>
-
+<!-- product -->
+<section class="product">
+    <!-- gray-box -->
+    <div class="gray-box">
+        <div class="wrap">
+            <!-- breadcrumps -->
+            <nav class="breadcrumps">
+                <ul>
+                    <li>
+                        <a href="">Главная</a>
+                    </li>
+                    <li>
+                        <a href="">Фильтры для воды</a>
+                    </li>
+                    <li>
+                        <span>{{ product.name }}</span>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /breadcrumps -->
+            <!-- product-main -->
+            <div class="product-main">
+                <!-- images-box -->
+                <figure class="images-box">
+                    <ul class="image-previews">
+                        {% for image in product.get_images %}
+                            <li class="image-preview" data-role="product-image-trigger" data-image="{{ forloop.counter }}">
+                                <img src="{{ image.image.url }}" alt="{{ image.description }}">
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="product-image">
+                        {% for image in product.get_images %}
+                            <img src="{{ image.image.url }}" alt="{{ image.description }}" data-role="product-image" data-image="{{ forloop.counter }}">
+                        {% endfor %}
+                    </div>
+                </figure>
+                <!-- /images-box -->
+                <!-- info-box -->
+                <div class="info-box">
+                    <div class="title-line">
+                        <h1 class="product-title">{{ product.name }}</h1>
+                    </div>
+                    <div class="product-rating-box">
+                        <div class="product-rating rating-{{ product.get_rating }}"></div>
+                    </div>
+                    <div class="price-line">
+                        <span class="price">{{ product.price_uah }}</span>
+                        <span class="currency">грн.</span>
+                        <button class="button button-blue add-to-cart">Купить</button>
+                    </div>
+                    <!-- images-box-mobile -->
+                    <figure class="images-box-mobile">
+                        <div class="product-image">
+                            {% for image in product.get_images %}
+                                <img src="{{ image.image.url }}" alt="" data-role="product-image" data-image="{{ forloop.counter }}">
+                            {% endfor %}
+                        </div>
+                        <ul class="image-previews">
+                            {% for image in product.get_images %}
+                                <li class="image-preview active" data-role="product-image-trigger" data-image="{{ forloop.counter }}">
+                                    <img src="{{ image.image.url }}" alt="{{ image.description }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </figure>
+                    <!-- /images-box-mobile -->
+                    <article class="descriptionription">
+                        {{ product.short_description }}
+                    </article>
+                </div>
+                <!-- /info-box -->
+            </div>
+            <!-- /product-main -->
+        </div>
+    </div>
+    <!-- /gray-box -->
+    <div class="wrap">
+        <!-- descriptionription-mobile -->
+        <article class="descriptionription-mobile">
+            {{ product.short_description }}
+        </article>
+        <!-- /descriptionription-mobile -->
+    </div>
+    <!-- characteristics -->
+    <div class="characteristics">
+        <div class="wrap list">
+            <!-- char-tabs -->
+            <ul class="char-tabs">
+                <li class="active" data-role="products-chars-trigger" data-view="chars">
+                    <span>Характеристики</span>
+                </li>
+                <li data-role="products-chars-trigger" data-view="description">
+                    <span>Полное описание</span>
+                </li>
+            </ul>
+            <!-- /char-tabs -->
+        </div>
+        <div class="wrap">
+            <div class="char-container" data-role="products-chars" data-view="chars">
+                <table class="chars">
+                    {% for attribute in product.attributes.all %}
+                    <tr>
+                        <td>{{ attribute.name }}:</td>
+                        <td>{{ attribute.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="char-container" data-role="products-chars" data-view="description">
+                <article class="descriptionription">
+                    {{ product.short_description }}
+                </article>
+            </div>
+        </div>
+    </div>
+    <!-- /characteristics -->
+</section>
+<!-- /product -->
 {% endblock content %}

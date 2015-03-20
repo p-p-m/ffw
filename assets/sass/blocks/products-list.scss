@@ -60,6 +60,13 @@
                             } // &:before
                         } // active
                     } // price-tag
+                    &.no-check {
+                        &.active {
+                            &:before {
+                                display: none;
+                            } // &:before
+                        } // &.active
+                    } // &.no-check
                     &.freewidth {
                         width: auto;
                         padding: 4px;

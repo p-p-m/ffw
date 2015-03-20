@@ -1294,6 +1294,9 @@ textarea {
   left: -10px;
   color: #00a2e2;
 }
+.with-filters .filter-line ul.filters li span.filter-button.no-check.active:before {
+  display: none;
+}
 .with-filters .filter-line ul.filters li span.filter-button.freewidth {
   width: auto;
   padding: 4px;

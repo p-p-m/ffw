@@ -16,12 +16,12 @@
                 margin-left: 10px;
             } // li + li
             li {
-                &.price {
+                &.price, &.rating {
                     color: #4a4a4a;
                     font-size: rem(18);
                     font-family: Arial;
                     line-height: 21px;
-                } // &.price
+                } // &.price, &.rating
                 &:nth-child(1) {
                     margin-right: 10px;
                 } // &:nth-child(1)
@@ -121,6 +121,13 @@
             } // li
         } // ul
     } // filter-line
+    .show-products-count {
+        font-size: rem(16);
+        color: #9D9D9D;
+        span {
+            font-weight: 700;
+        } // span
+    } // show-products-count
 } // with-filters
 
 .products-list-box {

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static i18n %}
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}
 
@@ -11,10 +11,11 @@
         <h1 class="view-title">{{ selected_subcategory.name }}</h1>
         <div class="filter-line">
             <ul class="filters">
-                <li class="price">Цена:</li>
-                <li><span class="filter-button gray freewidth price-tag disabled" data-role="filter-item">200</span></li>
-                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item">600</span></li>
-                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item">1000</span></li>
+                <li class="price">{% trans 'Price' %}:</li>
+                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item" data-sort="PD"><i class="fa fa-chevron-up"></i></span></li>
+                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item" data-sort="PA"><i class="fa fa-chevron-down"></i></span></li>
+                <li class="rating">{% trans 'Rating' %}:</li>
+                <li><span class="filter-button gray freewidth price-tag" data-role="filter-item" data-sort="RD"><i class="fa fa-chevron-up"></i></span></li>
                 <li class="show-filters">
                     <span class="filter-button gray freewidth filters-trigger" data-role="filters-trigger">фильтры</span>
                 </li>
@@ -29,6 +30,9 @@
                     </span>
                 </li>
             </ul>
+        </div>
+        <div class="show-products-count">
+            Найдено товаров <span data-role="count">{{ total_count }}</span>
         </div>
     </div>
 </div>
@@ -105,7 +109,6 @@
     </div>
     <!-- /products-list-box -->
 </div>
-{% include 'partials/pagination-more.html' %}
 {% include 'partials/pagination.html' %}
 {% endblock content %}
 

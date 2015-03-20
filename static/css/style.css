@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @-webkit-keyframes fadeIn {
   0% {
     opacity: 0;
@@ -1238,7 +1239,7 @@ textarea {
 .with-filters .filter-line ul.filters li + li {
   margin-left: 10px;
 }
-.with-filters .filter-line ul.filters li.price {
+.with-filters .filter-line ul.filters li.price, .with-filters .filter-line ul.filters li.rating {
   color: #4a4a4a;
   font-size: 1.125rem;
   font-family: Arial;
@@ -1355,6 +1356,13 @@ textarea {
 .with-filters .filter-line ul.filters li span.filter-button span.filter.show-list {
   width: 23px;
   background: url(../images/list-view.png);
+}
+.with-filters .show-products-count {
+  font-size: 1rem;
+  color: #9D9D9D;
+}
+.with-filters .show-products-count span {
+  font-weight: 700;
 }
 
 .products-list-box {

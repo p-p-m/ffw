@@ -6,7 +6,7 @@
             {% for category in categories %}
             <li>
                 <a href="{{ category.get_url }}">{{ category.name }}</a>
-                <ul class="submenu">
+                <ul class="submenu" data-role="product-submenu">
                     {% for subcategory in category.get_subcategories %}
                     <li><a href="{{ subcategory.get_url }}">{{ subcategory.name }}</a></li>
                     {% endfor %}

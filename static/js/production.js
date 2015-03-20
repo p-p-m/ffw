@@ -2477,6 +2477,12 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
         classCheckByTrigger(search, searchTrigger, 'active');
     }
 
+    function productSubMenu() {
+        var menu = $('[data-role="product-menu"]');
+        var subMenu = $('[data-role="product-submenu"]');
+        subMenu.css('top', menu.height());
+    }
+
     // popup menu
     function popupMenu() {
         var menu = $('[data-role="popup-menu"]');
@@ -2507,7 +2513,7 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
     }
 
     // Price range slider
-    function priceRange() {
+    function priceRange(sliderid, min, max, values) {
 
         function collision($div1, $div2) {
             var x1 = $div1.offset().left;
@@ -2522,11 +2528,11 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
 
         }
 
-        $('#slider').slider({
+        $('#' + sliderid).slider({
             range: true,
-            min: 0,
-            max: 1000,
-            values: [ 100, 500 ],
+            min: min,
+            max: max,
+            values: values,
             slide: function(event, ui) {
 
                 $('.ui-slider-handle:eq(0) .price-range-min').html(ui.values[ 0 ] + ' грн');
@@ -2536,7 +2542,7 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
                 $('.ui-slider-range').find('span.price-range-both').attr('data-highprice', ui.values[ 1 ]);
                 $('#range-both').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
 
-                if (collision($('.price-range-min'), $('.price-range-max')) == true) {
+                if (collision($('.price-range-min'), $('.price-range-max')) === true) {
                     $('.price-range-min, .price-range-max').css('opacity', '0');
                 } else {
                     $('.price-range-min, .price-range-max').css('opacity', '1');
@@ -2620,9 +2626,10 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
         CartDisplay();
         productFiltersShow();
         filtersItems();
-        priceRange();
+        priceRange('price', 0, 1000, [10, 500]);
         Tabs();
         popupSearch();
+        productSubMenu();
         popupMenu();
         popupMobileMenu();
         disabledElement();

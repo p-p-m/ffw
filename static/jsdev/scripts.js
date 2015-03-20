@@ -294,6 +294,12 @@
         classCheckByTrigger(search, searchTrigger, 'active');
     }
 
+    function productSubMenu() {
+        var menu = $('[data-role="product-menu"]');
+        var subMenu = $('[data-role="product-submenu"]');
+        subMenu.css('top', menu.height());
+    }
+
     // popup menu
     function popupMenu() {
         var menu = $('[data-role="popup-menu"]');
@@ -440,6 +446,7 @@
         priceRange('price', 0, 1000, [10, 500]);
         Tabs();
         popupSearch();
+        productSubMenu();
         popupMenu();
         popupMobileMenu();
         disabledElement();

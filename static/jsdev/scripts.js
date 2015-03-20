@@ -61,9 +61,13 @@
 
     function filtersItems() {
         var filterItem = $('[data-role="filter-item"]');
+        var filterItemToggle = $('[data-role="filter-item-toggle"]');
         filterItem.click(function() {
             filterItem.removeClass('active');
             $(this).addClass('active');
+        });
+        filterItemToggle.click(function() {
+            $(this).toggleClass('active');
         });
     }
 

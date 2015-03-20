@@ -39,7 +39,7 @@
 <!-- /view-title-box -->
 
 <!-- basic filters -->
-<div class="filter-block" data-role="filters-block">
+<div class="filter-block" data-role="filters-block" style="display: block !important;">
     <div class="wrap">
         <div class="filters">
             <div class="basic-filters">
@@ -59,6 +59,19 @@
                 </div>
                 <div class="second-container">
                     <div id="price" data-role="filter-slider" min="0" max="100" initial-min="10" initial-max="50"></div>
+                    <div class="values-fields">
+                        <div class="values-item">
+                            <input type="text">
+                            <span class="currency">грн</span>
+                        </div>
+                        <div class="values-item">
+                            <span>–</span>
+                        </div>
+                        <div class="values-item">
+                            <input type="text">
+                            <span class="currency">грн</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             {% for group in filter_form.fields_groups %}

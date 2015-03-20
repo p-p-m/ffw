@@ -363,6 +363,9 @@
                 $('.ui-slider-range').find('span.price-range-both').attr('data-highprice', ui.values[ 1 ]);
                 $('#range-both').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
 
+                $('[data-role="field-min"]').attr('value', ui.values[ 0 ]);
+                $('[data-role="field-max"]').attr('value', ui.values[ 1 ]);
+
                 if (collision($('.price-range-min'), $('.price-range-max')) === true) {
                     $('.price-range-min, .price-range-max').css('opacity', '0');
                 } else {
@@ -372,22 +375,28 @@
             }
         });
 
+        valueMin = $('#' + sliderid).slider('values', 0 );
+        valueMax = $('#' + sliderid).slider('values', 1 );
+
         $('.ui-slider-range').append('<span class="price-range-both value"><i>'
-            + $('#' + sliderid).slider('values', 0 ) + ' грн - ' + $('#' + sliderid).slider('values', 1 ) + ' грн</i></span>');
+            + valueMin + ' грн - ' + valueMax + ' грн</i></span>');
 
         $('.ui-slider-range').find('span.price-range-both')
-            .attr('data-lowprice', $('#' + sliderid).slider('values', 0 ));
+            .attr('data-lowprice', valueMin);
         $('.ui-slider-range').find('span.price-range-both')
-            .attr('data-highprice', $('#' + sliderid).slider('values', 1 ));
+            .attr('data-highprice', valueMax);
 
-        $('#range-both').append('<span class="price-range-both value">' + $('#' + sliderid).slider('values', 0 ) +
-            ' - ' + $('#' + sliderid).slider('values', 1 ) + '</span>');
+        $('#range-both').append('<span class="price-range-both value">' + valueMin +
+            ' - ' + valueMax + '</span>');
 
         $('.ui-slider-handle:eq(0)').append('<span class="price-range-min value">'
-            + $('#' + sliderid).slider('values', 0 ) + ' грн</span>');
+            + valueMin + ' грн</span>');
 
         $('.ui-slider-handle:eq(1)').append('<span class="price-range-max value">'
-            + $('#' + sliderid).slider('values', 1 ) + ' грн</span>');
+            + valueMax + ' грн</span>');
+
+        $('[data-role="field-min"]').attr('value', valueMin);
+        $('[data-role="field-max"]').attr('value', valueMax);
     }
 
     function slickStandart(argContainer, argBaner, argPrev, argNext) {

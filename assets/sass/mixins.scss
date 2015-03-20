@@ -101,3 +101,13 @@
         @media #{$bp-lg} { @content; }
     }
 }
+
+@mixin slide-down {
+    @include transition(all, 0.4s, ease);
+    opacity: 0;
+    transform: translate(0, -200%);
+    &.active {
+        transform: translate(0, 0);
+        opacity: 1;
+    } // active
+}

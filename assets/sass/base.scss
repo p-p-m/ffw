@@ -1,6 +1,11 @@
 $text-color: #303030;
 $link-color: #3498db;
 
+html {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     font-size: rem(18);
     line-height: 150%;
@@ -10,9 +15,9 @@ body {
     color: $text-color;
     padding: 0;
     margin: 0;
-    &.open-menu {
+    &.open-menu, &.open-gallery {
         overflow: hidden;
-    } // &.open-menu
+    } // &.open-menu, &.open-gallery
     @include bp(xs) {
         font-size: rem(22);
     } // xs

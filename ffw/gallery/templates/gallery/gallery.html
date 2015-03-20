@@ -8,7 +8,14 @@
 <div class="title-box">
     <div class="wrap">
         <h1 class="typo-primary">Галерея</h1>
-        <ul>
+    </div>
+</div>
+<!-- /title-box -->
+
+<!-- gallery -->
+<div class="gallery">
+    <div class="wrap">
+        <ul class="gallery-list">
             {% if prim_images %}
                 {% with prim_images as items %}
                     {% for item in items %}
@@ -17,29 +24,7 @@
                 {% endwith %}
             {% endif %}
         </ul>
-
     </div>
 </div>
-<!-- /title-box -->
-
-<ul>
-  {% if prim_images %}
-    {% for prim_image in prim_images %}
-       <li>
-           <a href={{prim_image.link}} ><img src="{{ MEDIA_PREFIX }}{{prim_image.photo}}" alt="{
-               {prim_image.description}}">{{prim_image}}</a>
-           <ul>
-               {% if prim_image.images %}
-                   {% for image in prim_image.images.all %}
-                       <li>
-                           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{
-                               image.description}}">{{image}}</a>
-                       </li>
-                  {% endfor %}
-               {% endif %}
-            </ul>
-       </li>
-    {% endfor %}
-  {% endif %}
-</ul>
+<!-- /gallery -->
 {% endblock %}

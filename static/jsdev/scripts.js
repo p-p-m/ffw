@@ -441,6 +441,27 @@
                 null,
                 null
         );
+        slickStandart(
+                $('[data-role="sub-images"]'),
+                '[data-role="sub-image"]', // this is string – this requirement
+                null,
+                $('[data-role="sub-image-next"]')
+        );
+    }
+
+    function galleryDisplay() {
+        var galleryItem = $('[data-role="gallery-item"]');
+
+        galleryItem.each(function() {
+            var expand = $(this).find('[data-role="gallery-expand"]');
+            var expandTrigger = $(this).find('[data-trigger="gallery-expand-trigger"]');
+            var overlay = $(this).find('[data-role="gallery-overlay"]');
+            expandTrigger.click(function() {
+                overlay.toggleClass('active');
+                expand.toggleClass('active');
+                $('body').toggleClass('open-gallery');
+            });
+        });
     }
 
     // document ready
@@ -463,6 +484,7 @@
         popupMenu();
         popupMobileMenu();
         disabledElement();
+        galleryDisplay();
     });
 
     // all initial on window resize

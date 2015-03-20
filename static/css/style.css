@@ -1667,14 +1667,14 @@ h1.typo-primary {
     clear: both;
   }
 }
-.title-box ul .photo-gallery a {
+.title-box ul .photo-gallery .photo-gallery-item {
   text-decoration: none;
 }
-.title-box ul .photo-gallery a img {
+.title-box ul .photo-gallery .photo-gallery-item .image {
   margin: auto;
   margin-bottom: 15px;
 }
-.title-box ul .photo-gallery a span {
+.title-box ul .photo-gallery .photo-gallery-item .link {
   display: block;
   font-family: Arial;
   font-size: 1.125rem;
@@ -1682,7 +1682,7 @@ h1.typo-primary {
   padding: 0 15px 15px 15px;
   line-height: 21px;
 }
-.title-box ul .photo-gallery a span:after {
+.title-box ul .photo-gallery .photo-gallery-item .link:after {
   content: '\f08e';
   font: normal normal normal 14px/1 FontAwesome;
   text-rendering: auto;

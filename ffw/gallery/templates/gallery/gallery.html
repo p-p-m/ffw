@@ -1,17 +1,38 @@
-{% load static %}
+{% extends 'base.html' %}
+
+{% load static i18n %}
 {% get_media_prefix as MEDIA_PREFIX %}
+
+{% block content %}
+<!-- title-box -->
+<div class="title-box">
+    <div class="wrap">
+        <h1 class="typo-primary">Галерея</h1>
+        <ul>
+            {% if prim_images %}
+                {% with prim_images as items %}
+                    {% for item in items %}
+                        {% include 'items/gallery-item.html' %}
+                    {% endfor %}
+                {% endwith %}
+            {% endif %}
+        </ul>
+
+    </div>
+</div>
+<!-- /title-box -->
 
 <ul>
   {% if prim_images %}
     {% for prim_image in prim_images %}
        <li>
            <a href={{prim_image.link}} ><img src="{{ MEDIA_PREFIX }}{{prim_image.photo}}" alt="{
-               {prim_image.description}}">{{prim_image}}</a>      
+               {prim_image.description}}">{{prim_image}}</a>
            <ul>
                {% if prim_image.images %}
                    {% for image in prim_image.images.all %}
                        <li>
-                           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ 
+                           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{
                                image.description}}">{{image}}</a>
                        </li>
                   {% endfor %}
@@ -21,3 +42,4 @@
     {% endfor %}
   {% endif %}
 </ul>
+{% endblock %}

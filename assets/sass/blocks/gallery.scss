@@ -24,13 +24,13 @@
                     clear: both;
                 } // &:nth-child(3n+1)
             } // lg
-            a {
+            .photo-gallery-item {
                 text-decoration: none;
-                img {
+                .image {
                     margin: auto;
                     margin-bottom: 15px;
-                } // img
-                span {
+                } // image
+                .link {
                     display: block;
                     font-family: Arial;
                     font-size: rem(18);
@@ -44,8 +44,8 @@
                         -webkit-font-smoothing: antialiased;
                         padding-left: 10px;
                     } // &:after
-                } // span
-            } // a
+                } // link
+            } // photo-gallery-item
         } // photo-gallery
     } // ul
 } // title-box

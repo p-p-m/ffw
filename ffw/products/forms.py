@@ -1,5 +1,5 @@
 from django import forms
-from django.db.models import Count
+from django.db.models import Count, Min, Max
 from django.utils.translation import ugettext_lazy as _
 
 import models
@@ -30,14 +30,17 @@ class SortForm(forms.Form):
 
 class FilterForm(forms.Form):
 
-    price_min = forms.FloatField(label='Min price', required=False)
-    price_max = forms.FloatField(label='Max price', required=False)
-
     def __init__(self, category=None, subcategory=None, **kwargs):
         super(FilterForm, self).__init__(**kwargs)
         self.filters = self._get_filters(category, subcategory)
         for filt in self.filters:
             self.fields.update(self._create_filter_fields(filt))
+        prices = models.Product.objects.all().aggregate(Min('price_uah'), Max('price_uah'))
+
+        self.fields['price_min'] = forms.FloatField(
+            label='Min price', required=False, min_value=prices['price_uah__min'], max_value=prices['price_uah__max'])
+        self.fields['price_max'] = forms.FloatField(
+            label='Min price', required=False, min_value=prices['price_uah__min'], max_value=prices['price_uah__max'])
 
     def _get_filters(self, category=None, subcategory=None):
         filters = []
@@ -50,9 +53,10 @@ class FilterForm(forms.Form):
     def _create_filter_fields(self, filt):
         if filt.filter_type == 'NUMERIC':
             attrs = {'min-value': filt.values['min'], 'max-value': filt.values['max']}
+            print attrs
             fields = {
                 'numeric_%s_min' % filt.pk: forms.FloatField(
-                    label='Min', required=False, initial=filt.values['min']),
+                    label='Min', required=False, initial=filt.values['min'], min_value=filt.values['min']),
                 'numeric_%s_max' % filt.pk: forms.FloatField(
                     label='Max', required=False, initial=filt.values['max']),
             }
@@ -115,6 +119,7 @@ class FilterForm(forms.Form):
         """
         Returns form fields grouped by filters
         """
+        # print [f.field.__dict__ for f in self]
         yield {
             'id': 0,
             'name': _('Price'),

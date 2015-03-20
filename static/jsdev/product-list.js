@@ -19,6 +19,23 @@ function setGetParameter(paramName, paramValue, url) {
     return url;
 }
 
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars()
+{
+    if (window.location.href.indexOf('?') == -1) {
+        return {};
+    }
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
+
 function executeSearchForm() {
     var url = window.location.href.split('?')[0] + '?' + $('form#search-form').serialize(),
         countUrl = setGetParameter('count', 'on', url);
@@ -30,9 +47,31 @@ function executeSearchForm() {
     });
 }
 
+function activateFilters() {
+    var urlVars = getUrlVars();
+    for (var key in urlVars) {
+        if (urlVars.hasOwnProperty(key)) {
+            $('[data-role="filter-item"][name=' + key + ']').addClass("active");
+        }
+    }
+}
+
+
 $(document).ready(function() {
-    $('form#search-form input').on('change', function() {
-        executeSearchForm();
+
+    activateFilters();
+
+    $('[data-role="filter-item"]').on('click', function() {
+        var name = $(this).attr("name"),
+            url = setGetParameter(name, '1'),
+            countUrl = setGetParameter('count', 'on', url);
+        window.history.pushState('', '', url);
+
+        $.ajax({
+            url: countUrl,
+        }).done(function(data) {
+            alert(data);
+        });
     });
 
     $('form#search-form input[type="number"]').on('keyup', function() {

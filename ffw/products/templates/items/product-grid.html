@@ -8,7 +8,7 @@
             </span>
         </div>
         <div class="img-box">
-            <img src="{{ item.get_first_image.image.url }}" alt="">
+            <img src="{% if item.images.exists %}{{ item.get_first_image.image.url }}{% endif %}" alt="">
         </div>
         <div class="price-tag">
             <span class="price">{{ item.price_uah }}</span>

@@ -62,7 +62,7 @@
     {% else %}
         <li class="pressbutton control"><a class="fa fa-angle-left"></a></li>
     {% endif %}
-    <li class="pressbutton active"><a page="page_obj.number">{{ page_obj.number }}</a></li>
+    <li class="pressbutton active"><a page="{{ page_obj.number }}">{{ page_obj.number }}</a></li>
     {% if page_obj.has_next %}
         <li class="pressbutton control"><a class="fa fa-angle-right" page="{{ page_obj.next_page_number }}"></a></li>
     {% else %}

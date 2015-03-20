@@ -1,22 +1,72 @@
+{% load products_tags %}
 <!-- pagination -->
 <ul class="pagination">
-    <li class="pressbutton control"><a href="#" class="fa fa-angle-left"></a></li>
-    <li class="pressbutton active"><a href="#">1</a></li>
-    <li class="pressbutton"><a href="#">2</a></li>
-    <li class="pressbutton"><a href="#">3</a></li>
-    <li class="pressbutton"><a href="#">...</a></li>
-    <li class="pressbutton"><a href="#">5</a></li>
-    <li class="pressbutton"><a href="#">6</a></li>
-    <li class="pressbutton control"><a href="#" class="fa fa-angle-right"></a></li>
+    {% if page_obj.has_previous %}
+        <li class="pressbutton control"><a class="fa fa-angle-left" page="{{ page_obj.previous_page_number }}"></a></li>
+    {% else %}
+        <li class="pressbutton control"><a class="fa fa-angle-left"></a></li>
+    {% endif %}
+    {% with page_obj.number as current %}
+    {% with page_obj.paginator.num_pages as last %}
+        {% if 4 >= current and current|add:3 >= last %}
+            {% for i in last|get_range %}
+            <li class="pressbutton {% if i|add:1 == current %}active{% endif %}">
+                <a page="{{ i|add:1 }}">{{ i|add:1 }}</a>
+            </li>
+            {% endfor %}
+        {% elif 4 >= current and current|add:3 < last %}
+            {% for i in current|add:1|get_range %}
+            <li class="pressbutton {% if i|add:1 == current %}active{% endif %}">
+                <a page="{{ i|add:1 }}">{{ i|add:1 }}</a>
+            </li>
+            {% endfor %}
+            <li class="pressbutton disabled"><a>...</a></li>
+            <li class="pressbutton"><a page="{{ last|add:-1 }}">{{ last|add:-1 }}</a></li>
+            <li class="pressbutton"><a page="{{ last }}">{{ last }}</a></li>
+        {% elif 4 < current and current|add:3 < last %}
+            <li class="pressbutton"><a page="1">1</a></li>
+            <li class="pressbutton"><a page="2">2</a></li>
+            <li class="pressbutton disabled"><a>...</a></li>
+            <li class="pressbutton"><a page="{{ current|add:-1 }}">{{ current|add:-1 }}</a></li>
+            <li class="pressbutton active"><a page="{{ current }}">{{ current }}</a></li>
+            <li class="pressbutton"><a page="{{ current|add:1  }}">{{ current|add:1 }}</a></li>
+            <li class="pressbutton disabled"><a>...</a></li>
+            <li class="pressbutton"><a page="{{ last|add:-1 }}">{{ last|add:-1 }}</a></li>
+            <li class="pressbutton"><a page="{{ last }}">{{ last }}</a></li>
+        {% elif 4 < current and current|add:3 >= last %}
+            <li class="pressbutton"><a page="1">1</a></li>
+            <li class="pressbutton"><a page="2">2</a></li>
+            <li class="pressbutton disabled"><a>...</a></li>
+            {% for i in last|get_range %}
+            {% if i|add:1 > current|add:-2 %}
+            <li class="pressbutton {% if i|add:1 == current %}active{% endif %}">
+                <a page="{{ i|add:1 }}">{{ i|add:1 }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% endwith %}
+    {% if page_obj.has_next %}
+        <li class="pressbutton control"><a class="fa fa-angle-right" page="{{ page_obj.next_page_number }}"></a></li>
+    {% else %}
+        <li class="pressbutton control"><a class="fa fa-angle-right"></a></li>
+    {% endif %}
 </ul>
 <!-- /pagination -->
 
 <!-- pagination-mobile -->
 <ul class="pagination-mobile">
-    <li class="pressbutton control"><a href="#" class="fa fa-angle-left"></a></li>
-    <li class="pressbutton active"><a href="#">1</a></li>
-    <li class="pressbutton"><a href="#">2</a></li>
-    <li class="pressbutton"><a href="#">3</a></li>
-    <li class="pressbutton control"><a href="#" class="fa fa-angle-right"></a></li>
+    {% if page_obj.has_previous %}
+        <li class="pressbutton control"><a class="fa fa-angle-left" page="{{ page_obj.previous_page_number }}"></a></li>
+    {% else %}
+        <li class="pressbutton control"><a class="fa fa-angle-left"></a></li>
+    {% endif %}
+    <li class="pressbutton active"><a page="page_obj.number">{{ page_obj.number }}</a></li>
+    {% if page_obj.has_next %}
+        <li class="pressbutton control"><a class="fa fa-angle-right" page="{{ page_obj.next_page_number }}"></a></li>
+    {% else %}
+        <li class="pressbutton control"><a class="fa fa-angle-right"></a></li>
+    {% endif %}
 </ul>
 <!-- /pagination-mobile -->

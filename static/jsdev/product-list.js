@@ -56,6 +56,14 @@ function activateFilters() {
     }
 }
 
+function activatePaginationButton() {
+    var page = $(this).attr('page');
+    if (page) {
+        var url = setGetParameter('page', page);
+        window.location.href = url;
+    }
+}
+
 
 $(document).ready(function() {
 
@@ -74,9 +82,9 @@ $(document).ready(function() {
         });
     });
 
-    $('form#search-form input[type="number"]').on('keyup', function() {
-        executeSearchForm();
-    });
+    $('ul.pagination a').on('click', activatePaginationButton);
+    $('ul.pagination-mobile a').on('click', activatePaginationButton);
+
 
     $('select#paginate-by').on('change', function() {
         var selected = $(this).find(":selected").text(),

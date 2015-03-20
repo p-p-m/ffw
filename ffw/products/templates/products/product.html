@@ -103,17 +103,19 @@
             <!-- /char-tabs -->
         </div>
         <div class="wrap">
-            <div class="char-container" data-role="products-chars" data-view="chars">
-                <table class="chars">
-                    {% for attribute in product.attributes.all %}
-                    <tr>
-                        <td>{{ attribute.name }}:</td>
-                        <td>{{ attribute.value }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
+            <div class="tab-container" data-role="products-chars" data-view="chars">
+                <article>
+                    <table class="chars">
+                        {% for attribute in product.attributes.all %}
+                        <tr>
+                            <td>{{ attribute.name }}:</td>
+                            <td>{{ attribute.value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </article>
             </div>
-            <div class="char-container" data-role="products-chars" data-view="description">
+            <div class="tab-container" data-role="products-chars" data-view="description">
                 <article class="descriptionription">
                     {{ product.short_description }}
                 </article>

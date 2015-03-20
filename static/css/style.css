@@ -74,6 +74,24 @@ a:hover {
   text-decoration: none;
 }
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+td {
+  margin: 0;
+  padding: 0;
+  vertical-align: top;
+}
+
+th {
+  text-align: left;
+  vertical-align: top;
+}
+
 fieldset {
   border: none;
   padding: 0;
@@ -2784,8 +2802,23 @@ h1.typo-primary {
 .product .characteristics .char-tabs li:hover {
   background: rgba(255, 255, 255, 0.5);
 }
-.product .characteristics .char-container {
+.product .characteristics .tab-container {
   margin-top: 30px;
+}
+.product .characteristics .tab-container article {
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #5C5C5C;
+}
+.product .characteristics .tab-container table.chars {
+  width: 100%;
+}
+.product .characteristics .tab-container table.chars tr:nth-child(even) td {
+  background-color: #F2F2F2;
+}
+.product .characteristics .tab-container table.chars tr td {
+  padding: 15px;
+  line-height: 1.3;
 }
 
 .product-rating-box {

@@ -42,6 +42,23 @@ a {
     } // &:hover
 } // a
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+} // table
+
+td {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+} // td
+th {
+    text-align: left;
+    vertical-align: top;
+} // th
+
 fieldset {
     border: none;
     padding: 0;

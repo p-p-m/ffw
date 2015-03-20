@@ -24,21 +24,19 @@
 </div>
 <!-- /large-baner -->
 
-{% for category in categories %}
-    <!-- catalogue-directories -->
-    <div class="catalogue-directories">
-        <div class="wrap">
-            <ul class="directories-list">
-                {% for subcategory in category.subcategories.all %}
-                    {% with subcategory as item %}
-                        {% include 'items/index-category-item.html' %}
-                    {% endwith %}
-                {% endfor %}
-            </ul>
-        </div>
+<!-- catalogue-directories -->
+<div class="catalogue-directories">
+    <div class="wrap">
+        <ul class="directories-list">
+            {% for subcategory in subcategories %}
+                {% with subcategory as item %}
+                    {% include 'items/index-category-item.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
     </div>
-    <!-- /catalogue-directories -->
-{% endfor %}
+</div>
+<!-- /catalogue-directories -->
 
 <!-- home-page-text -->
 <div class="home-page-text">

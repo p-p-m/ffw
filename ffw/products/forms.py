@@ -9,7 +9,6 @@ class SortForm(forms.Form):
     SORT_CHOICES = (
         ('PA', _('Price, from small to big')),
         ('PD', _('Price, from big to small')),
-        ('RA', _('Rating, from small to big')),
         ('RD', _('Rating, from big to small')),
     )
 
@@ -21,8 +20,6 @@ class SortForm(forms.Form):
             queryset = queryset.annotate(null_price=Count('price_uah')).order_by('-null_price', 'price_uah')
         elif sort_by == 'PD':
             queryset = queryset.order_by('-price_uah')
-        elif sort_by == 'RA':
-            queryset = queryset.order_by('rating')
         elif sort_by == 'RD':
             queryset = queryset.order_by('-rating')
         return queryset
@@ -35,12 +32,14 @@ class FilterForm(forms.Form):
         self.filters = self._get_filters(category, subcategory)
         for filt in self.filters:
             self.fields.update(self._create_filter_fields(filt))
-        prices = models.Product.objects.all().aggregate(Min('price_uah'), Max('price_uah'))
+        prices = self._get_base_queryset(category, subcategory).aggregate(Min('price_uah'), Max('price_uah'))
 
         self.fields['price_min'] = forms.FloatField(
-            label='Min price', required=False, min_value=prices['price_uah__min'], max_value=prices['price_uah__max'])
+            label='Min price', required=False,
+            min_value=int(prices['price_uah__min']), max_value=int(prices['price_uah__max']) + 1)
         self.fields['price_max'] = forms.FloatField(
-            label='Min price', required=False, min_value=prices['price_uah__min'], max_value=prices['price_uah__max'])
+            label='Min price', required=False,
+            min_value=int(prices['price_uah__min']), max_value=int(prices['price_uah__max']) + 1)
 
     def _get_filters(self, category=None, subcategory=None):
         filters = []
@@ -50,15 +49,22 @@ class FilterForm(forms.Form):
             filters += list(models.ProductFilter.objects.filter(subcategory=subcategory))
         return filters
 
+    def _get_base_queryset(self, category=None, subcategory=None):
+        queryset = models.Product.objects.all()
+        if category is not None:
+            queryset = queryset.filter(subcategory__category=category)
+        if subcategory is not None:
+            queryset = queryset.filter(subcategory=subcategory)
+        return queryset
+
     def _create_filter_fields(self, filt):
         if filt.filter_type == 'NUMERIC':
             attrs = {'min-value': filt.values['min'], 'max-value': filt.values['max']}
-            print attrs
             fields = {
                 'numeric_%s_min' % filt.pk: forms.FloatField(
-                    label='Min', required=False, initial=filt.values['min'], min_value=filt.values['min']),
+                    label='Min', required=False, min_value=filt.values['min'], max_value=filt.values['max']),
                 'numeric_%s_max' % filt.pk: forms.FloatField(
-                    label='Max', required=False, initial=filt.values['max']),
+                    label='Max', required=False, min_value=filt.values['min'], max_value=filt.values['max']),
             }
             for field in fields.itervalues():
                 field.widget.attrs = attrs
@@ -115,17 +121,14 @@ class FilterForm(forms.Form):
         return products_queryset
 
     @property
+    def price_fields(self):
+        return {f.name: f for f in self if f.name.startswith('price')}
+
+    @property
     def fields_groups(self):
         """
         Returns form fields grouped by filters
         """
-        # print [f.field.__dict__ for f in self]
-        yield {
-            'id': 0,
-            'name': _('Price'),
-            'type': 'numeric',
-            'fields': [f for f in self if f.name in ('price_max', 'price_min')],
-        }
         for filt in self.filters:
             field_name_prefix = '%s_%s' % (filt.filter_type.lower(), filt.pk)
             yield {

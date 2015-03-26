@@ -29,7 +29,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': join(PROJECT_ROOT, 'debug.log'),
+            'filename': os.path.join(PROJECT_ROOT, 'debug.log'),
             'formatter': 'verbose',
         },
     },

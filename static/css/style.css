@@ -3414,6 +3414,9 @@ h1.typo-primary {
   position: relative;
   padding-bottom: 22px;
 }
+.slider-box.stand-alone {
+  padding-top: 20px !important;
+}
 .slider-box .values-fields {
   width: 60%;
   margin: auto;

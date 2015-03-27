@@ -84,7 +84,7 @@
                 </div>
             </div>
             {% for group in filter_form.fields_groups %}
-            <div class="producer slider-box">
+            <div class="producer slider-box stand-alone">
                 <h3 class="filter-title">{{ group.name }}</h3>
                 {% if group.type == 'numeric' %}
                     <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>

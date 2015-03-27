@@ -139,6 +139,9 @@
 .slider-box {
     position: relative;
     padding-bottom: 22px;
+    &.stand-alone {
+        padding-top: 20px !important;
+    } // &.stand-alone
     .values-fields {
         @include clearfix;
         width: 60%;

@@ -321,6 +321,9 @@ a, a:focus, span {
   background: #1D73AC;
   border-bottom: 2px solid #135B8A;
 }
+.button.apply {
+  font-size: 0.75rem;
+}
 
 input[type="text"],
 input[type="email"],
@@ -3231,6 +3234,9 @@ h1.typo-primary {
   user-select: none;
   padding: 10px;
   background-color: #eee;
+}
+.filter-block .filters .apply-box {
+  text-align: center;
 }
 .filter-block .filters .main-filters {
   margin: 0;

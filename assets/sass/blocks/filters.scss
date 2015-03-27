@@ -8,6 +8,9 @@
         @include no-select;
         padding: 10px;
         background-color: #eee;
+        .apply-box {
+            text-align: center;
+        } // apply-box
         .main-filters {
             @include clear-list-inline;
             float: left;

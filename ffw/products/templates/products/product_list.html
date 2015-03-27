@@ -48,7 +48,7 @@
 <!-- /view-title-box -->
 
 <!-- basic filters -->
-<div class="filter-block" data-role="filters-block">
+<div class="filter-block" data-role="filters-block" style="display: block;">
     <div class="wrap">
         <div class="filters">
             <div class="basic-filters">
@@ -66,7 +66,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="second-container" data-role='filter-slider'>
+                <div class="second-container slider-box" data-role='filter-slider'>
                     <div id="slider" data-min="{{ filter_form.price_fields.price_min.field.min_value }}" data-max="{{ filter_form.price_fields.price_min.field.max_value }}"></div>
                     <div class="values-fields">
                         <div class="values-item">
@@ -84,11 +84,11 @@
                 </div>
             </div>
             {% for group in filter_form.fields_groups %}
-            <div class="producer">
+            <div class="producer slider-box">
                 <h3 class="filter-title">{{ group.name }}</h3>
                 {% if group.type == 'numeric' %}
                     <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>
-                    <div data-role='filter-slider'>
+                    <div class="slider-box" data-role='filter-slider'>
                         <div id="slider" data-min="{{ group.fields.0.field.min_value }}" data-max="{{ group.fields.1.field.max_value }}"></div>
                         <div class="values-fields">
                             <div class="values-item">

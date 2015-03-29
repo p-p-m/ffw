@@ -99,6 +99,9 @@
             border-bottom: 2px solid #135B8A;
         } // &.oneclick
     } // &.button-blue
+    &.apply {
+        font-size: rem(12);
+    }
 } // button
 
 input[type="text"],

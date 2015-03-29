@@ -321,6 +321,9 @@ a, a:focus, span {
   background: #1D73AC;
   border-bottom: 2px solid #135B8A;
 }
+.button.apply {
+  font-size: 0.75rem;
+}
 
 input[type="text"],
 input[type="email"],
@@ -3232,6 +3235,9 @@ h1.typo-primary {
   padding: 10px;
   background-color: #eee;
 }
+.filter-block .filters .apply-box {
+  text-align: center;
+}
 .filter-block .filters .main-filters {
   margin: 0;
   padding: 0;
@@ -3386,52 +3392,6 @@ h1.typo-primary {
 .filter-block .filters .basic-filters .second-container #price {
   margin-bottom: 40px;
 }
-.filter-block .filters .basic-filters .second-container .values-fields {
-  width: 60%;
-  margin: auto;
-}
-.filter-block .filters .basic-filters .second-container .values-fields:before, .filter-block .filters .basic-filters .second-container .values-fields:after {
-  display: table;
-  content: ' ';
-}
-.filter-block .filters .basic-filters .second-container .values-fields:after {
-  clear: both;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item {
-  float: left;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item:nth-child(1) {
-  width: 45%;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item:nth-child(2) {
-  width: 10%;
-  text-align: center;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item:nth-child(3) {
-  width: 45%;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item:not(:nth-child(2)) {
-  position: relative;
-}
-.filter-block .filters .basic-filters .second-container .values-fields .values-item:not(:nth-child(2)) .currency {
-  position: absolute;
-  right: 10px;
-  top: 8px;
-  font-weight: normal;
-  color: #626262;
-  font-size: 0.875rem;
-  font-family: Arial;
-  line-height: 1;
-}
-.filter-block .filters .basic-filters .second-container .values-fields input[type="text"] {
-  display: inline-block;
-  vertical-align: middle;
-  font-weight: normal;
-  color: #626262;
-  font-size: 0.875rem;
-  font-family: Arial;
-  padding-right: 40px;
-}
 .filter-block .filters .producer {
   padding: 10px;
 }
@@ -3448,6 +3408,62 @@ h1.typo-primary {
   font-family: Arial;
   line-height: 21px;
   margin: 0;
+}
+
+.slider-box {
+  position: relative;
+  padding-bottom: 22px;
+}
+.slider-box.stand-alone {
+  padding-top: 20px !important;
+}
+.slider-box .values-fields {
+  width: 60%;
+  margin: auto;
+  position: relative;
+  top: 22px;
+}
+.slider-box .values-fields:before, .slider-box .values-fields:after {
+  display: table;
+  content: ' ';
+}
+.slider-box .values-fields:after {
+  clear: both;
+}
+.slider-box .values-fields .values-item {
+  float: left;
+}
+.slider-box .values-fields .values-item:nth-child(1) {
+  width: 45%;
+}
+.slider-box .values-fields .values-item:nth-child(2) {
+  width: 10%;
+  text-align: center;
+}
+.slider-box .values-fields .values-item:nth-child(3) {
+  width: 45%;
+}
+.slider-box .values-fields .values-item:not(:nth-child(2)) {
+  position: relative;
+}
+.slider-box .values-fields .values-item:not(:nth-child(2)) .currency {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  font-weight: normal;
+  color: #626262;
+  font-size: 0.875rem;
+  font-family: Arial;
+  line-height: 1;
+}
+.slider-box .values-fields input[type="text"] {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: normal;
+  color: #626262;
+  font-size: 0.875rem;
+  font-family: Arial;
+  padding-right: 40px;
 }
 
 .single-page article {

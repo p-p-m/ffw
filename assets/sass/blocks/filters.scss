@@ -8,6 +8,9 @@
         @include no-select;
         padding: 10px;
         background-color: #eee;
+        .apply-box {
+            text-align: center;
+        } // apply-box
         .main-filters {
             @include clear-list-inline;
             float: left;
@@ -117,45 +120,6 @@
                 #price {
                     margin-bottom: 40px;
                 } // #price
-                .values-fields {
-                    @include clearfix;
-                    width: 60%;
-                    margin: auto;
-                    .values-item {
-                        float: left;
-                        &:nth-child(1) {
-                            width: 45%;
-                        } // &:nth-child(2)
-                        &:nth-child(2) {
-                            width: 10%;
-                            text-align: center;
-                        } // &:nth-child(2)
-                        &:nth-child(3) {
-                            width: 45%;
-                        } // &:nth-child(3)
-                        &:not(:nth-child(2)) {
-                            position: relative;
-                            .currency {
-                                position: absolute;
-                                right: 10px;
-                                top: 8px;
-                                font-weight: normal;
-                                color: #626262;
-                                font-size: rem(14);
-                                font-family: Arial;
-                                line-height: 1;
-                            } // &:after
-                        } // &:not(:nth-child(2))
-                    } // values-item
-                    input[type="text"] {
-                        @include inline-middle;
-                        font-weight: normal;
-                        color: #626262;
-                        font-size: rem(14);
-                        font-family: Arial;
-                        padding-right: 40px;
-                    } // input[type="text"]
-                } // values-fields
             } // second-container
         } // basic-filters
         .producer {
@@ -171,3 +135,52 @@
         } // producer
     } // filters
 } // filter-block
+
+.slider-box {
+    position: relative;
+    padding-bottom: 22px;
+    &.stand-alone {
+        padding-top: 20px !important;
+    } // &.stand-alone
+    .values-fields {
+        @include clearfix;
+        width: 60%;
+        margin: auto;
+        position: relative;
+        top: 22px;
+        .values-item {
+            float: left;
+            &:nth-child(1) {
+                width: 45%;
+            } // &:nth-child(2)
+            &:nth-child(2) {
+                width: 10%;
+                text-align: center;
+            } // &:nth-child(2)
+            &:nth-child(3) {
+                width: 45%;
+            } // &:nth-child(3)
+            &:not(:nth-child(2)) {
+                position: relative;
+                .currency {
+                    position: absolute;
+                    right: 10px;
+                    top: 8px;
+                    font-weight: normal;
+                    color: #626262;
+                    font-size: rem(14);
+                    font-family: Arial;
+                    line-height: 1;
+                } // &:after
+            } // &:not(:nth-child(2))
+        } // values-item
+        input[type="text"] {
+            @include inline-middle;
+            font-weight: normal;
+            color: #626262;
+            font-size: rem(14);
+            font-family: Arial;
+            padding-right: 40px;
+        } // input[type="text"]
+    } // values-fields
+} // slider-box

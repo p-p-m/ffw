@@ -2532,12 +2532,61 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
 
         }
 
+        function updateFromInputMin() {
+            $('[data-role="field-min"]').keyup(function(e) {
+                oldMax = $('#' + sliderid).slider('values', 1 );
+                newMin = $(this).val();
+                $('#' + sliderid).slider("option", "values", [newMin, oldMax]);
+                updateMin(newMin);
+                updateDiffLine(newMin, oldMax);
+            });
+        }
+
+        function updateFromInputMax() {
+            $('[data-role="field-max"]').keyup(function() {
+                oldMin = $('#' + sliderid).slider('values', 0 );
+                newMax = $(this).val();
+                $('#' + sliderid).slider("option", "values", [oldMin, newMax]);
+                updateMax(newMax);
+                updateDiffLine(oldMin, newMax);
+            });
+        }
+
+        function updateBothValues(currenValMin, currenValMax) {
+            $('[data-role="field-min"]').attr('value', currenValMin);
+            $('[data-role="field-max"]').attr('value', currenValMax);
+            updateDiffLine(currenValMin, currenValMax);
+        }
+
+        function updateMax(currentValueMax) {
+            $('.ui-slider-range').find('span.price-range-both')
+            .attr('data-highprice', currentValueMax);
+            $('.ui-slider-handle:eq(1)').html('<span class="price-range-max value">'
+            + currentValueMax + ' грн</span>');
+        }
+        function updateMin(currentValueMin) {
+            $('.ui-slider-range').find('span.price-range-both')
+            .attr('data-highprice', currentValueMin);
+            $('.ui-slider-handle:eq(0)').html('<span class="price-range-min value">'
+            + currentValueMin + ' грн</span>');
+        }
+
+        function updateDiffLine(currentValueMin, currentValueMax) {
+            $('.ui-slider-range').html('<span class="price-range-both value"><i>'
+            + currentValueMin + ' грн - ' + currentValueMax + ' грн</i></span>');
+            $('#range-both').html('<span class="price-range-both value">' + currentValueMin +
+                ' - ' + currentValueMax + '</span>');
+        }
+
         $('#' + sliderid).slider({
             range: true,
             min: min,
             max: max,
             values: values,
             slide: function(event, ui) {
+
+                $('[data-role="field-min"]').attr('value', ui.values[ 0 ]);
+                $('[data-role="field-max"]').attr('value', ui.values[ 1 ]);
 
                 $('.ui-slider-handle:eq(0) .price-range-min').html(ui.values[ 0 ] + ' грн');
                 $('.ui-slider-handle:eq(1) .price-range-max').html(ui.values[ 1 ] + ' грн');
@@ -2546,8 +2595,7 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
                 $('.ui-slider-range').find('span.price-range-both').attr('data-highprice', ui.values[ 1 ]);
                 $('#range-both').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
 
-                $('[data-role="field-min"]').attr('value', ui.values[ 0 ]);
-                $('[data-role="field-max"]').attr('value', ui.values[ 1 ]);
+                updateBothValues(ui.values[ 0 ], ui.values[ 1 ]);
 
                 if (collision($('.price-range-min'), $('.price-range-max')) === true) {
                     $('.price-range-min, .price-range-max').css('opacity', '0');
@@ -2561,25 +2609,11 @@ S:{pattern:/[a-zA-Z]/}}};b.jMaskGlobals=b.jMaskGlobals||{};p=b.jMaskGlobals=b.ex
         valueMin = $('#' + sliderid).slider('values', 0 );
         valueMax = $('#' + sliderid).slider('values', 1 );
 
-        $('.ui-slider-range').append('<span class="price-range-both value"><i>'
-            + valueMin + ' грн - ' + valueMax + ' грн</i></span>');
-
-        $('.ui-slider-range').find('span.price-range-both')
-            .attr('data-lowprice', valueMin);
-        $('.ui-slider-range').find('span.price-range-both')
-            .attr('data-highprice', valueMax);
-
-        $('#range-both').append('<span class="price-range-both value">' + valueMin +
-            ' - ' + valueMax + '</span>');
-
-        $('.ui-slider-handle:eq(0)').append('<span class="price-range-min value">'
-            + valueMin + ' грн</span>');
-
-        $('.ui-slider-handle:eq(1)').append('<span class="price-range-max value">'
-            + valueMax + ' грн</span>');
-
-        $('[data-role="field-min"]').attr('value', valueMin);
-        $('[data-role="field-max"]').attr('value', valueMax);
+        updateMin(valueMin);
+        updateMax(valueMax);
+        updateBothValues(valueMin, valueMax);
+        updateFromInputMin();
+        updateFromInputMax();
     }
 
     function slickStandart(argContainer, argBaner, argPrev, argNext) {

@@ -42,3 +42,8 @@ collectstatic:
 
 validate:
 	$(SCRIPT) validate
+
+reinitdb:
+	$(MANAGESCRIPT) flush --noinput
+	$(MANAGESCRIPT) createproducts
+	$(MANAGESCRIPT) createbanners

@@ -34,19 +34,30 @@ custom database and other settings.
 
         make run
 
-8. Static builder
+
+Frontend steps:
+
+1. Static builder
 
         npm install
         bower install
 
-also ruby, ruby gems, gem sass-lang is required.
+2. Also ruby, ruby gems, gem sass-lang is required.
 
         sudo su -c "gem install sass"
 
-for watch static
+3. For watch static
 
         grunt
 
-for compile static
+4. For compile static
 
         grunt build
+
+
+Other commands:
+
+ - generate random data. (this command will clear your current base and add new banners and products)
+
+        make reinitdb
+

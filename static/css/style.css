@@ -1021,12 +1021,26 @@ textarea {
   display: none;
   background-color: #00A2E2;
   position: absolute;
-  top: 30px;
-  width: 100%;
+  top: 46px;
+  left: 50%;
+  width: 180px;
+  margin-left: -90px;
   z-index: 4;
 }
 .product-menu .menu li .submenu li {
   list-style: none;
+}
+.product-menu .menu li .submenu > li > a {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  font-family: arial;
+  font-size: 14px;
+  line-height: 1;
+}
+.product-menu .menu li .submenu > li > a:hover {
+  background-color: #046f99;
 }
 
 .footer .service {

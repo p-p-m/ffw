@@ -113,9 +113,23 @@
                 display: none;
                 background-color: #00A2E2;
                 position: absolute;
-                top: 30px;
-                width: 100%;
+                top: 46px;
+                left: 50%;
+                width: 180px;
+                margin-left: -90px;
                 z-index: 4;
+                > li {
+                    > a {
+                        width: 100%;
+                        box-sizing: border-box;
+                        font-family: arial;
+                        font-size: 14px;
+                        line-height: 1;
+                        &:hover {
+                            background-color: rgb(4, 111, 153);
+                        }
+                    } // > a
+                } // > li
             } // submenu
         } // li
     } // menu

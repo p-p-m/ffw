@@ -1,0 +1,107 @@
+.pagination {
+    @include bp(xs) {
+        display: none;
+    }
+    @include clearfix;
+    @include clear-list-inline;
+    width: 480px;
+    margin: auto;
+    padding: 40px 0;
+    text-align: center;
+    .pressbutton + .pressbutton {
+        border-left: none;
+    } // .pressbutton + .pressbutton
+    .pressbutton {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        border: 1px solid #979797;
+        font-family: Arial;
+        font-size: rem(20);
+        text-align: center;
+        &.control {
+            border: 1px solid transparent;
+            a {
+                font-size: rem(32);
+                color: #979797;
+            } // a
+        } // &.control
+        &.active {
+            background-color: #979797;
+            a {
+            color: white;
+            } // a
+        } // &.active
+        a {
+            display: block;
+            width: 58px;
+            height: 60px;
+            padding: 13px 0 0 0;
+            box-sizing: border-box;
+            text-decoration: none;
+            color: #979797;
+        } // a
+    } // pressbutton
+} // pagination
+
+.pagination-mobile {
+    width: 100%;
+    padding: 40px 0;
+    @include table;
+    .pressbutton {
+        @include table-cell;
+        padding: 13px 0 0 0;
+        margin: 0;
+        width: 33.3333%;
+        height: 60px;
+        border: 1px solid #979797;
+        font-family: Arial;
+        font-size: rem(20);
+        float: left;
+        text-align: center;
+        &.control {
+            border-left: none;
+            border-right: none;
+            a {
+                display: block;
+                width: 100%;
+                height: 60px;
+                font-size: rem(32);
+                color: #979797;
+            } // a
+        } // &.control
+        &.active {
+            background-color: #979797;
+            color: white;
+            a, span {
+                color: white;
+            } // a, span
+        } // &.active
+        a {
+            text-decoration: none;
+            color: #979797;
+            display: block;
+            width: 100%;
+            height: 60px;
+        } // a
+    } // pressbutton
+    @include bp(sm) {
+        display: none;
+    } // sm
+    @include bp(md) {
+        display: none;
+    } // md
+    @include bp(lg) {
+        display: none;
+    } // lg
+} // pagination-mobile
+
+.pagination-more-link {
+    text-align: center;
+    margin: 10px 0;
+    a {
+        color: #5a5a5a;
+        font-size: rem(30);
+        font-family: Arial;
+    } // a
+} // link

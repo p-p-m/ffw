@@ -1,0 +1,6 @@
+.home-page-text {
+    margin: 20px 0;
+    @include bp(xs) {
+        display: none;
+    } // xs
+} // home-page-text

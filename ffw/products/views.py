@@ -17,11 +17,9 @@ from django.views.decorators.csrf import csrf_protect
 class HomeView(View):
 
     def get(self, request):
-        categories = models.Category.objects.all().select_related('subcategories')
-        top = Banner.objects.get(name='top')
         main = Banner.objects.get(name='main')
-        return render(request, 'products/home.html', {'categories': categories,
-                      'top': top, 'main': main})
+        subcategories = models.Subcategory.objects.filter(is_active=True)
+        return render(request, 'products/home.html', {'main': main, 'subcategories': subcategories})
 
 
 class ProductListView(ListView):
@@ -106,7 +104,7 @@ class ProductListView(ListView):
         context['filter_form'] = self._get_filter_form()
        
         if not self.request.is_ajax():
-            context['categories'] = models.Category.objects.all().select_related('subcategories')
+            context['selected_subcategory'] = self._get_selected_subcategory()
             context['selected_category'] = self._get_selected_category()
         return context
 

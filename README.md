@@ -33,3 +33,31 @@ custom database and other settings.
 7. Start site:
 
         make run
+
+
+Frontend steps:
+
+1. Static builder
+
+        npm install
+        bower install
+
+2. Also ruby, ruby gems, gem sass-lang is required.
+
+        sudo su -c "gem install sass"
+
+3. For watch static
+
+        grunt
+
+4. For compile static
+
+        grunt build
+
+
+Other commands:
+
+ - generate random data. (this command will clear your current base and add new banners and products)
+
+        make reinitdb
+

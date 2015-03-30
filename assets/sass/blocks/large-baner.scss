@@ -1,0 +1,69 @@
+.large-baner {
+    margin-bottom: 40px;
+    .baner-back {
+        text-decoration: none;
+        display: block;
+        position: relative;
+        .main-baners {
+            height: 300px;
+            overflow: hidden;
+            .baner {
+                height: 300px;
+                background-size: cover !important;
+                background-position: 50% 50% !important;
+            } // baner
+        } // main-baners
+        .prev, .next {
+            color: white;
+            position: absolute;
+            top: 50%;
+            margin-top: rem(-20);
+            z-index: 3;
+            cursor: pointer;
+            @include bp(xs) {
+                margin-top: rem(-20);
+            } // xs
+            @include bp(sm) {
+                margin-top: rem(-25);
+            } // sm
+            &:before {
+                font-family: FontAwesome;
+                font-size: rem(60);
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                line-height: 1;
+                @include bp(xs) {
+                    font-size: rem(40);
+                } // xs
+                @include bp(sm) {
+                    font-size: rem(60);
+                } // sm
+            } // &:before
+        } // prev, next
+        .prev {
+            left: 30px;
+            @include bp(xs) {
+                left: 10px;
+            } // xs
+            @include bp(sm) {
+                left: 10px;
+            } // sm
+            &:before {
+                content: '\f104';
+            } // &:before
+        } // prev
+        .next {
+            right: 30px;
+            @include bp(xs) {
+                right: 10px;
+            } // xs
+            @include bp(sm) {
+                right: 10px;
+            } // sm
+            &:before {
+                content: '\f105';
+            } // &:before
+        } // next
+    }  // baner-back
+} // large-baner

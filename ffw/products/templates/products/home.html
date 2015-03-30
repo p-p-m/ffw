@@ -1,32 +1,59 @@
+{% extends 'base.html' %}
 {% load static %}
 {% get_media_prefix as MEDIA_PREFIX %}
 
-<ul>
-  {% if top.images.all %}
-    {% for image in top.images.all %}
-       <li>
-           <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{image.photo}}" alt="{{image.description}}">{{image}}</a>      
-       </li>
-    {% endfor %}
-  {% endif %}
-</ul>
+{% block content %}
+<!-- large-baner -->
+<div class="large-baner">
+    <div class="wrap">
+        <div class="baner-back">
+            <span class="prev" data-role="baner-prev"></span>
+            <div class="main-baners">
+                <div data-role="main-baners">
+                    {% if main.images.all %}
+                        {% for image in main.images.all %}
+                            <a href="{{ image.link }}" class="baner" data-role="main-baner"
+                                style="background: url('{{ MEDIA_PREFIX }}{{ image.photo.url }}');"></a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <span class="next" data-role="baner-next"></span>
+        </div>
+    </div>
+</div>
+<!-- /large-baner -->
 
+<!-- catalogue-directories -->
+<div class="catalogue-directories">
+    <div class="wrap">
+        <ul class="directories-list">
+            {% for subcategory in subcategories %}
+                {% with subcategory as item %}
+                    {% include 'items/index-category-item.html' %}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+<!-- /catalogue-directories -->
 
-{% for category in categories %}
-    <ul><li><a href="{{ category.get_url }}">{{ category.name }}</a></li>
-      {% for subcategory in category.subcategories.all %}
-        <ul><li><a href="{{ subcategory.get_url }}">{{ subcategory.name }}</a></li></ul>
-      {% endfor %}
-    </ul>
-{% endfor %}
-
-
-<ul>
-  {% if main.images.all %}
-    {% for image in main.images.all %}
-      <li>
-        <a href={{image.link}} ><img src="{{ MEDIA_PREFIX }}{{ image.photo }}" alt="{{ image.description}}">{{image}}</a>
-      </li>
-    {% endfor %}
-  {% endif %}
-</ul>
+<!-- home-page-text -->
+<div class="home-page-text">
+    <div class="wrap">
+        <h2 class="text-title">Фильтры для воды, для дома и для офиса</h2>
+        <article class="text-text">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non mollis lectus. Praesent venenatis urna in odio venenatis blandit. Aenean pretium neque sit amet ante luctus, in egestas mi ornare. Maecenas convallis, ex sed placerat condimentum, magna nunc eleifend lorem, quis commodo nisl sem non erat. Ut quis ligula aliquet, posuere ligula a, dictum urna. Curabitur quam sem, tristique vitae cursus eget, pretium condimentum nulla. Aenean sit amet orci suscipit, vestibulum leo non, ultricies ex.
+            </p>
+            <p>
+                Quisque porta risus leo, ut condimentum arcu vehicula eget. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In vitae convallis ligula. Morbi vestibulum lectus malesuada felis tempus, a lacinia sapien laoreet. Nam ut cursus nisi. Suspendisse tincidunt mauris sed porttitor maximus. Nunc lobortis tellus eget massa molestie euismod. Integer dictum consequat placerat. Praesent placerat in ex eu tristique. Nunc eleifend dignissim nibh, non gravida odio imperdiet et.
+            </p>
+            <p>
+                Fusce accumsan ipsum auctor, gravida nunc sollicitudin, rhoncus risus. Etiam porta orci metus, at ultricies lectus cursus sit amet. Sed sagittis orci sit amet dui elementum, ac ultrices magna varius. Praesent eros purus, pharetra eu vehicula a, eleifend at quam. Duis at felis mattis urna pellentesque fermentum vel ac ex. Donec placerat vitae tortor ut dapibus. Aliquam risus elit, elementum vel tortor non, cursus rhoncus lacus.
+            </p>
+        </article>
+    </div>
+</div>
+<!-- /home-page-text -->
+{% endblock %}

@@ -1,0 +1,147 @@
+.main-header {
+    padding: 15px 0;
+    border-bottom: 1px solid #E2E2E2;
+    @include no-select;
+    .cart-display-mobile {
+        float: right;
+        @include bp(sm) {
+            display: none;
+        } // sm
+        @include bp(md) {
+            display: none;
+        } // md
+        @include bp(lg) {
+            display: none;
+        } // lg
+        .cart-display-link {
+            text-decoration: none;
+            display: block;
+            padding-left: 30px;
+            &.active {
+                .cart-count {
+                    background-color: #00A2E2;
+                } // .cart-count
+            } // &.active
+            .cart-count {
+                box-sizing: border-box;
+                border-radius: 100%;
+                width: 34px;
+                height: 34px;
+                background: #1B5191;
+                color: white;
+                text-align: center;
+                position: relative;
+                padding-top: 4px;
+                &:before {
+                    content: '\f07a';
+                    font: normal normal normal 20px/1 FontAwesome;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    color: #c1c1c1;
+                    margin-right: 5px;
+                    position: absolute;
+                    left: -26px;
+                    top: 7px;
+                    width: 14px;
+                } // &:before
+            } // cart-count
+        } // cart-display-link
+    } // cart-display-mobile
+    .currency-mobile {
+        float: right;
+        @include bp(md) {
+            display: none;
+        } // md
+        @include bp(lg) {
+            display: none;
+        } // lg
+        .currency-select-mobile {
+            border-radius: 3px;
+            color: #565656;
+            font-size: rem(23);
+            font-family: PT Sans Narrow;
+            margin-top: 4px;
+            &:before {
+                content: '\f00c';
+                font: normal normal normal 14px/1 FontAwesome;
+                text-rendering: auto;
+                -webkit-font-smoothing: antialiased;
+                color: #00A2E2;
+                margin-right: 5px;
+                margin-left: 20px;
+                position: relative;
+                top: -3px;
+            } // &:before
+        } // currency-select-mobile
+    } // currency-mobile
+    .small-menu {
+        @include clear-list-inline;
+        float: left;
+        font-size: rem(23);
+        font-family: PT Sans Narrow;
+        .small-menu-item {
+            display: none;
+            @include bp(sm) {
+                @include inline-middle;
+            } // sm
+            @include bp(md) {
+                @include inline-middle;
+            } // md
+            @include bp(lg) {
+                @include inline-middle;
+            } // lg
+            &.bar-icon {
+                @include inline-middle;
+                cursor: pointer;
+                @include bp(sm) {
+                    display: none;
+                } // sm
+                @include bp(md) {
+                    display: none;
+                } // md
+                @include bp(lg) {
+                    display: none;
+                } // lg
+            } // &.bar-icon
+            a {
+                color: #969696;
+                text-decoration: none;
+            } // a
+        } // small-menu-item
+        .small-menu-item + .small-menu-item {
+            margin-left: 20px;
+        } // small-menu-item + small-menu-item
+    } // small-menu
+    .currency {
+        display: none;
+        @include clear-list-inline;
+        float: right;
+        font-size: rem(23);
+        font-family: PT Sans Narrow;
+        @include bp(md) {
+            display: block;
+        } // md
+        @include bp(lg) {
+            display: block;
+        } // lg
+        .currency-item {
+            color: #969696;
+            opacity: .5;
+            margin-left: 20px;
+            cursor: pointer;
+            &.active {
+                opacity: 1;
+                &:before {
+                    content: '\f00c';
+                    font: normal normal normal 14px/1 FontAwesome;
+                    text-rendering: auto;
+                    -webkit-font-smoothing: antialiased;
+                    color: #00A2E2;
+                    margin-right: 5px;
+                    position: relative;
+                    top: -3px;
+                } // &:before
+            } // &.active
+        } // currency-item
+    } // curency
+} // main-header

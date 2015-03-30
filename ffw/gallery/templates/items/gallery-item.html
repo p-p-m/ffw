@@ -1,0 +1,28 @@
+<li class="photo-gallery">
+    <div class="photo-gallery-item" data-role="gallery-item">
+        <img src="{{ item.photo.url }}" class="image" data-trigger="gallery-expand-trigger">
+        <a href="{{ item.link }}" class="link">{{ item.description }}</a>
+        {% if item.images %}
+            <div class="expand-overlay" data-role="gallery-overlay" data-trigger="gallery-expand-trigger"></div>
+            <div class="white-box" data-role="gallery-expand">
+                <span class="close" data-role="close"><i class="fa fa-times"></i></span>
+                <div class="sub-images" data-role="sub-images">
+                    <div class="sub-image" data-role="sub-image">
+                        <img src="{{ item.photo.url }}" alt="{{ item.description }}" data-role="sub-image-next">
+                        <div class="description">
+                            <a href={{ item.link }} class="link">{{ item.description }}</a>
+                        </div>
+                    </div>
+                    {% for image in item.images.all %}
+                        <div class="sub-image" data-role="sub-image">
+                            <img src="{{ image.photo.url }}" alt="{{ image.description }}" data-role="sub-image-next">
+                            <div class="description">
+                                <a href={{ image.link }} class="link">{{ image.description }}</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</li>

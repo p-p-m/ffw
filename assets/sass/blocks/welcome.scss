@@ -1,0 +1,214 @@
+.welcome-wrap {
+    @include table;
+    width: 100%;
+    padding: 0 5%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    @include bp(md) {
+        width: 960px;
+        padding: 0;
+    } // md
+    @include bp(lg) {
+        width: 960px;
+        padding: 0;
+    } // lg
+    .welcome-block {
+        @include table-cell;
+        vertical-align: middle;
+        box-sizing: border-box;
+        &.logo-box {
+            width: 50%;
+            @include bp(sm) {
+                width: 170px;
+                padding-right: 20px;
+            } // sm
+            @include bp(md) {
+                width: 170px;
+                padding-right: 20px;
+            } // md
+            @include bp(lg) {
+                width: 170px;
+                padding-right: 20px;
+            } // lg
+            .logo {
+                @include inline-middle;
+                width: 150px;
+                height: 150px;
+                background: url(/static/images/logo.png);
+                background-size: 100%;
+            } // logo
+        } // &.logo-box
+        &.baner-box {
+            @include table-cell;
+            @include bp(sm) {
+                @include table-cell;
+            } // sm
+            @include bp(md) {
+                @include table-cell;
+            } // md
+            @include bp(lg) {
+                @include table-cell;
+            } // lg
+            .banners {
+                overflow: hidden;
+                height: 200px;
+            } // baners
+            .baner {
+                background: url(/static/images/baner.png);
+                background-size: cover !important;
+                background-position: 50% 50% !important;
+                width: 100%;
+                height: 200px;
+                float: left;
+                display: none;
+                @include bp(sm) {
+                    display: block;
+                } // sm
+                @include bp(md) {
+                    display: block;
+                } // md
+                @include bp(lg) {
+                    display: block;
+                } // lg
+            } // banner
+        } // &.baner-box
+        &.info-box {
+            width: 50%;
+            padding-left: 20px;
+            @include bp(sm) {
+                width: 210px;
+                padding-left: 20px;
+            } // sm
+            @include bp(md) {
+                width: 210px;
+                padding-left: 20px;
+            } // md
+            @include bp(lg) {
+                width: 210px;
+                padding-left: 20px;
+            } // lg
+            .info {
+                @include inline-middle;
+                background-color: white;
+                width: 100%;
+                .info-block {
+                    font-size: rem(14);
+                    line-height: 16px;
+                    color: #c1c1c1;
+                    ul {
+                        @include clear-list;
+                        li {
+                            margin-left: 40px;
+                        } // li
+                        li + li {
+                            margin-top: 5px;
+                        } // +
+                    } // ul
+                } // info-block
+                .phones {
+                    margin-bottom: 10px;
+                    display: block;
+                    &:before {
+                        content: '\f095';
+                        font: normal normal normal 14px/1 FontAwesome;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        color: #c1c1c1;
+                        float: left;
+                    } // &:before
+                } // phones
+                .email {
+                    border-bottom: none;
+                    display: block;
+                    @include bp(sm) {
+                        margin-bottom: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #E2E2E2;
+                    } // sm
+                    @include bp(md) {
+                        margin-bottom: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #E2E2E2;
+                    } // md
+                    @include bp(lg) {
+                        margin-bottom: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #E2E2E2;
+                    } // lg
+                    &:before {
+                        content: '\f0e0';
+                        font: normal normal normal 14px/1 FontAwesome;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        color: #c1c1c1;
+                        position: relative;
+                        top: 16px;
+                    }  // &:before
+                } // email
+                .cart {
+                    display: none;
+                    @include bp(sm) {
+                        display: block;
+                    } // sm
+                    @include bp(md) {
+                        display: block;
+                    } // md
+                    @include bp(lg) {
+                        display: block;
+                    } // lg
+                    .cart-display-link {
+                        @include no-select;
+                        @include clearfix;
+                        text-decoration: none;
+                        display: block;
+                        &.active {
+                            .cart-count {
+                                background-color: #00A2E2;
+                            } // .cart-count
+                        } // &.active
+                        .cart-count {
+                            box-sizing: border-box;
+                            border-radius: 100%;
+                            width: 34px;
+                            height: 34px;
+                            background: #1B5191;
+                            color: white;
+                            text-align: center;
+                            position: relative;
+                            padding-top: 9px;
+                            padding-right: 12px;
+                            top: 10px;
+                            left: 30px;
+                            float: left;
+                            &:before {
+                                content: '\f07a';
+                                font: normal normal normal 14px/1 FontAwesome;
+                                text-rendering: auto;
+                                -webkit-font-smoothing: antialiased;
+                                color: #c1c1c1;
+                                position: relative;
+                                left: -30px;
+                            } // &:before
+                        } // cart-count
+                        .cart-info {
+                            float: right;
+                            color: #c1c1c1;
+                            span {
+                                display: block;
+                            } // span
+                            .text-cart {
+                                color: #484848;
+                                font-size: rem(18);
+                            } // text-cart
+                            .sum {
+                                font-weight: bold;
+                                color: #266AAC;
+                            } // sum
+                        } // cart-info
+                    } // cart-display-link
+                } // cart
+            } // info
+        } // &.info-box
+    } // welcome-block
+} // welcome-wrap

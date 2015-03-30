@@ -32,7 +32,7 @@ class ProductFactory(factory.DjangoModelFactory):
     code = factory.Sequence(lambda n: 'Product-code-%s' % n)
     subcategory = factory.SubFactory(SubcategoryFactory)
 
-    price_uah = factory.fuzzy.FuzzyDecimal(low=10000, high=200000)
+    price_uah = factory.fuzzy.FuzzyDecimal(low=1000, high=20000)
     price_usd = factory.LazyAttribute(lambda product: product.price_uah / Decimal(20.0))
     price_eur = factory.LazyAttribute(lambda product: product.price_uah / Decimal(24.0))
 

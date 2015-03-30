@@ -1,0 +1,45 @@
+.catalogue-directories {
+    .directories-list {
+        @include clearfix;
+        @include clear-list;
+        .list-item {
+            float: left;
+            width: 16.6666%;
+            text-align: center;
+            margin-bottom: 15px;
+            &:nth-child(6n+1) {
+                clear: both;
+            } // &:nth-child(6n+1)
+            @include bp(xs) {
+                width: 50%;
+                &:nth-child(2n+1) {
+                    clear: both;
+                } // &:nth-child(6n+1)
+            } // xs
+            @include bp(sm) {
+                width: 33.3333%;
+                &:nth-child(3n+1) {
+                    clear: both;
+                } // &:nth-child(6n+1)
+            } // sm
+            .item {
+                @include inline-middle;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0 20px;
+                font-family: Arial;
+                font-size: rem(18);
+                line-height: 1;
+                color: #57ABFF;
+                text-decoration: none;
+                @include bp(xs) {
+                    padding: 0 40px;
+                } // xs
+                .item-icon {
+                    margin: auto;
+                    margin-bottom: 15px;
+                } // item-icon
+            } // item
+        } // list-item
+    } // directories-list
+} // catalogue-directories

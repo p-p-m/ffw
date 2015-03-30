@@ -1,2 +1,20 @@
-< hl > {{page.title | upper}} < /hl >
-< ul > {{page.text}} < /ul >
+{% extends 'base.html' %}
+
+{% load static i18n %}
+{% get_media_prefix as MEDIA_PREFIX %}
+
+{% block content %}
+<div class="view-title-box">
+    <div class="wrap">
+        <h1 class="view-title">{{page.title | upper}}</h1>
+    </div>
+</div>
+
+<div class="single-page">
+    <div class="wrap">
+        <article>
+            {{ page.text }}
+        </article>
+    </div>
+</div>
+{% endblock %}

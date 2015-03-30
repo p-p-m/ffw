@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
+
 {% csrf_token %}
-{% load i18n %}
-{% load static %}
+{% load static i18n %}
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}
 
@@ -10,58 +10,161 @@
 {% block content %}
   {% include 'products/header.html' %}
 
-  Paginate By:
-    <select id='paginate-by'>
-      <option value="10" {% if paginate_by == 10 %} selected="selected" {% endif %}>10</option>
-      <option value="25" {% if paginate_by == 20 %} selected="selected" {% endif %}>20</option>
-      <option value="50" {% if paginate_by == 30 %} selected="selected" {% endif %}>30</option>
-    </select><br/>
-
- Order By:
-      {% for field in sort_form %}
-        {{ field }}
-      {% endfor %}
-    <br/>
-
-  Selected category: {{ selected_category }}<hr/>
-  <ul>
-    {% for product in products %}
+<!--    {% for product in products %}
       <li>
         <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
         (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
         <button  name= 'but1' value= {{product.code}} type="button" 
             id= "product_add" data-product-code= {{product.code}} }  > {% trans "Add to the cart" %}  </button>
       </li>
-    {% endfor %}
-  </ul>
+-->
 
-  <hr/>
-  <strong>Search form</strong><br/><br/>
 
-  Filtered products: <div id='search-count'> {{ total_count }} </div>
+<!-- view-title-box -->
+<div class="view-title-box with-filters">
+    <div class="wrap">
+        <h1 class="view-title">
+        {% if selected_subcategory %}
+            {{ selected_subcategory.name }}
+        {% else %}
+            {{ selected_category.name }}
+        {% endif %}
+        </h1>
+        <div class="filter-line">
+            <ul class="filters">
+                <li class="price">{% trans 'Price' %}:</li>
+                <li><span class="filter-button gray freewidth no-check price-tag" data-role="sort-item" data-sort="PD"><i class="fa fa-chevron-up"></i></span></li>
+                <li><span class="filter-button gray freewidth no-check price-tag" data-role="sort-item" data-sort="PA"><i class="fa fa-chevron-down"></i></span></li>
+                <li class="rating">{% trans 'Rating' %}:</li>
+                <li><span class="filter-button gray freewidth no-check price-tag" data-role="sort-item" data-sort="RD"><i class="fa fa-chevron-up"></i></span></li>
+                <li class="show-filters">
+                    <span class="filter-button gray freewidth filters-trigger" data-role="filters-trigger">фильтры</span>
+                </li>
+                <li>
+                    <span class="filter-button" data-role="products-view-trigger" data-view="grid">
+                        <span class="filter show-grid active"></span>
+                    </span>
+                </li>
+                <li>
+                    <span class="filter-button" data-role="products-view-trigger" data-view="list">
+                        <span class="filter show-list"></span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <div class="show-products-count">
+            {% trans 'products found' %} <span data-role="count">{{ total_count }}</span>
+        </div>
+    </div>
+</div>
+<!-- /view-title-box -->
 
-  <form id='search-form' action='' method='GET'>
-    <input type='submit'><br/>
-    {% for group in filter_form.fields_groups %}
-      {% if group.type == 'numeric' %}
-        <strong> {{ group.name }}</strong><br/>
-        From: {{ group.fields.0 }}, To: {{ group.fields.1 }}
-        <hr/>
-      {% else %}
-        <strong> {{ group.name }}</strong><br/>
-        {% for field in group.fields %}
-          {{ field }} <a href='javascript:void(0);'> {{ field.label }} </a> <br>
-        {% endfor %}
-        <hr/>
-      {% endif %}
-    {% endfor %}
+<!-- basic filters -->
+<div class="filter-block" data-role="filters-block">
+    <div class="wrap">
+        <div class="filters">
+            <div class="basic-filters">
+                <h3 class="filter-title">Основные фильтры</h3>
+                <div class="first-container">
+                    <ul class="main-filters">
+                        <li>
+                            <span class="item" data-role="filter-item-toggle">новинка</span>
+                        </li>
+                        <li>
+                            <span class="item" data-role="filter-item-toggle">акция</span>
+                        </li>
+                        <li>
+                            <span class="item" data-role="filter-item-toggle">скидка</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="second-container slider-box" data-role='filter-slider'>
+                    <div id="slider" data-min="{{ filter_form.price_fields.price_min.field.min_value }}" data-max="{{ filter_form.price_fields.price_min.field.max_value }}"></div>
+                    <div class="values-fields">
+                        <div class="values-item">
+                            <input type="text" data-role="field-min" name="{{ filter_form.price_fields.price_min.name }}">
+                            <span class="currency">грн</span>
+                        </div>
+                        <div class="values-item">
+                            <span>–</span>
+                        </div>
+                        <div class="values-item">
+                            <input type="text" data-role="field-max" name="{{ filter_form.price_fields.price_max.name }}">
+                            <span class="currency">грн</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for group in filter_form.fields_groups %}
+            <div class="producer slider-box stand-alone">
+                <h3 class="filter-title">{{ group.name }}</h3>
+                {% if group.type == 'numeric' %}
+                    <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>
+                    <div class="slider-box" data-role='filter-slider'>
+                        <div id="slider" data-min="{{ group.fields.0.field.min_value }}" data-max="{{ group.fields.1.field.max_value }}"></div>
+                        <div class="values-fields">
+                            <div class="values-item">
+                                <input type="text" data-role="field-min" name="{{ group.fields.0.name }}">
+                            </div>
+                            <div class="values-item">
+                                <span>–</span>
+                            </div>
+                            <div class="values-item">
+                                <input type="text" data-role="field-max" name="{{ group.fields.1.name }}">
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <ul class="main-filters">
+                    {% for field in group.fields %}
+                    <li><span class="item" data-role="filter-item-toggle" name="{{ field.name }}">{{ field.label }}</span></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="apply-box">
+                <a class="button button-blue apply">{% trans 'Show products' %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /basic filters -->
 
-    <input type='submit'>
-  </form>
+<div class="products-view">
+    <!-- products-list-box -->
+    <div class="products-list-box" data-role="products-view" data-view="grid">
+        <div class="wrap">
+            <ul class="products-list">
+                {% with products as items %}
+                    {% for item in items %}
+                        {% include 'items/product-grid.html' %}
+                    {% endfor %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+    <!-- /products-list-box -->
 
+    <!-- products-list-box -->
+    <div class="products-list-box" data-role="products-view" data-view="list">
+        <div class="wrap">
+            <ul class="products-list">
+                {% with products as items %}
+                    {% for item in items %}
+                        {% include 'items/product-list.html' %}
+                    {% endfor %}
+                {% endwith %}
+            </ul>
+        </div>
+    </div>
+    <!-- /products-list-box -->
+</div>
+{% include 'partials/pagination.html' %}
 {% endblock content %}
 
 {% block js %}
   <script src="{{ STATIC_URL }}js/sess_cart.js"> </script>
-  <script src="{{ STATIC_URL }}js/product-list.js"> </script>
+<!--  <script src="{{ STATIC_URL }}js/product-list.js"> </script>-->
+  <script src="{{ STATIC_URL }}/jsdev/product-list.js"></script>
 {% endblock js %}

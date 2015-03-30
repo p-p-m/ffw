@@ -30,12 +30,16 @@ class Category(models.Model):
     slug = models.CharField(
         _('Category slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
     def get_url(self):
         return reverse('products', args=(self.slug,))
+
+    def get_subcategories(self):
+        return self.subcategories.all()
 
 
 @python_2_unicode_compatible
@@ -50,6 +54,7 @@ class Subcategory(models.Model):
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return '{}-{}'.format(self.category, self.name)
@@ -92,6 +97,16 @@ class Product(TimeStampedModel):
 
     def get_url(self):
         return reverse('product', args=(self.slug, ))
+
+    def get_images(self):
+        return self.images.all()
+
+    def get_first_image(self):
+        return self.images.all()[0]
+
+    def get_rating(self):
+        rounded_rating = int(self.rating)
+        return rounded_rating
 
 
 @python_2_unicode_compatible

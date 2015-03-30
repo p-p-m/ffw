@@ -1,0 +1,19 @@
+<!-- popup-menu -->
+<div class="popup-menu" data-role="popup-mobile-menu">
+    <div class="wrap">
+        <nav class="popup-block search-box">
+            <input class="search-fieled" type="search" placeholder="Search request">
+            <button type="submit" class="send"></button>
+        </nav>
+        <nav class="popup-block menu-box">
+            <ul class="menu-list">
+                {% for category in categories %}
+                    <li>
+                        <a href="{{ category.get_url }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
+<!-- /popup-menu -->

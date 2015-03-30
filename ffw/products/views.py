@@ -9,7 +9,11 @@ import forms
 import models
 from django.utils.translation import ugettext_lazy as _
 
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_protect   
 
+   
 class HomeView(View):
 
     def get(self, request):
@@ -100,7 +104,7 @@ class ProductListView(ListView):
         context['total_count'] = self.get_queryset().count()
         context['sort_form'] = forms.SortForm(self.request.GET)
         context['filter_form'] = self._get_filter_form()
-
+       
         if not self.request.is_ajax():
             context['categories'] = models.Category.objects.all().select_related('subcategories')
             context['selected_category'] = self._get_selected_category()
@@ -108,12 +112,50 @@ class ProductListView(ListView):
 
 
 class ProductView(View):
-
     def get(self, request, product):
         product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
         return render(request, 'products/product.html', {'product': product})
+     
 
+@csrf_protect
+def  cart_change(request, *args, **kwargs):
+    c = {}
+    c.update(csrf(request))    
+    action = request.POST.get('action', '')
+    session = request.session
+    session['cart'] = session.get('cart',{'products': {}, 'quant': 0, 'sum': 0})
+    cart = session['cart']
+    cart['quant'] = 0
+    cart['sum'] = 0
 
-def  product_add(request):
-   print('aaaaaaaaaaaaaaaa')
-   return HttpResponse('OkOk')
+    if action != 'clear':    
+        product_code = request.POST.get('product_code', '')
+        product = get_object_or_404(models.Product.objects, code=product_code)
+        price = float(product.price_uah)
+        name = product.name
+        
+        if action == 'remove':
+            del cart['products'][product_code]
+        else:
+            cart['products'][product_code] = cart['products'].get(product_code,{'name': '', 'price': 0})
+            cart['products'][product_code]['name'] = name
+            cart['products'][product_code]['price'] = price        
+
+        for key in cart['products']:   
+            cart['sum'] += cart['products'][key]['price']
+            cart['quant'] += 1
+
+    else:
+        cart['products'] = {}
+    
+    return HttpResponse(json.JSONEncoder().encode({'sum': cart['sum'], 'quant': cart['quant']}), c) #, 'product_code': product_code
+    
+
+class CartView(View):
+
+    def get(self, request):       
+        return render(request, 'products/cart.html', {'cart': request.session['cart']})
+
+def   cart_get(request, *args, **kwargs):   
+    return HttpResponse(json.JSONEncoder().encode({'cart':request.session['cart']}))
+        

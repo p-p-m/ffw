@@ -1,22 +1,16 @@
+$(document).ready(function() {
+ 
+    cart.fulling();
 
-document.getElementById('product_add').onclick = function() {
-    alert(this.value);
-    
-    $.ajax({
-      type: "POST",
-      url: "127.0.0.1:8000/cart/",
-      data: {
-          'product_id': 1
-      },
-      dataType: "text", //пробовал и html
-      cashe: false,
-      success: function(data) {
-        alert('Ok');   
-      },
-      error: function(data) {
-        alert('My error');  
-      }      
+    $('button#remove').on('click', function() {
+        var product_code = this.value; 
+        cart.cart_change(product_code, 'remove');    
     });
-  
-};   
     
+    $('button#clear').on('click', function() {
+        var product_code = this.value; 
+        cart.cart_change(0, 'clear');    
+    });
+});
+
+

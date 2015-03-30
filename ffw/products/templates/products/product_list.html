@@ -1,18 +1,14 @@
-
-
 {% extends 'base.html' %}
 
+{% csrf_token %}
 {% load i18n %}
 {% load static %}
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}
 
-SELECTED PRODUCTS: quantity <output name = "quantity">0</output>  sum <output name = "sum">0 <br/>
-<!--
-Paginate By: {{ paginate_by }}<br/>
-Selected category: {{ selected_category }}<hr/>
--->
+
 {% block content %}
+  {% include 'products/header.html' %}
 
   Paginate By:
     <select id='paginate-by'>
@@ -28,15 +24,13 @@ Selected category: {{ selected_category }}<hr/>
     <br/>
 
   Selected category: {{ selected_category }}<hr/>
-  
   <ul>
     {% for product in products %}
       <li>
         <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
         (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
-        <button 
-          name= 'add' value = {{product.id}} type="button" id = "product_add">{% trans "Add to cart" %}
-        </button>
+        <button  name= 'but1' value= {{product.code}} type="button" 
+            id= "product_add" data-product-code= {{product.code}} }  > {% trans "Add to the cart" %}  </button>
       </li>
     {% endfor %}
   </ul>
@@ -48,7 +42,6 @@ Selected category: {{ selected_category }}<hr/>
 
   <form id='search-form' action='' method='GET'>
     <input type='submit'><br/>
-
     {% for group in filter_form.fields_groups %}
       {% if group.type == 'numeric' %}
         <strong> {{ group.name }}</strong><br/>
@@ -61,7 +54,6 @@ Selected category: {{ selected_category }}<hr/>
         {% endfor %}
         <hr/>
       {% endif %}
-      
     {% endfor %}
 
     <input type='submit'>
@@ -70,13 +62,6 @@ Selected category: {{ selected_category }}<hr/>
 {% endblock content %}
 
 {% block js %}
-  <script 
-      src="{{ STATIC_URL }}js/cart.js">
-      //src="{{ STATIC_URL }}js/product-list.js">
-  </script>
+  <script src="{{ STATIC_URL }}js/sess_cart.js"> </script>
+  <script src="{{ STATIC_URL }}js/product-list.js"> </script>
 {% endblock js %}
-
-
-
-
-

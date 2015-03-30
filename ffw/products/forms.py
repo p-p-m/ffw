@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django import forms
 from django.db.models import Count, Min, Max
 from django.utils.translation import ugettext_lazy as _
@@ -60,12 +62,12 @@ class FilterForm(forms.Form):
     def _create_filter_fields(self, filt):
         if filt.filter_type == 'NUMERIC':
             attrs = {'min-value': filt.values['min'], 'max-value': filt.values['max']}
-            fields = {
+            fields = OrderedDict({
                 'numeric_%s_min' % filt.pk: forms.FloatField(
                     label='Min', required=False, min_value=filt.values['min'], max_value=filt.values['max']),
                 'numeric_%s_max' % filt.pk: forms.FloatField(
                     label='Max', required=False, min_value=filt.values['min'], max_value=filt.values['max']),
-            }
+            })
             for field in fields.itervalues():
                 field.widget.attrs = attrs
             return fields

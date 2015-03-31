@@ -39,6 +39,12 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'code', 'price_uah', 'price_usd', 'price_eur')
     list_filter = ('is_active',)
     prepopulated_fields = {"slug": ("name",)}
+    readonly_fields = ('preview', )
+
+    def preview(self, obj):
+        if obj is None:
+            return
+        return '<strong><a href="' + obj.get_url() + '" target="_blank"> Project on site </a></strong>'
 
 
 class ProductFilterAdmin(admin.ModelAdmin):

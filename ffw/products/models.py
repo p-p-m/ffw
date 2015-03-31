@@ -1,9 +1,9 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-from decimal import Decimal
 import logging
 
+from constance import config
 from django.db import models
 from django.db.models import Q
 from django.core.exceptions import ValidationError
@@ -91,6 +91,24 @@ class Product(TimeStampedModel):
 
     is_active = models.BooleanField(_('Is product active'), default=True)
     rating = models.FloatField(_('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)])
+
+    def clean(self):
+        if not self.price_uah and not self.price_usd and not self.price_eur:
+            raise ValidationError('At least one price has to be defined')
+
+        if self.price_uah:
+            value = float(self.price_uah)
+        elif self.price_usd:
+            value = float(self.price_usd) * config.USD_RATE
+        elif self.price_eur:
+            value = float(self.price_eur) * config.EUR_RATE
+
+        if not self.price_uah:
+            self.price_uah = value
+        if not self.price_usd:
+            self.price_usd = value / config.USD_RATE
+        if not self.price_eur:
+            self.price_eur = value / config.EUR_RATE
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.code)

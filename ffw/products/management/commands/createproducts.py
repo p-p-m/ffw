@@ -17,7 +17,7 @@ class Command(BaseCommand):
         models.Category.objects.all().delete()
         models.Subcategory.objects.all().delete()
         # admin
-        get_user_model().objects.create()
+        get_user_model().objects.create_superuser(username='admin', password='admin', email='admin@i.ua')
         # categories
         categories = [factories.CategoryFactory() for _ in range(3)]
         # subcategories

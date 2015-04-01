@@ -291,9 +291,13 @@
         var searchTrigger = $('[data-role="popup-search-trigger"]');
         var productMenu = $('[data-role="product-menu"]');
 
+        searchTrigger.css('height', productMenu.height());
         productPosition = productMenu.position();
         popupTop = productPosition.top + productMenu.outerHeight();
 
+        searchTrigger.click(function() {
+            $(this).toggleClass('active');
+        });
         search.css('top', popupTop);
         classCheckByTrigger(search, searchTrigger, 'active');
     }

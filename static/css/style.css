@@ -24,7 +24,7 @@ body {
   font-size: 1.125rem;
   line-height: 150%;
   background: #fff;
-  font-family: Helvetica, Arial, serif;
+  font-family: Helvetica, Verdana, Arial, serif;
   position: relative;
   color: #303030;
   padding: 0;
@@ -260,7 +260,6 @@ a, a:focus, span {
   margin: 20px 0;
 }
 .view-title-box .view-title {
-  font-family: 'PT Sans Narrow';
   font-size: 1.75rem;
   color: #000000;
   line-height: 1;
@@ -947,7 +946,6 @@ textarea {
   line-height: 26px;
   width: 60px;
   height: 46px;
-  font-family: PT Sans Narrow;
 }
 .product-menu .menu li.bar-icon span:before {
   content: '\f0c9';
@@ -1019,7 +1017,6 @@ textarea {
   color: white;
   font-size: 1.125rem;
   line-height: 1;
-  font-family: PT Sans Narrow;
   padding: 10px 20px;
 }
 .product-menu .menu li a:hover, .product-menu .menu li a:active {
@@ -1500,8 +1497,7 @@ textarea {
   border: 1px solid #63B9E5;
 }
 .products-list-box .products-list .product-box .product.product-grid .title {
-  font-family: 'PT Sans Narrow';
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   color: #000000;
   line-height: 1;
   margin: 0;

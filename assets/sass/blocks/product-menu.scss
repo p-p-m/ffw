@@ -3,6 +3,9 @@
     width: 100%;
     display: none;
     vertical-align: middle;
+    .wrap {
+        background: none;
+    } // wrap
     @include bp (sm) {
         display: block;
     } // sm

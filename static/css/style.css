@@ -2597,6 +2597,9 @@ h1.typo-primary {
     padding-top: 30px;
   }
 }
+.product .gray-box .wrap {
+  background: none;
+}
 .product .product-main {
   table-layout: fixed;
   display: table;

@@ -36,6 +36,9 @@
         @include bp(xs) {
             padding-top: 30px;
         } // xs
+        .wrap {
+            background: none;
+        } // wrap
     } // gray-box
     .product-main {
         @include table;

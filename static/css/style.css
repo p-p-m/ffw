@@ -1074,6 +1074,9 @@ textarea {
   background-color: #198DC8;
 }
 
+.footer .wrap {
+  background: none;
+}
 .footer .service {
   padding: 20px 0;
 }

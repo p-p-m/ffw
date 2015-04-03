@@ -1,4 +1,7 @@
 .footer {
+    .wrap {
+        background: none;
+    } // wrap
     .service {
         padding: 20px 0;
         @include clearfix;

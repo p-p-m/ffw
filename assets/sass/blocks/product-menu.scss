@@ -116,16 +116,16 @@
                 font-size: rem(18);
                 line-height: 1;
                 padding: 10px 20px;
-                &:hover, &:active {
+                &:hover, &:active, &.active {
                     background-color: rgb(0, 114, 173);
-                } // &:hover
+                } // &:hover, &:active, &.active
             } // a
             &:hover {
                 a {
                     background-color: rgb(0, 114, 173);
-                    &:active {
+                    &:hover, &:active, &.active {
                         background-color: rgb(0, 114, 173);
-                    } // &:active
+                    } // &:hover, &:active, &.active
                 } // a
                 .submenu {
                     display: block;
@@ -158,6 +158,9 @@
                         font-family: arial;
                         font-size: rem(14);
                         line-height: 1;
+                        &:hover, &:active, &.active {
+                            background-color: #198DC8;
+                        } // &:hover, &:active, &.active
                     } // > a
                 } // > li
             } // submenu

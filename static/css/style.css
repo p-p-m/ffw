@@ -1024,13 +1024,13 @@ textarea {
   line-height: 1;
   padding: 10px 20px;
 }
-.product-menu .menu li a:hover, .product-menu .menu li a:active {
+.product-menu .menu li a:hover, .product-menu .menu li a:active, .product-menu .menu li a.active {
   background-color: #0072ad;
 }
 .product-menu .menu li:hover a {
   background-color: #0072ad;
 }
-.product-menu .menu li:hover a:active {
+.product-menu .menu li:hover a:hover, .product-menu .menu li:hover a:active, .product-menu .menu li:hover a.active {
   background-color: #0072ad;
 }
 .product-menu .menu li:hover .submenu {
@@ -1069,6 +1069,9 @@ textarea {
   font-family: arial;
   font-size: 0.875rem;
   line-height: 1;
+}
+.product-menu .menu li .submenu > li > a:hover, .product-menu .menu li .submenu > li > a:active, .product-menu .menu li .submenu > li > a.active {
+  background-color: #198DC8;
 }
 
 .footer .service {

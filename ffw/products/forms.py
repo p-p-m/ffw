@@ -36,12 +36,12 @@ class FilterForm(forms.Form):
             self.fields.update(self._create_filter_fields(filt))
         prices = self._get_base_queryset(category, subcategory).aggregate(Min('price_uah'), Max('price_uah'))
 
-        self.fields['price_min'] = forms.FloatField(
-            label='Min price', required=False,
-            min_value=int(prices['price_uah__min']), max_value=int(prices['price_uah__max']) + 1)
-        self.fields['price_max'] = forms.FloatField(
-            label='Min price', required=False,
-            min_value=int(prices['price_uah__min']), max_value=int(prices['price_uah__max']) + 1)
+        kwargs = {
+            'min_value': int(prices['price_uah__min']) if prices['price_uah__min'] else 0,
+            'max_value': int(prices['price_uah__max']) + 1 if prices['price_uah__max'] else 0
+        }
+        self.fields['price_min'] = forms.FloatField(label='Min price', required=False, **kwargs)
+        self.fields['price_max'] = forms.FloatField(label='Min price', required=False, **kwargs)
 
     def _get_filters(self, category=None, subcategory=None):
         filters = []

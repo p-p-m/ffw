@@ -1,6 +1,9 @@
 var cart = {
     'products': {},
-               //find and insert  sum and quantity of products of the cart
+    'sum': 0,
+    'count': 0,
+    'products_str': '',
+               //calc data of cart, insert total sum and count of products in the cart
     'fulling': function () {   
         $.ajaxPrefilter( function( options ) {
             options.url = "http://" + document.location.host + '/products/cart_get'  ;
@@ -9,13 +12,21 @@ var cart = {
         $.ajax({
             type: "GET",         
             dataType: 'text'
-        }).done(function(data) { 
-            var cart_sess =  jQuery.parseJSON(data).cart;
-            $('output#quant_cart').text(cart_sess.quant);  
-            $('output#sum_cart').text(cart_sess.sum);
-            cart.sum = cart_sess.sum;
-            cart.quant = cart_sess.quant;
-            cart.products = cart_sess.products;
+        }).done(function(data) {
+            var products =  jQuery.parseJSON(data).products;
+            var sum_cart = jQuery.parseJSON(data).sum_cart;
+            var count_cart = jQuery.parseJSON(data).count_cart;
+
+            $('div.cart-count').text(count_cart);
+            $('span.sum').text(sum_cart);
+
+            cart.sum = sum_cart;
+            cart.count = count_cart;
+            cart.products = products;
+
+            for ( key in products) {
+                cart.products_str += key + cart.products[key]['name'] + cart.products[key]['price'];
+            };
         });
     }, 
     
@@ -54,9 +65,11 @@ var cart = {
         });
 
         $.ajaxPrefilter( function( options ) {
-            options.url = "http://" + document.location.host + '/products/cart/'  ;
+            options.url = "http://" + document.location.host + '/products/cart/';
         });
+
         var res = action == 'remove' || action == 'clear';
+
         if (res) { 
                      //remove product from cart
             $.ajax({
@@ -69,24 +82,27 @@ var cart = {
             }) 
             .done(function(data) { 
                 var obj = jQuery.parseJSON(data);
-                $('output#quant_cart').text(obj.quant);  
-                $('output#sum_cart').text(obj.sum);
+                $('div.cart-count').text(obj.count_cart);
+                $('span.sum').text(obj.sum_cart);
             });       
         }
         else {
-                       //add product to cart     
+                       //add product to cart
             $.ajax({
                 type: "POST",
                 data:{
                     'product_code': product_code                
-                },            
+                },
                 dataType: 'text'
             }) 
             .done(function(data) { 
                 var obj = jQuery.parseJSON(data);
-                $('output#quant_cart').text(obj.quant);  
-                $('output#sum_cart').text(obj.sum);
+                $('div.cart-count').text(obj.count_cart);
+                $('span.sum').text(obj.sum_cart);
+                if (obj.msg) {
+                    alert(obj.msg);
+                };
             });   
-        }
+        };
     }
-};    
+}

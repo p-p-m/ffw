@@ -9,7 +9,6 @@
   -->
   
 {% block content %}
-{% include 'products/header.html' %}
 <!-- product -->
 <section class="product">
     <!-- gray-box -->
@@ -59,7 +58,7 @@
                     <div class="price-line">
                         <span class="price">{{ product.price_uah }}</span>
                         <span class="currency">грн.</span>
-                        <button class="button button-blue add-to-cart">Купить</button>
+                        <button class="button button-blue add-to-cart" id="buy" value = {{product.code}}>Купить 332211</button>
                     </div>
                     <!-- images-box-mobile -->
                     <figure class="images-box-mobile">

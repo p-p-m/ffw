@@ -8,18 +8,6 @@
 
 
 {% block content %}
-{% include 'products/header.html' %}
-
-<!--    
-     
-        <a href="{{ product.get_url }}">{{ product.name }} | {{ product.code }}</a>
-        (Price: {{ product.price_uah }} UAH, Rating: {{ product.rating }})
-        <button  name= 'but1' value= {{product.code}} type="button" 
-            id= "product_add" data-product-code= {{product.code}} }  > {% trans "Add to the cart" %}  </button>
-      
-      
--->
-
 
 <!-- view-title-box -->
 <div class="view-title-box with-filters">
@@ -166,6 +154,5 @@
 
 {% block js %}
   <script src="{{ STATIC_URL }}js/sess_cart.js"> </script>
-<!--  <script src="{{ STATIC_URL }}js/product-list.js"> </script>-->
-  <script src="{{ STATIC_URL }}/jsdev/product-list.js"></script>
+  <script src="{{ STATIC_URL }}jsdev/product-list.js"></script>
 {% endblock js %}

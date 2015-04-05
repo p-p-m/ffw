@@ -19,7 +19,6 @@ class HomeView(View):
     def get(self, request):
         main = Banner.objects.get(name='main')
         subcategories = models.Subcategory.objects.filter(is_active=True)
-        print(111)
         return render(request, 'products/home.html', {'main': main, 'subcategories': subcategories})
 
 
@@ -120,41 +119,47 @@ class ProductView(View):
 def  cart_change(request, *args, **kwargs):
     c = {}
     c.update(csrf(request))    
+    #data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ..., 
+       #'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
     action = request.POST.get('action', '')
-    session = request.session
-    session['cart'] = session.get('cart',{'products': {}, 'quant': 0, 'sum': 0})
-    cart = session['cart']
-    cart['quant'] = 0
-    cart['sum'] = 0
+
+    request.session['products'] = request.session.get('products',{})
+    request.session['sum_cart'] = request.session.get('sum_cart',0)
+    request.session['count_cart'] = request.session.get('count_cart',0)
+    request.session['sum_cart'] = 0
+    request.session['count_cart'] = 0
+        # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
+    msg = ''
 
     if action != 'clear':    
         product_code = request.POST.get('product_code', '')
         product = get_object_or_404(models.Product.objects, code=product_code)
         price = float(product.price_uah)
         name = product.name
-        
+        msg = product_code + ' ' + name + ' '
         if action == 'remove':
-            del cart['products'][product_code]
+            del request.session['products'][product_code]
         else:
-            cart['products'][product_code] = cart['products'].get(product_code,{'name': '', 'price': 0})
-            cart['products'][product_code]['name'] = name
-            cart['products'][product_code]['price'] = price        
+            if product_code in request.session['products'].keys():
+                msg = msg + ' is in the cart already'
+            else:
+                msg = msg + 'add in the cart'
+                request.session['products'][product_code] = request.session['products'].get(product_code,
+                    {'name': '', 'price': 0})
+                request.session['products'][product_code]['name'] = name
+                request.session['products'][product_code]['price'] = price
 
-        for key in cart['products']:   
-            cart['sum'] += cart['products'][key]['price']
-            cart['quant'] += 1
-
+        for key in request.session['products']:
+            request.session['sum_cart'] += request.session['products'][key]['price']
+            request.session['count_cart'] += 1
     else:
-        cart['products'] = {}
+        request.session['products'] = {}
     
-    return HttpResponse(json.JSONEncoder().encode({'sum': cart['sum'], 'quant': cart['quant']}), c) #, 'product_code': product_code
+    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart':
+        request.session['count_cart'], 'msg': msg}), c)
     
-
-class CartView(View):
-
-    def get(self, request):       
-        return render(request, 'products/cart.html', {'cart': request.session['cart']})
-
-def   cart_get(request, *args, **kwargs):   
-    return HttpResponse(json.JSONEncoder().encode({'cart':request.session['cart']}))
+def   cart_get(request, *args, **kwargs):
+    return HttpResponse(json.dumps({'sum_cart':request.session['sum_cart'], 'count_cart':request.session['count_cart'],
+        'products': request.session['products']},ensure_ascii=False))
+    #return HttpResponse(json.JSONEncoder().encode({'cart':request.session['cart']}))
         

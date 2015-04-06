@@ -209,7 +209,7 @@
             }
 
             // Behavior
-            cartTrigger.click(function() {alert('sssss')
+            cartTrigger.click(function() {
                 classCheck(cartDisplay, 'opened');
                 classCheck(cartTriggerMobile, 'active');
                 classCheck($(this), 'active');

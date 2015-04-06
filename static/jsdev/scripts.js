@@ -412,7 +412,7 @@
                 $('body').toggleClass('open-gallery');
             });
 
-            close.click(function() {alert('Yes')
+            close.click(function() {
                 overlay.removeClass('active');
                 expand.removeClass('active');
                 $('body').removeClass('open-gallery');

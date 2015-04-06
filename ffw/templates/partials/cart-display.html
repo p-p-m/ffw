@@ -39,7 +39,11 @@
         <div data-role="cart-items">
             <!-- cart-items -->
             <div class="cart-items" id="cart_value">
-                include 'items/cart-item.html'
+            {{products_sess}}
+                {%for key in products_sess%}
+                    {{key}}
+                {%endfor%}
+                <button class="button button-blue">Удалить</button>
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')

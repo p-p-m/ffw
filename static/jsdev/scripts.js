@@ -219,7 +219,7 @@
 
         // Behavior
         cartTrigger.click(function() {
-            $('div#cart_value').text(cartFulling());
+            //$('div#cart_value').text(cartFulling());
             classCheck(cartDisplay, 'opened');
             classCheck(cartTriggerMobile, 'active');
             classCheck($(this), 'active');

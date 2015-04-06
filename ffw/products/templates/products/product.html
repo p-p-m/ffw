@@ -28,6 +28,11 @@
             <!-- /breadcrumps -->
             <!-- product-main -->
             <div class="product-main">
+            <div>
+                {%for key in products_sess%}
+                   {{products_sess.key}}
+                {%endfor%}
+            </div>
                 <!-- images-box -->
                 <figure class="images-box">
                     <ul class="image-previews">

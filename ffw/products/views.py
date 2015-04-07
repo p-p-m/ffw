@@ -1,4 +1,6 @@
+#  -*- coding: utf-8 -*-
 import json
+
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -13,7 +15,7 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_protect   
 
-   
+
 class HomeView(View):
 
     def get(self, request):
@@ -112,26 +114,27 @@ class ProductListView(ListView):
 class ProductView(View):
     def get(self, request, product):
         product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
-        return render(request, 'products/product.html', {'product': product, 'products_sess': request.session['products']})
-     
+        return render(request, 'products/product.html', {'product': product, 'products_sess': (
+            request.session['products'])})
+
 
 @csrf_protect
-def  cart_change(request, *args, **kwargs):
+def cart_change(request, *args, **kwargs):
     c = {}
-    c.update(csrf(request))    
-    #data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ..., 
-       #'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
+    c.update(csrf(request))
+    #  data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ...,
+    #  'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
     action = request.POST.get('action', '')
 
-    request.session['products'] = request.session.get('products',{})
-    request.session['sum_cart'] = request.session.get('sum_cart',0)
-    request.session['count_cart'] = request.session.get('count_cart',0)
+    request.session['products'] = request.session.get('products', {})
+    request.session['sum_cart'] = request.session.get('sum_cart', 0)
+    request.session['count_cart'] = request.session.get('count_cart', 0)
     request.session['sum_cart'] = 0
     request.session['count_cart'] = 0
-        # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
+    # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
     msg = ''
 
-    if action != 'clear':    
+    if action != 'clear':
         product_code = request.POST.get('product_code', '')
         product = get_object_or_404(models.Product.objects, code=product_code)
         price = float(product.price_uah)
@@ -144,8 +147,8 @@ def  cart_change(request, *args, **kwargs):
                 msg = msg + ' is in the cart already'
             else:
                 msg = msg + 'add in the cart'
-                request.session['products'][product_code] = request.session['products'].get(product_code,
-                    {'name': '', 'price': 0})
+                request.session['products'][product_code] = request.session['products'].get(product_code, (
+                    {'name': '', 'price': 0}))
                 request.session['products'][product_code]['name'] = name
                 request.session['products'][product_code]['price'] = price
 
@@ -154,12 +157,11 @@ def  cart_change(request, *args, **kwargs):
             request.session['count_cart'] += 1
     else:
         request.session['products'] = {}
-    
-    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart':
-        request.session['count_cart'], 'msg': msg}), c)
-    
-def   cart_get(request, *args, **kwargs):
-    return HttpResponse(json.dumps({'sum_cart':request.session['sum_cart'], 'count_cart':request.session['count_cart'],
-        'products': request.session['products']},ensure_ascii=False))
-    #return HttpResponse(json.JSONEncoder().encode({'cart':request.session['cart']}))
-        
+
+    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
+        request.session['count_cart']), 'msg': msg}), c)
+
+
+def cart_get(request, *args, **kwargs):
+    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
+        request.session['count_cart']), 'products': request.session['products']}, ensure_ascii=False))

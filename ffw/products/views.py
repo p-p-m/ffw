@@ -135,24 +135,24 @@ def cart_change(request, *args, **kwargs):
     if action == 'clear':
         request.session['products'] = {}
     else:
+        print(11111)
         # 'remove' or 'add'
-        product_code = request.POST.get('product_code', '')
-        product = get_object_or_404(models.Product.objects, code=product_code)
+        product_pk = request.POST.get('product_pk', ''); print(product_pk,222222)
+        product = get_object_or_404(models.Product.objects, pk=product_pk)
         price = float(product.price_uah)
         name = product.name
-        msg = product_code + ' ' + name + ' '
 
         if action == 'remove':
-            del request.session['products'][product_code]
+            del request.session['products'][product_pk]
         else:
-            if product_code in request.session['products'].keys():
-                msg = msg + ' is in the cart already'
+            if product_pk in request.session['products'].keys():
+                msg = name + ' is in the cart already'
             else:
-                msg = msg + 'add in the cart'
-                request.session['products'][product_code] = request.session['products'].get(product_code, (
+                msg = name + 'add in the cart'
+                request.session['products'][product_pk] = request.session['products'].get(product_pk, (
                     {'name': '', 'price': 0}))
-                request.session['products'][product_code]['name'] = name
-                request.session['products'][product_code]['price'] = price
+                request.session['products'][product_pk]['name'] = name
+                request.session['products'][product_pk]['price'] = price
 
         for key in request.session['products']:
             request.session['sum_cart'] += request.session['products'][key]['price']

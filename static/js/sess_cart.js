@@ -31,9 +31,9 @@ var cart = {
     }, 
     
     
-               //action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
-                  //any - add the product to the cart 
-    cart_change: function(product_code, action) {
+    //action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
+        //'add' (or any string) - add the product to the cart
+    cart_change: function(product_pk, action) {
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie != '') {
@@ -71,11 +71,11 @@ var cart = {
         var res = action == 'remove' || action == 'clear';
 
         if (res) { 
-                     //remove product from cart
+            //remove product from cart
             $.ajax({
                 type: "POST",
                 data:{
-                    'product_code': product_code,
+                    'product_pk': product_pk,
                     'action': action                    
                 },            
                 dataType: 'text'
@@ -87,11 +87,11 @@ var cart = {
             });       
         }
         else {
-                       //add product to cart
+            //add product to cart
             $.ajax({
                 type: "POST",
                 data:{
-                    'product_code': product_code                
+                    'product_pk': product_pk                
                 },
                 dataType: 'text'
             }) 

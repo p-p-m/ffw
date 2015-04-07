@@ -104,7 +104,7 @@ class ProductListView(ListView):
         context['total_count'] = self.get_queryset().count()
         context['sort_form'] = forms.SortForm(self.request.GET)
         context['filter_form'] = self._get_filter_form()
-       
+
         if not self.request.is_ajax():
             context['selected_subcategory'] = self._get_selected_subcategory()
             context['selected_category'] = self._get_selected_category()
@@ -127,19 +127,18 @@ def cart_change(request, *args, **kwargs):
     action = request.POST.get('action', '')
 
     request.session['products'] = request.session.get('products', {})
-    request.session['sum_cart'] = request.session.get('sum_cart', 0)
-    request.session['count_cart'] = request.session.get('count_cart', 0)
     request.session['sum_cart'] = 0
     request.session['count_cart'] = 0
     # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
     msg = ''
-
+    #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
     if action != 'clear':
         product_code = request.POST.get('product_code', '')
         product = get_object_or_404(models.Product.objects, code=product_code)
         price = float(product.price_uah)
         name = product.name
         msg = product_code + ' ' + name + ' '
+
         if action == 'remove':
             del request.session['products'][product_code]
         else:

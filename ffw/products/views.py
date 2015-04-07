@@ -135,9 +135,8 @@ def cart_change(request, *args, **kwargs):
     if action == 'clear':
         request.session['products'] = {}
     else:
-        print(11111)
         # 'remove' or 'add'
-        product_pk = request.POST.get('product_pk', ''); print(product_pk,222222)
+        product_pk = request.POST.get('product_pk', '')
         product = get_object_or_404(models.Product.objects, pk=product_pk)
         price = float(product.price_uah)
         name = product.name

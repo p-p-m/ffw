@@ -39,9 +39,8 @@
         <div data-role="cart-items">
             <!-- cart-items -->
             <div class="cart-items" id="cart_value">
-            
-                {%for key, value in products_sess.items%}
-                    {{key}}: {{value.name}} {{value.price}} <button class="button button-blue">Удалить</button> <br>
+                {% for key, value in products_sess.items %}
+                    {{ key }}: {{ value.name }} {{ value.price }} <button class="button button-blue">Удалить</button> <br>
                 {%endfor%}
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')

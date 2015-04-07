@@ -48,6 +48,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'products.processors.categories_processor',
     'products.processors.debug_processor',
     'gallery.processors.top_banner_processor',
+    'django.core.context_processors.request',
 )
 
 

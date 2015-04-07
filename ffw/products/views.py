@@ -131,8 +131,12 @@ def cart_change(request, *args, **kwargs):
     request.session['count_cart'] = 0
     # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
     msg = ''
+
     #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
-    if action != 'clear':
+    if action == 'clear':
+        request.session['products'] = {}
+    else:
+        # 'remove' or 'add'
         product_code = request.POST.get('product_code', '')
         product = get_object_or_404(models.Product.objects, code=product_code)
         price = float(product.price_uah)
@@ -154,8 +158,7 @@ def cart_change(request, *args, **kwargs):
         for key in request.session['products']:
             request.session['sum_cart'] += request.session['products'][key]['price']
             request.session['count_cart'] += 1
-    else:
-        request.session['products'] = {}
+
 
     return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
         request.session['count_cart']), 'msg': msg}), c)

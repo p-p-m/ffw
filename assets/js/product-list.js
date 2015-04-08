@@ -50,16 +50,4 @@ $(document).ready(function() {
         window.location.href = (window.location.href.split('?')[0] + '?' +
             $('form#search-form').serialize() + '&sort_by=' + selected);
     });
-
-    cart.fulling();
-
-    $('button#product_add').on('click', function() {
-        var product_code = this.value; 
-        cart.cart_change(product_code);    
-    });
-    
-    $('button#go_cart').on('click', function() {
-        document.location.href = "http://" + document.location.host + '/products/cart/cart/';
-    });
-
 });

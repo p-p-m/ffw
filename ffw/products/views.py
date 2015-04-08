@@ -118,7 +118,7 @@ class ProductView(View):
 
 
 @csrf_protect
-def cart_change_get(request, *args, **kwargs):
+def cart(request, *args, **kwargs):
     if request.is_ajax:
         if request.method == 'GET':
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (

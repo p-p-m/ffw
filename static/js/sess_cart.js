@@ -63,9 +63,7 @@ var cart = {
             options.url = "http://" + document.location.host + '/products/cart/';
         });
 
-        var res = action == 'remove' || action == 'clear';
-
-        if (res) {
+        if (action == 'remove' || action == 'clear') {
             //remove product from cart
             $.ajax({
                 type: "POST",

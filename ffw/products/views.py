@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect   
+from django.views.decorators.csrf import csrf_protect
 
 
 class HomeView(View):
@@ -118,50 +118,50 @@ class ProductView(View):
 
 
 @csrf_protect
-def cart_change(request, *args, **kwargs):
-    c = {}
-    c.update(csrf(request))
-    #  data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ...,
-    #  'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
-    action = request.POST.get('action', '')
+def cart_change_get(request, *args, **kwargs):
+    if request.is_ajax:
+        if request.method == 'GET':
+            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
+                request.session['count_cart']), 'products': request.session['products']}, ensure_ascii=False))
+        elif request.method == 'POST':
+            c = {}
+            c.update(csrf(request))
 
-    request.session['products'] = request.session.get('products', {})
-    request.session['sum_cart'] = 0
-    request.session['count_cart'] = 0
-    # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
-    msg = ''
+            #  data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ...,
+            #  'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
+            action = request.POST.get('action', '')
+            request.session['products'] = request.session.get('products', {})
+            request.session['sum_cart'] = 0
+            request.session['count_cart'] = 0
+            # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
+            msg = ''
 
-    #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
-    if action == 'clear':
-        request.session['products'] = {}
-    else:
-        # 'remove' or 'add'
-        product_pk = request.POST.get('product_pk', '')
-        product = get_object_or_404(models.Product.objects, pk=product_pk)
-        price = float(product.price_uah)
-        name = product.name
-
-        if action == 'remove':
-            del request.session['products'][product_pk]
-        else:
-            if product_pk in request.session['products'].keys():
-                msg = name + ' is in the cart already'
+            #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
+            if action == 'clear':
+                request.session['products'] = {}
             else:
-                msg = name + 'add in the cart'
-                request.session['products'][product_pk] = request.session['products'].get(product_pk, (
-                    {'name': '', 'price': 0}))
-                request.session['products'][product_pk]['name'] = name
-                request.session['products'][product_pk]['price'] = price
+                # 'remove' or 'add'
+                product_pk = request.POST.get('product_pk', '')
+                product = get_object_or_404(models.Product.objects, pk=product_pk)
+                price = float(product.price_uah)
+                name = product.name
 
-        for key in request.session['products']:
-            request.session['sum_cart'] += request.session['products'][key]['price']
-            request.session['count_cart'] += 1
+                if action == 'remove':
+                    del request.session['products'][product_pk]
+                else:
+                    if product_pk in request.session['products'].keys():
+                        msg = name + ' is in the cart already'
+                    else:
+                        msg = name + 'add in the cart'
+                        request.session['products'][product_pk] = request.session['products'].get(product_pk, (
+                            {'name': '', 'price': 0}))
+                        request.session['products'][product_pk]['name'] = name
+                        request.session['products'][product_pk]['price'] = price
+
+                for key in request.session['products']:
+                    request.session['sum_cart'] += request.session['products'][key]['price']
+                    request.session['count_cart'] += 1
 
 
-    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-        request.session['count_cart']), 'msg': msg}), c)
-
-
-def cart_get(request, *args, **kwargs):
-    return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-        request.session['count_cart']), 'products': request.session['products']}, ensure_ascii=False))
+            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
+                request.session['count_cart']), 'msg': msg}), c)

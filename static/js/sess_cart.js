@@ -2,15 +2,14 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    'products_str': '',
-               //calc data of cart, insert total sum and count of products in the cart
-    'fulling': function () {   
+    //calc data of cart, insert total sum and count of products in the cart
+    'fulling': function () {
         $.ajaxPrefilter( function( options ) {
-            options.url = "http://" + document.location.host + '/products/cart_get'  ;
+            options.url = "http://" + document.location.host + '/products/cart';
         });
 
         $.ajax({
-            type: "GET",         
+            type: "GET",
             dataType: 'text'
         }).done(function(data) {
             var products =  jQuery.parseJSON(data).products;
@@ -23,14 +22,10 @@ var cart = {
             cart.sum = sum_cart;
             cart.count = count_cart;
             cart.products = products;
-
-            for ( key in products) {
-                cart.products_str += key + cart.products[key]['name'] + cart.products[key]['price'];
-            };
         });
-    }, 
-    
-    
+    },
+
+
     //action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
         //'add' (or any string) - add the product to the cart
     cart_change: function(product_pk, action) {
@@ -46,7 +41,7 @@ var cart = {
                         break;
                     }
                 }
-            }   
+            }
             return cookieValue;
         }
 
@@ -55,12 +50,12 @@ var cart = {
         function csrfSafeMethod(method) {
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
-          
+
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                } 
+                }
             }
         });
 
@@ -70,39 +65,39 @@ var cart = {
 
         var res = action == 'remove' || action == 'clear';
 
-        if (res) { 
+        if (res) {
             //remove product from cart
             $.ajax({
                 type: "POST",
                 data:{
                     'product_pk': product_pk,
-                    'action': action                    
-                },            
+                    'action': action
+                },
                 dataType: 'text'
-            }) 
-            .done(function(data) { 
+            })
+            .done(function(data) {
                 var obj = jQuery.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart);
-            });       
+            });
         }
         else {
             //add product to cart
             $.ajax({
                 type: "POST",
                 data:{
-                    'product_pk': product_pk                
+                    'product_pk': product_pk
                 },
                 dataType: 'text'
-            }) 
-            .done(function(data) { 
+            })
+            .done(function(data) {
                 var obj = jQuery.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart);
                 if (obj.msg) {
                     alert(obj.msg);
                 };
-            });   
+            });
         };
     }
 }

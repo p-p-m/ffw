@@ -12,9 +12,9 @@ var cart = {
             type: "GET",
             dataType: 'text'
         }).done(function(data) {
-            var products =  jQuery.parseJSON(data).products;
-            var sum_cart = jQuery.parseJSON(data).sum_cart;
-            var count_cart = jQuery.parseJSON(data).count_cart;
+            var products =  $.parseJSON(data).products;
+            var sum_cart = $.parseJSON(data).sum_cart;
+            var count_cart = $.parseJSON(data).count_cart;
 
             $('div.cart-count').text(count_cart);
             $('span.sum').text(sum_cart);
@@ -34,7 +34,7 @@ var cart = {
             if (document.cookie && document.cookie != '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
+                    var cookie = $.trim(cookies[i]);
                     // Does this cookie string begin with the name we want?
                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
@@ -76,7 +76,7 @@ var cart = {
                 dataType: 'text'
             })
             .done(function(data) {
-                var obj = jQuery.parseJSON(data);
+                var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart);
             });
@@ -91,7 +91,7 @@ var cart = {
                 dataType: 'text'
             })
             .done(function(data) {
-                var obj = jQuery.parseJSON(data);
+                var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart);
                 if (obj.msg) {

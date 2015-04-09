@@ -4,25 +4,10 @@ var cart = {
     'count': 0,
     //calc data of cart, insert total sum and count of products in the cart
     'fulling': function () {
-        $.ajaxPrefilter( function( options ) {
-            options.url = "http://" + document.location.host + '/products/cart';
-        });
-
-        $.ajax({
-            type: "GET",
-            dataType: 'text'
-        }).done(function(data) {
-            var products =  $.parseJSON(data).products;
-            var sum_cart = $.parseJSON(data).sum_cart;
-            var count_cart = $.parseJSON(data).count_cart;
-
-            $('div.cart-count').text(count_cart);
-            $('span.sum').text(sum_cart);
-
-            cart.sum = sum_cart;
-            cart.count = count_cart;
-            cart.products = products;
-        });
+        var sum_cart = $('div#cart').data('sum-cart');
+        var count_cart = $('div#cart').data('count-cart');
+        $('div.cart-count').text(count_cart);
+        $('span.sum').text(sum_cart);
     },
 
 

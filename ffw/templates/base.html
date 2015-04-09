@@ -25,7 +25,7 @@
 
 </head>
 <body>
-
+<div id='cart' data-sum-cart={{ request.session.sum_cart }} data-count-cart={{ request.session.count_cart }}></div>
 <!-- menus -->
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}

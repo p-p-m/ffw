@@ -175,15 +175,6 @@
         }).filter(':first').click();
     }
 
-
-    function cartFulling() {
-
-        cart.fulling();
-        $('div.total-display').text("Товаров: " + cart.count +' на сумму ' + cart.sum)
-        return cart.products_str
-    }
-
-
     function CartDisplay() {
 
         var cartDisplay = $('[data-role="cart-display"]');
@@ -219,14 +210,12 @@
 
         // Behavior
         cartTrigger.click(function() {
-            //$('div#cart_value').text(cartFulling());
             classCheck(cartDisplay, 'opened');
             classCheck(cartTriggerMobile, 'active');
             classCheck($(this), 'active');
         });
 
         cartTriggerMobile.click(function() {
-            $('div#cart_value').text(cartFulling());
             classCheck(cartDisplay, 'opened');
             classCheck(cartTrigger, 'active');
             classCheck($(this), 'active');

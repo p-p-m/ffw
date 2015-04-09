@@ -153,10 +153,7 @@ def cart(request, *args, **kwargs):
                         msg = name + ' is in the cart already'
                     else:
                         msg = name + 'add in the cart'
-                        request.session['products'][product_pk] = request.session['products'].get(product_pk, (
-                            {'name': '', 'price': 0}))
-                        request.session['products'][product_pk]['name'] = name
-                        request.session['products'][product_pk]['price'] = price
+                        request.session['products'][product_pk] = {'name': name, 'price': price}
 
                 for key in request.session['products']:
                     request.session['sum_cart'] += request.session['products'][key]['price']

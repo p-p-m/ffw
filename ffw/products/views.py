@@ -155,9 +155,8 @@ def cart(request, *args, **kwargs):
                         msg = name + 'add in the cart'
                         request.session['products'][product_pk] = {'name': name, 'price': price}
 
-                for key in request.session['products']:
-                    request.session['sum_cart'] += request.session['products'][key]['price']
-                    request.session['count_cart'] += 1
+                request.session['sum_cart'] = sum([v['price'] for v in request.session['products'].values()])
+                request.session['count_cart'] = len(request.session['products'])
 
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (

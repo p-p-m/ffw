@@ -45,7 +45,7 @@ var cart = {
         });
 
         $.ajaxPrefilter( function( options ) {
-            options.url = "http://" + document.location.host + '/products/cart/';
+            options.url = $('div#cart').data('url');
         });
 
         if (action == 'remove' || action == 'clear') {

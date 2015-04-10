@@ -25,7 +25,8 @@
 
 </head>
 <body>
-<div id='cart' data-sum-cart={{ request.session.sum_cart }} data-count-cart={{ request.session.count_cart }}></div>
+<div id='cart' data-sum-cart={{ request.session.sum_cart }} data-count-cart={{ request.session.count_cart }}
+    data-url="{% url 'cart' %}"></div>
 <!-- menus -->
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}
@@ -51,7 +52,7 @@
         <script src="/static/js/production.js"></script>
     {% endif %}
 {% endblock basejs %}
-
+    <script src="{{ STATIC_URL }}jsdev/cart.js"> </script>
 {% block js %}{% endblock %}
 
 </body>

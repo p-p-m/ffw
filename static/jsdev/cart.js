@@ -48,8 +48,8 @@ var cart = {
             options.url = $('div#cart').data('url');
         });
 
-        if (action == 'remove' || action == 'clear') {
-            //remove product from cart
+        if (action == 'remove') {
+            // remove product from cart
             $.ajax({
                 type: "POST",
                 data:{
@@ -64,8 +64,22 @@ var cart = {
                 $('span.sum').text(obj.sum_cart);
             });
         }
+        else if (action == 'clear') {
+            // clear cart
+            $.ajax({
+                type: "POST",
+                data:{
+                    'action': action
+                },
+                dataType: 'text'
+            })
+            .done(function() {
+                $('div.cart-count').text(0);
+                $('span.sum').text(0);
+            });
+        }
         else {
-            //add product to cart
+            // add product to cart
             $.ajax({
                 type: "POST",
                 data:{

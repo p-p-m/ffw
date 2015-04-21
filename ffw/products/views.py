@@ -120,10 +120,7 @@ class ProductView(View):
 @csrf_protect
 def cart(request, *args, **kwargs):
     if request.is_ajax:
-        if request.method == 'GET':
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                request.session['count_cart']), 'products': request.session['products']}, ensure_ascii=False))
-        elif request.method == 'POST':
+        if request.method == 'POST':
             c = {}
             c.update(csrf(request))
 
@@ -139,7 +136,7 @@ def cart(request, *args, **kwargs):
             #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
             if action == 'clear':
                 request.session['products'] = {}
-                return HttpResponse(json.dumps({'sum_cart': 0, 'count_cart':0, 'msg': msg}), c)
+                return
 
             # 'remove' or 'add'
             product_pk = request.POST.get('product_pk', '')

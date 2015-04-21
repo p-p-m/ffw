@@ -139,24 +139,26 @@ def cart(request, *args, **kwargs):
             #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
             if action == 'clear':
                 request.session['products'] = {}
+                return HttpResponse(json.dumps({'sum_cart': 0, 'count_cart':0, 'msg': msg}), c)
+
+            # 'remove' or 'add'
+            product_pk = request.POST.get('product_pk', '')
+            product = get_object_or_404(models.Product.objects, pk=product_pk)
+            price = float(product.price_uah)
+            name = product.name
+
+            if action == 'remove':
+                del request.session['products'][product_pk]
             else:
-                # 'remove' or 'add'
-                product_pk = request.POST.get('product_pk', '')
-                product = get_object_or_404(models.Product.objects, pk=product_pk)
-                price = float(product.price_uah)
-                name = product.name
-
-                if action == 'remove':
-                    del request.session['products'][product_pk]
+                # action is 'add'
+                if product_pk in request.session['products'].keys():
+                    msg = name + ' is in the cart already'
                 else:
-                    if product_pk in request.session['products'].keys():
-                        msg = name + ' is in the cart already'
-                    else:
-                        msg = name + 'add in the cart'
-                        request.session['products'][product_pk] = {'name': name, 'price': price}
+                    msg = name + 'add in the cart'
+                    request.session['products'][product_pk] = {'name': name, 'price': price}
 
-                request.session['sum_cart'] = sum([v['price'] for v in request.session['products'].values()])
-                request.session['count_cart'] = len(request.session['products'])
+            request.session['sum_cart'] = sum([v['price'] for v in request.session['products'].values()])
+            request.session['count_cart'] = len(request.session['products'])
 
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (

@@ -40,7 +40,7 @@
             <!-- cart-items -->
             <div class="cart-items" id="cart_value">
                 {% for key, value in request.session.products.items %}
-                    {{ key }}: {{ value.name }} {{ value.price }} <button class="button button-blue">Удалить</button> <br>
+                    {{ key }}: {{ value.name }} {{ value.price }} <button id="remove" class="button button-blue" value={{key}}>Удалить</button> <br>
                 {%endfor%}
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')

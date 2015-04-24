@@ -1,8 +1,16 @@
+$(document).ready(function() {
+    
+    $('button#remove').on('click', function() {alert(this.value)
+        var product_pk = this.value;
+        cart.cart_change(product_pk,'remove');
+    });
+});
+
 var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    //calc data of cart, insert total sum and count of products in the cart
+    // calc data of cart, insert total sum and count of products in the cart
     'fulling': function () {
         var sum_cart = $('div#cart').data('sum-cart');
         var count_cart = $('div#cart').data('count-cart');
@@ -11,8 +19,8 @@ var cart = {
     },
 
 
-    //action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
-        //'add' (or any string) - add the product to the cart
+    // action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
+        // 'add' (or any string) - add the product to the cart
     cart_change: function(product_pk, action) {
         function getCookie(name) {
             var cookieValue = null;

@@ -26,6 +26,7 @@ INSTALLED_APPS = (
     'products',
     'common_pages',
     'gallery',
+    'cart',
 )
 
 MIDDLEWARE_CLASSES = (

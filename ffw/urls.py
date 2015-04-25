@@ -13,7 +13,7 @@ urlpatterns = patterns(
     url(r'^', include('products.urls')),
     url(r'^common_pages/', include('common_pages.urls')),
     url(r'^gallery/', include('gallery.urls')),
-
+    url(r'^cart/', include('cart.urls')),
     url(r'^admin/', include(admin.site.urls)),
     )
 

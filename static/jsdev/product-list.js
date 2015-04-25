@@ -233,7 +233,6 @@ function executeSort() {
 }
 
 $(document).ready(function() {
-    cart.fulling();
     activate();
 
     $('[data-role="filter-item-toggle"]').on('click', executeFilterToggle);

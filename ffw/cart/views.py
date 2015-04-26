@@ -4,9 +4,7 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-#from django.views.generic import ListView, View
 
-#import forms
 import models
 from products.models import  Product
 from django.utils.translation import ugettext_lazy as _
@@ -24,40 +22,42 @@ def cart(request, *args, **kwargs):
             c = {}
             c.update(csrf(request))
 
-            #  data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {product_code1: {'name': ...,
-            #  'price': ..., product_code2: {'name': ..., 'price': ...}, ....}}
+            #  Data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {pk1: {'product_code': ..., 'name': ...,
+                #  'price': ...}, pk2: {'product_code': ...,'name': ..., 'price': ...}, ....}}.
             action = request.POST.get('action', '')
             request.session['products'] = request.session.get('products', {})
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
-            # if product is in the cart, msg = 'The product alredy is in the cart', else 'the product add'
-            msg = ''
 
-            #  action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name include '' - its equal '"add")
+            #  Action can be: 1 - "remove", 2 - 'clear', 3 - "add" (or any name includiing '' - its equal '"add").
+            # Status can be: "added", "removed", "exist", "cleared"
             if action == 'clear':
                 request.session['products'] = {}
+                status = 'cleared'
                 return
-            
-            # 'remove' or 'add'
-            product_pk = request.POST.get('product_pk', '')            
+
+            # Action is 'remove' or 'add'
+            product_pk = request.POST.get('product_pk', '')
             product = get_object_or_404(Product.objects, pk=product_pk)
             price = float(product.price_uah)
             name = product.name
+            product_code = product.code
 
             if action == 'remove':
                 del request.session['products'][product_pk]
+                status = 'remove'
             else:
 
-                # action is 'add'
+                # Action is 'add'
                 if product_pk in request.session['products'].keys():
-                    msg = name + ' is in the cart already'
+                    status = 'exist'
                 else:
-                    msg = name + 'add in the cart'
-                    request.session['products'][product_pk] = {'name': name, 'price': price}
+                    status = 'added'
+                    request.session['products'][product_pk] = {'product_code':product_code, 'name': name, 'price': price}
 
             request.session['sum_cart'] = sum([v['price'] for v in request.session['products'].values()])
             request.session['count_cart'] = len(request.session['products'])
 
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                request.session['count_cart']), 'msg': msg}), c)
+                request.session['count_cart']), 'status': status}), c)

@@ -2,8 +2,8 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    // action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
-        // 'add' (or any string) - add the product to the cart
+    // Action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
+        // 'add' (or any string) - add the product to the cart.
     cart_change: function(product_pk, action) {
         function getCookie(name) {
             var cookieValue = null;
@@ -40,7 +40,7 @@ var cart = {
         });
 
         if (action == 'remove') {
-            // remove product from cart
+            // Remove product from cart
             $.ajax({
                 type: "POST",
                 data:{
@@ -56,7 +56,7 @@ var cart = {
             });
         }
         else if (action == 'clear') {
-            // clear cart
+            // Clear cart
             $.ajax({
                 type: "POST",
                 data:{
@@ -70,7 +70,7 @@ var cart = {
             });
         }
         else {
-            // add product to cart
+            // Add product to cart
             $.ajax({
                 type: "POST",
                 data:{
@@ -82,9 +82,7 @@ var cart = {
                 var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart + ' грн');
-                if (obj.msg) {
-                    alert(obj.msg);
-                };
+                alert("status - " + obj.status);                
             });
         };
     }
@@ -93,12 +91,13 @@ var cart = {
 
 $(document).ready(function() {
     
+    // For cart-display.html
     $('button#remove').on('click', function() {
         var product_pk = this.value;
         cart.cart_change(product_pk,'remove');
     });
-        
-    //  for products_list.html and product.html
+
+    //  For products_list.html and product.html
     $('button#buy').on('click', function() {
         var product_pk = this.value;
         cart.cart_change(product_pk,'add');

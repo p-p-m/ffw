@@ -4,4 +4,4 @@ from cart import views
 urlpatterns = patterns(
     '',
     url(r'^$', views.cart, name='cart'),
-    )
+)

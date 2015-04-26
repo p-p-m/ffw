@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
 import models
-from products.models import  Product
+from products.models import Product
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.context_processors import csrf
@@ -23,7 +23,7 @@ def cart(request, *args, **kwargs):
             c.update(csrf(request))
 
             #  Data of cart in session: {'sum_cart': ..., 'count_cart': ..., 'products': {pk1: {'product_code': ..., 'name': ...,
-                #  'price': ...}, pk2: {'product_code': ...,'name': ..., 'price': ...}, ....}}.
+            #  'price': ...}, pk2: {'product_code': ...,'name': ..., 'price': ...}, ....}}.
             action = request.POST.get('action', '')
             request.session['products'] = request.session.get('products', {})
             request.session['sum_cart'] = 0
@@ -53,11 +53,14 @@ def cart(request, *args, **kwargs):
                     status = 'exist'
                 else:
                     status = 'added'
-                    request.session['products'][product_pk] = {'product_code':product_code, 'name': name, 'price': price}
+                    request.session['products'][product_pk] = {
+                        'product_code': product_code,
+                        'name': name,
+                        'price': price}
 
-            request.session['sum_cart'] = sum([v['price'] for v in request.session['products'].values()])
+            request.session['sum_cart'] = sum(
+                [v['price'] for v in request.session['products'].values()])
             request.session['count_cart'] = len(request.session['products'])
-
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
                 request.session['count_cart']), 'status': status}), c)

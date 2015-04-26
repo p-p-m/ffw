@@ -2,15 +2,6 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    // calc data of cart, insert total sum and count of products in the cart
-    'fulling': function () {
-        var sum_cart = $('div#cart').data('sum-cart');
-        var count_cart = $('div#cart').data('count-cart');
-        $('div.cart-count').text(count_cart);
-        $('span.sum').text(sum_cart);
-    },
-
-
     // action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
         // 'add' (or any string) - add the product to the cart
     cart_change: function(product_pk, action) {
@@ -61,7 +52,7 @@ var cart = {
             .done(function(data) {
                 var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
-                $('span.sum').text(obj.sum_cart);
+                $('span.sum').text(obj.sum_cart + ' грн');
             });
         }
         else if (action == 'clear') {
@@ -75,10 +66,10 @@ var cart = {
             })
             .done(function() {
                 $('div.cart-count').text(0);
-                $('span.sum').text(0);
+                $('span.sum').text(0 + ' грн');
             });
         }
-        else {        alert('cart_0_'+product_pk);
+        else {
             // add product to cart
             $.ajax({
                 type: "POST",
@@ -90,7 +81,7 @@ var cart = {
             .done(function(data) {
                 var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
-                $('span.sum').text(obj.sum_cart);
+                $('span.sum').text(obj.sum_cart + ' грн');
                 if (obj.msg) {
                     alert(obj.msg);
                 };
@@ -101,9 +92,8 @@ var cart = {
 
 
 $(document).ready(function() {
-    cart.fulling();
     
-    $('button#remove').on('click', function() {alert('remove')
+    $('button#remove').on('click', function() {
         var product_pk = this.value;
         cart.cart_change(product_pk,'remove');
     });
@@ -111,7 +101,6 @@ $(document).ready(function() {
     //  for products_list.html and product.html
     $('button#buy').on('click', function() {
         var product_pk = this.value;
-        alert('add' + product_pk)
         cart.cart_change(product_pk,'add');
     });
 });

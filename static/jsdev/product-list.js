@@ -247,8 +247,4 @@ $(document).ready(function() {
             url = setGetParameter('paginate_by', selected);
         window.location.href = url;
     });
-
-    $('button#buy').on('click', function() {
-        cart.cart_change(this.value,'add');
-    });
 });

@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404
 
 #import forms
 import models
+from products.models import  Product
 from django.utils.translation import ugettext_lazy as _
 
 from django.core.context_processors import csrf
@@ -17,6 +18,7 @@ from django.views.decorators.csrf import csrf_protect
 
 @csrf_protect
 def cart(request, *args, **kwargs):
+
     if request.is_ajax:
         if request.method == 'POST':
             c = {}
@@ -35,16 +37,17 @@ def cart(request, *args, **kwargs):
             if action == 'clear':
                 request.session['products'] = {}
                 return
-
+            
             # 'remove' or 'add'
-            product_pk = request.POST.get('product_pk', '')
-            product = get_object_or_404(models.Product.objects, pk=product_pk)
+            product_pk = request.POST.get('product_pk', '')            
+            product = get_object_or_404(Product.objects, pk=product_pk)
             price = float(product.price_uah)
             name = product.name
 
             if action == 'remove':
                 del request.session['products'][product_pk]
             else:
+
                 # action is 'add'
                 if product_pk in request.session['products'].keys():
                     msg = name + ' is in the cart already'

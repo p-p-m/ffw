@@ -25,9 +25,10 @@
 
 </head>
 <body>
-<div id='cart' data-sum-cart={{ request.session.sum_cart }} data-count-cart={{ request.session.count_cart }}
-    data-url="{% url 'cart' %}"></div>
-<!-- menus -->
+
+ <div id='cart'   data-url="{% url 'cart' %}"></div>
+
+ <!-- menus -->
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}
 {% include 'partials/search.html' %}

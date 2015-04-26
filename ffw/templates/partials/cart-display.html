@@ -48,7 +48,7 @@
             </div>
             <!-- /cart-items -->
             <div class="total-display">
-                3 товара на сумму <strong>1020</strong> грн.
+                {{ request.session.count_cart }} товара на сумму <strong>{{ request.session.sum_cart }}</strong> грн.
             </div>
             <div class="cart-buttons">
                 <button class="button button-blue order">Купить</button>

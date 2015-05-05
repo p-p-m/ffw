@@ -4,6 +4,7 @@
     width: 100%;
     padding: 0 5%;
     margin: auto;
+    background-color: #fff;
     @include bp(md) {
         width: 960px;
         padding: 0;
@@ -35,7 +36,6 @@
 .view-title-box {
     margin: 20px 0;
     .view-title {
-        font-family: 'PT Sans Narrow';
         font-size: rem(28);
         color: #000000;
         line-height: 1;

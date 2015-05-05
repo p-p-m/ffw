@@ -23,6 +23,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'constance',
+    'constance.backends.database',
+
     'products',
     'common_pages',
     'gallery',
@@ -96,3 +99,11 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'static'),
 )
+
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'USD_RATE': (24, 'UAH/USD rate'),
+    'EUR_RATE': (26, 'UAH/EUR rate'),
+}

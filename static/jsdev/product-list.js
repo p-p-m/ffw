@@ -211,6 +211,9 @@ function activate() {
     $("[data-role='filter-slider']").each(function() {
         activateSliderFilter($(this));
     });
+    $("#show-button").on('click', function() {
+        location.reload();
+    });
 }
 
 function executeFilterToggle() {

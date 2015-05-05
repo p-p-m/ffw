@@ -3,6 +3,9 @@
     width: 100%;
     display: none;
     vertical-align: middle;
+    .wrap {
+        background: none;
+    } // wrap
     @include bp (sm) {
         display: block;
     } // sm
@@ -16,6 +19,15 @@
         @include clear-list-inline;
         padding-right: 60px;
         position: relative;
+        > li {
+            + li {
+                border-left: 1px solid rgba(255, 255, 255, 0.33);
+            } // + li
+            &:nth-child(1),
+            &:nth-child(2) {
+                border-left: none;
+            } // &:nth-child(1), &:nth-child(2)
+        } // > li
         li {
             float: left;
             position: relative;
@@ -47,7 +59,6 @@
                     line-height: 26px;
                     width: 60px;
                     height: 46px;
-                    font-family: PT Sans Narrow;
                     &:before {
                         content: '\f0c9';
                         font: normal normal normal 23px/1 FontAwesome;
@@ -75,6 +86,7 @@
                 top: 0px;
                 background-color: #A0D4E9;
                 text-align: center;
+                border-left: none !important;
                 @include bp (sm) {
                     display: block;
                 } // sm
@@ -82,36 +94,50 @@
                     cursor: pointer;
                     @include inline-middle;
                     box-sizing: border-box;
-                    padding-top: 8px;
                     color: #2A609F;
                     width: 60px;
-                    height: 46px;
+                    padding-top: 4px;
                     &:before {
                         content: '\f002';
                         font: normal normal normal 22px/1 FontAwesome;
                         text-rendering: auto;
                         -webkit-font-smoothing: antialiased;
                     } // &:before
+                    &.active {
+                        color: #fff;
+                        background-color: rgb(0, 114, 173);
+                    } // &.active
                 } // lens-trigger
             } // &.lens
             a {
                 display: block;
                 text-decoration: none;
                 color: white;
-                font-size: rem(20);
-                line-height: 26px;
-                font-family: PT Sans Narrow;
+                font-size: rem(18);
+                line-height: 1;
                 padding: 10px 20px;
+                &:hover, &:active, &.active {
+                    background-color: rgb(0, 114, 173);
+                } // &:hover, &:active, &.active
             } // a
             &:hover {
+                a {
+                    background-color: rgb(0, 114, 173);
+                    &:hover, &:active, &.active {
+                        background-color: rgb(0, 114, 173);
+                    } // &:hover, &:active, &.active
+                } // a
                 .submenu {
                     display: block;
                 } // .submenu
             } // hover
             .submenu {
                 @include clear-list;
+                border-radius: 0px 0px 5px 5px;
                 display: none;
-                background-color: #00A2E2;
+                // background-color: #00A2E2;
+                // background-color: #A0D4E9;
+                background-color: rgb(0, 114, 173);
                 position: absolute;
                 top: 46px;
                 left: 50%;
@@ -119,15 +145,22 @@
                 margin-left: -90px;
                 z-index: 4;
                 > li {
+                    display: block;
+                    width: 100%;
+                    &:nth-last-child(1) {
+                        a {
+                            border-radius: 0px 0px 5px 5px;
+                        } // a
+                    } // &:nth-last-child(1)
                     > a {
                         width: 100%;
                         box-sizing: border-box;
                         font-family: arial;
-                        font-size: 14px;
+                        font-size: rem(14);
                         line-height: 1;
-                        &:hover {
-                            background-color: rgb(4, 111, 153);
-                        }
+                        &:hover, &:active, &.active {
+                            background-color: #198DC8;
+                        } // &:hover, &:active, &.active
                     } // > a
                 } // > li
             } // submenu

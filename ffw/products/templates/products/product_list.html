@@ -6,9 +6,13 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}
 
+<<<<<<< HEAD
 
 {% block content %}
 
+=======
+{% block content %}
+>>>>>>> origin/develop
 <!-- view-title-box -->
 <div class="view-title-box with-filters">
     <div class="wrap">
@@ -113,7 +117,7 @@
                 </div>
             {% endfor %}
             <div class="apply-box">
-                <a class="button button-blue apply">{% trans 'Show products' %}</a>
+                <a id='show-button' class="button button-blue apply">{% trans 'Show products' %}</a>
             </div>
         </div>
     </div>

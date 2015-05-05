@@ -5,10 +5,12 @@
             <li class="bar-icon"><span data-role="popup-menu-trigger">Категории</span></li>
             {% for category in categories %}
             <li>
-                <a href="{{ category.get_url }}">{{ category.name }}</a>
+                <a href="{{ category.get_url }}" class="{% if selected_category.id == category.id %}active{% endif %}">{{ category.name }}</a>
                 <ul class="submenu" data-role="product-submenu">
                     {% for subcategory in category.get_subcategories %}
-                    <li><a href="{{ subcategory.get_url }}">{{ subcategory.name }}</a></li>
+                    <li>
+                        <a href="{{ subcategory.get_url }}" class="{% if selected_subcategory.id == subcategory.id %}active{% endif %}">{{ subcategory.name }}</a>
+                    </li>
                     {% endfor %}
                 </ul>
             </li>

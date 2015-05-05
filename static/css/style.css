@@ -24,7 +24,8 @@ body {
   font-size: 1.125rem;
   line-height: 150%;
   background: #fff;
-  font-family: Helvetica, Arial, serif;
+  background-image: url("/static/images/bg.png");
+  font-family: Helvetica, Verdana, Arial, serif;
   position: relative;
   color: #303030;
   padding: 0;
@@ -212,6 +213,7 @@ a, a:focus, span {
   width: 100%;
   padding: 0 5%;
   margin: auto;
+  background-color: #fff;
 }
 .wrap:before, .wrap:after {
   display: table;
@@ -260,7 +262,6 @@ a, a:focus, span {
   margin: 20px 0;
 }
 .view-title-box .view-title {
-  font-family: 'PT Sans Narrow';
   font-size: 1.75rem;
   color: #000000;
   line-height: 1;
@@ -855,6 +856,9 @@ textarea {
   display: none;
   vertical-align: middle;
 }
+.product-menu .wrap {
+  background: none;
+}
 @media (min-width: 768px) and (max-width: 992px) {
   .product-menu {
     display: block;
@@ -880,6 +884,12 @@ textarea {
   list-style: none;
   display: inline-block;
   vertical-align: middle;
+}
+.product-menu .menu > li + li {
+  border-left: 1px solid rgba(255, 255, 255, 0.33);
+}
+.product-menu .menu > li:nth-child(1), .product-menu .menu > li:nth-child(2) {
+  border-left: none;
 }
 .product-menu .menu li {
   float: left;
@@ -941,7 +951,6 @@ textarea {
   line-height: 26px;
   width: 60px;
   height: 46px;
-  font-family: PT Sans Narrow;
 }
 .product-menu .menu li.bar-icon span:before {
   content: '\f0c9';
@@ -979,6 +988,7 @@ textarea {
   top: 0px;
   background-color: #A0D4E9;
   text-align: center;
+  border-left: none !important;
 }
 @media (min-width: 768px) and (max-width: 992px) {
   .product-menu .menu li.lens {
@@ -992,10 +1002,9 @@ textarea {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
-  padding-top: 8px;
   color: #2A609F;
   width: 60px;
-  height: 46px;
+  padding-top: 4px;
 }
 .product-menu .menu li.lens .lens-trigger:before {
   content: '\f002';
@@ -1003,14 +1012,26 @@ textarea {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
 }
+.product-menu .menu li.lens .lens-trigger.active {
+  color: #fff;
+  background-color: #0072ad;
+}
 .product-menu .menu li a {
   display: block;
   text-decoration: none;
   color: white;
-  font-size: 1.25rem;
-  line-height: 26px;
-  font-family: PT Sans Narrow;
+  font-size: 1.125rem;
+  line-height: 1;
   padding: 10px 20px;
+}
+.product-menu .menu li a:hover, .product-menu .menu li a:active, .product-menu .menu li a.active {
+  background-color: #0072ad;
+}
+.product-menu .menu li:hover a {
+  background-color: #0072ad;
+}
+.product-menu .menu li:hover a:hover, .product-menu .menu li:hover a:active, .product-menu .menu li:hover a.active {
+  background-color: #0072ad;
 }
 .product-menu .menu li:hover .submenu {
   display: block;
@@ -1018,8 +1039,10 @@ textarea {
 .product-menu .menu li .submenu {
   margin: 0;
   padding: 0;
+  -webkit-border-radius: 0px 0px 5px 5px;
+          border-radius: 0px 0px 5px 5px;
   display: none;
-  background-color: #00A2E2;
+  background-color: #0072ad;
   position: absolute;
   top: 46px;
   left: 50%;
@@ -1030,19 +1053,30 @@ textarea {
 .product-menu .menu li .submenu li {
   list-style: none;
 }
+.product-menu .menu li .submenu > li {
+  display: block;
+  width: 100%;
+}
+.product-menu .menu li .submenu > li:nth-last-child(1) a {
+  -webkit-border-radius: 0px 0px 5px 5px;
+          border-radius: 0px 0px 5px 5px;
+}
 .product-menu .menu li .submenu > li > a {
   width: 100%;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   font-family: arial;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1;
 }
-.product-menu .menu li .submenu > li > a:hover {
-  background-color: #046f99;
+.product-menu .menu li .submenu > li > a:hover, .product-menu .menu li .submenu > li > a:active, .product-menu .menu li .submenu > li > a.active {
+  background-color: #198DC8;
 }
 
+.footer .wrap {
+  background: none;
+}
 .footer .service {
   padding: 20px 0;
 }
@@ -1474,8 +1508,7 @@ textarea {
   border: 1px solid #63B9E5;
 }
 .products-list-box .products-list .product-box .product.product-grid .title {
-  font-family: 'PT Sans Narrow';
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   color: #000000;
   line-height: 1;
   margin: 0;
@@ -2054,10 +2087,13 @@ h1.typo-primary {
   top: 0px;
   left: 0px;
   width: 100%;
-  background-color: #00A2E2;
+  background-color: #0072ad;
   z-index: 9;
   vertical-align: middle;
   padding: 30px 0;
+}
+.popup-menu .wrap {
+  background: none;
 }
 .popup-menu.active {
   display: block;
@@ -2069,7 +2105,8 @@ h1.typo-primary {
   width: 100%;
   background-color: transparent;
   border: none;
-  border-bottom: 2px solid #485B73;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+  color: #fff;
   font-size: 1.25rem;
   padding: 5px 10px;
   padding-right: 30px;
@@ -2079,23 +2116,23 @@ h1.typo-primary {
           box-sizing: border-box;
 }
 .popup-menu .search-box .search-fieled::-webkit-input-placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
 }
 .popup-menu .search-box .search-fieled::-moz-placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
 }
 .popup-menu .search-box .search-fieled:-moz-placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
 }
 .popup-menu .search-box .search-fieled:-ms-input-placeholder {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
 }
 .popup-menu .search-box .send {
   display: block;
   width: 30px;
   height: 30px;
   border: none;
-  color: #485B73;
+  color: rgba(255, 255, 255, 0.7);
   position: absolute;
   right: 2px;
   top: 10px;
@@ -2559,6 +2596,9 @@ h1.typo-primary {
   .product .gray-box {
     padding-top: 30px;
   }
+}
+.product .gray-box .wrap {
+  background: none;
 }
 .product .product-main {
   table-layout: fixed;

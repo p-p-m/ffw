@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
+from datetime import date
 
 import exceptions
 
@@ -295,3 +296,17 @@ class ProductFilter(models.Model):
         for min_value, max_value in ranges:
             query = query | (Q(value_float__gte=min_value) & Q(value_float__lte=max_value))
         return attributes.filter(query)
+
+
+@python_2_unicode_compatible
+class ProductComment(models.Model):
+    class Meta:
+        verbose_name = _('Product comment')
+        verbose_name_plural = _('Product comments')
+
+    product = models.ForeignKey(Product, related_name='comments')
+    positive = models.BooleanField(_('Positive'))
+    negaitive = models.BooleanField(_('Negative'))
+    rating = models.IntegerField(_('Rating'))
+    date_insert = models.DateField(_('Date'), default=date.today())
+    agree = models.BooleanField(_('Agree'))

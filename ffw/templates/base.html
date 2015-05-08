@@ -26,7 +26,9 @@
 </head>
 <body>
 
-<!-- menus -->
+ <div id='cart'   data-url="{% url 'cart' %}"></div>
+
+ <!-- menus -->
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}
 {% include 'partials/search.html' %}
@@ -51,7 +53,7 @@
         <script src="/static/js/production.js"></script>
     {% endif %}
 {% endblock basejs %}
-
+    <script src="{{ STATIC_URL }}jsdev/cart.js"> </script>
 {% block js %}{% endblock %}
 
 </body>

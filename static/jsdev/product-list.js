@@ -236,7 +236,6 @@ function executeSort() {
 }
 
 $(document).ready(function() {
-
     activate();
 
     $('[data-role="filter-item-toggle"]').on('click', executeFilterToggle);
@@ -251,5 +250,4 @@ $(document).ready(function() {
             url = setGetParameter('paginate_by', selected);
         window.location.href = url;
     });
-
 });

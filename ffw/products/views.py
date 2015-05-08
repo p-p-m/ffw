@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 import json
 
 from django.http import HttpResponse
@@ -7,6 +8,11 @@ from django.views.generic import ListView, View
 from gallery.models import Banner
 import forms
 import models
+from django.utils.translation import ugettext_lazy as _
+
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
+from django.views.decorators.csrf import csrf_protect
 
 
 class HomeView(View):
@@ -105,7 +111,6 @@ class ProductListView(ListView):
 
 
 class ProductView(View):
-
     def get(self, request, product):
         product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
         return render(request, 'products/product.html', {'product': product})

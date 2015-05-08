@@ -50,5 +50,4 @@ $(document).ready(function() {
         window.location.href = (window.location.href.split('?')[0] + '?' +
             $('form#search-form').serialize() + '&sort_by=' + selected);
     });
-
 });

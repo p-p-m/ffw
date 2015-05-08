@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
-from gallery import views
+from cart import views
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.GalleryView.as_view(), name='gallery'),
+    url(r'^$', views.cart, name='cart'),
 )

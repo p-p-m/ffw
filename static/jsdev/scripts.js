@@ -222,6 +222,7 @@
         });
     }
 
+
     // Cart behavior
     // Count items
     function cartItemCountUpdate() {

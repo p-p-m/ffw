@@ -38,15 +38,17 @@
         </div>
         <div data-role="cart-items">
             <!-- cart-items -->
-            <div class="cart-items">
-                @@include('../items/cart-item.html')
+            <div class="cart-items" id="cart_value">
+                {% for key, value in request.session.products.items %}
+                    {{ key }}: {{ value.name }} {{ value.price }} <button id="remove" class="button button-blue" value={{key}}>Удалить</button> <br>
+                {%endfor%}
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')
                 @@include('../items/cart-item.html')
             </div>
             <!-- /cart-items -->
             <div class="total-display">
-                3 товара на сумму <strong>1020</strong> грн.
+                {{ request.session.count_cart }} товара на сумму <strong>{{ request.session.sum_cart }}</strong> грн.
             </div>
             <div class="cart-buttons">
                 <button class="button button-blue order">Купить</button>

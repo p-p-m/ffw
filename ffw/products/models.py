@@ -298,15 +298,14 @@ class ProductFilter(models.Model):
         return attributes.filter(query)
 
 
-@python_2_unicode_compatible
-class ProductComment(models.Model):
+class ProductComment(TimeStampedModel):
     class Meta:
         verbose_name = _('Product comment')
         verbose_name_plural = _('Product comments')
 
     product = models.ForeignKey(Product, related_name='comments')
-    positive = models.BooleanField(_('Positive'))
-    negaitive = models.BooleanField(_('Negative'))
-    rating = models.IntegerField(_('Rating'))
-    date_insert = models.DateField(_('Date'), default=date.today())
-    agree = models.BooleanField(_('Agree'))
+    positive = models.TextField(_('Positive'))
+    negaitive = models.TextField(_('Negative'))
+    rating = models.FloatField(_('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comment = models.TextField(_('Comment'))
+    is_approved = models.BooleanField(_('Is approved'),default=False)

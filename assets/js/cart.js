@@ -7,7 +7,7 @@ var cart = {
     cart_change: function(product_pk, action) {
         function getCookie(name) {
             var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
+            if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = $.trim(cookies[i]);
@@ -84,9 +84,9 @@ var cart = {
                 $('span.sum').text(obj.sum_cart + ' грн');
                 alert("status - " + obj.status);
             });
-        };
+        }
     }
-}
+};
 
 
 $(document).ready(function() {

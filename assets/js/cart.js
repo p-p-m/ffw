@@ -82,7 +82,7 @@ var cart = {
                 var obj = $.parseJSON(data);
                 $('div.cart-count').text(obj.count_cart);
                 $('span.sum').text(obj.sum_cart + ' грн');
-                alert("status - " + obj.status);                
+                alert("status - " + obj.status);
             });
         };
     }
@@ -90,7 +90,7 @@ var cart = {
 
 
 $(document).ready(function() {
-    
+
     // For cart-display.html
     $('button#remove').on('click', function() {
         var product_pk = this.value;

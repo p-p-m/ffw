@@ -3,7 +3,25 @@ var cart = {
     'sum': 0,
     'count': 0,
     'add': function(product_pk) {
-        function getCookie(name) {
+         cart.csrf_prefilter();
+
+        $.ajax({
+            type: "POST",
+            data:{
+                'product_pk': product_pk
+            },
+            dataType: 'text'
+        })
+        .done(function(data) {
+            var obj = $.parseJSON(data);
+            $('div.cart-count').text(obj.count_cart);
+            $('span.sum').text(obj.sum_cart + ' грн');
+            alert("status - " + obj.status);
+        });
+    },
+
+    'csrf_prefilter': function() {
+         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie != '') {
                 var cookies = document.cookie.split(';');
@@ -33,22 +51,8 @@ var cart = {
             }
         });
 
-        $.ajaxPrefilter( function( options ) {
+         $.ajaxPrefilter( function( options ) {
             options.url = $('div#cart').data('url');
-        });
-
-        $.ajax({
-            type: "POST",
-            data:{
-                'product_pk': product_pk
-            },
-            dataType: 'text'
-        })
-        .done(function(data) {
-            var obj = $.parseJSON(data);
-            $('div.cart-count').text(obj.count_cart);
-            $('span.sum').text(obj.sum_cart + ' грн');
-            alert("status - " + obj.status);
         });
     },
 

@@ -2,11 +2,33 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    'add': function(product_pk) {
+    'add': function(product_pk, quant) {
          cart.csrf_prefilter();
 
          $.ajaxPrefilter( function( options ) {
             options.url = options.url + 'add/';
+         });
+
+        $.ajax({
+            type: "POST",
+            data:{
+                'product_pk': product_pk,
+                'quant': quant
+            },
+            dataType: 'text'
+        })
+        .done(function(data) {
+            var obj = $.parseJSON(data);
+            $('div.cart-count').text(obj.count_cart);
+            $('span.sum').text(obj.sum_cart + ' грн');
+            alert("status - " + obj.status);
+        });
+    },
+    'remove': function(product_pk) {
+         cart.csrf_prefilter();
+
+         $.ajaxPrefilter( function( options ) {
+            options.url = options.url + 'remove/';
          });
 
         $.ajax({
@@ -156,8 +178,9 @@ $(document).ready(function() {
     });
 
     //  For products_list.html and product.html
-    $('button#buy').on('click', function() {
-        var product_pk = this.value;
-        cart.add(product_pk);
+    $('button#buy').on('click', function() {     
+        var product_pk = $('button#buy').data('product_pk');
+        var quant = $('button#buy').data('quant');alert(product_pk)
+        cart.add(product_pk, quant);
     });
 });

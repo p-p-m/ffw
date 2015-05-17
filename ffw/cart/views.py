@@ -15,6 +15,41 @@ from django.views.decorators.csrf import csrf_protect
 
 
 @csrf_protect
+def add(request, *args, **kwargs):
+    print(111111)
+    if request.is_ajax:
+        if request.method == 'POST':
+            c = {}
+            c.update(csrf(request))
+
+            request.session['products'] = request.session.get('products', {})
+            request.session['sum_cart'] = 0
+            request.session['count_cart'] = 0
+
+            product_pk = request.POST.get('product_pk', '')
+            product = get_object_or_404(Product.objects, pk=product_pk)
+            price = float(product.price_uah)
+            name = product.name
+            product_code = product.code
+
+            if product_pk in request.session['products'].keys():
+                status = 'exist'
+            else:
+                status = 'added'
+                request.session['products'][product_pk] = {
+                    'product_code': product_code,
+                    'name': name,
+                    'price': price}
+
+            request.session['sum_cart'] = sum(
+                [v['price'] for v in request.session['products'].values()])
+            request.session['count_cart'] = len(request.session['products'])
+
+            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
+                request.session['count_cart']), 'status': status}), c)
+
+
+@csrf_protect
 def cart(request, *args, **kwargs):
 
     if request.is_ajax:

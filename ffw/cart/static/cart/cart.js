@@ -5,6 +5,10 @@ var cart = {
     'add': function(product_pk) {
          cart.csrf_prefilter();
 
+         $.ajaxPrefilter( function( options ) {
+            options.url = options.url + 'add/';
+         });
+
         $.ajax({
             type: "POST",
             data:{

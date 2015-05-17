@@ -27,7 +27,7 @@ def add(request, *args, **kwargs):
 
             product_pk = request.POST.get('product_pk', '')
             quant = int(request.POST.get('quant', 0))
-            print(quant)
+
             product = get_object_or_404(Product.objects, pk=product_pk)
             price = float(product.price_uah)
             name = product.name
@@ -40,6 +40,7 @@ def add(request, *args, **kwargs):
 
             count += quant
             sum_ = count * price
+
             status = 'added'
             request.session['products'][product_pk] = {
                 'product_code': product_code,

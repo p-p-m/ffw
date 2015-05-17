@@ -2,7 +2,7 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    'add': function(product_pk) {
+    'add': function(product_pk, quant) {
          cart.csrf_prefilter();
 
          $.ajaxPrefilter( function( options ) {
@@ -12,7 +12,8 @@ var cart = {
         $.ajax({
             type: "POST",
             data:{
-                'product_pk': product_pk
+                'product_pk': product_pk,
+                'quant': quant
             },
             dataType: 'text'
         })
@@ -158,6 +159,7 @@ $(document).ready(function() {
     //  For products_list.html and product.html
     $('button#buy').on('click', function() {
         var product_pk = this.value;
-        cart.add(product_pk);
+        var quant = $(this).data('quant');
+        cart.add(product_pk, quant);
     });
 });

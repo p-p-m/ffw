@@ -2,12 +2,14 @@ var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
-    'add': function(product_pk, quant) {
-         cart.csrf_prefilter();
+    'set': function(product_pk, quant) {
+        cart.csrf();
+        cart.prefilter_url();
+        cart.prefilter_success();
 
-         $.ajaxPrefilter( function( options ) {
-            options.url = options.url + 'add/';
-         });
+        $.ajaxPrefilter( function( options ) {
+            options.url = options.url + 'set/';
+        });
 
         $.ajax({
             type: "POST",
@@ -16,54 +18,44 @@ var cart = {
                 'quant': quant
             },
             dataType: 'text'
-        })
-        .done(function(data) {
-            var obj = $.parseJSON(data);
-            $('div.cart-count').text(obj.count_cart);
-            $('span.sum').text(obj.sum_cart + ' грн');
-            alert("status - " + obj.status);
         });
     },
+    'remove': function(product_pk) {
+        cart.csrf();
+        cart.prefilter_url();
+        cart.prefilter_success()
 
-    'csrf_prefilter': function() {
-         function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = $.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+        $.ajaxPrefilter( function(options ) {
+             options.url = options.url + 'remove/';
+         });
 
-        var csrftoken = getCookie('csrftoken');
-
-        function csrfSafeMethod(method) {
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
-
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                }
-            }
-        });
-
-         $.ajaxPrefilter( function( options ) {
-            options.url = $('div#cart').data('url');
-        });
+        $.ajax({
+            type: "POST",
+            data:{
+                'product_pk': product_pk,
+            },
+            dataType: 'text'
+         });
     },
+    'clear': function() {
+        cart.csrf();
+        cart.prefilter_success( funct_name='clear' );
+        cart.prefilter_url();
 
-    // Action  can be: "clear" - clear the cart, "remove" - remove the product from the cart,
-        // 'add' (or any string) - add the product to the cart.
-    cart_change: function(product_pk, action) {
+        $.ajax({
+            type: "DELETE",
+            dataType: 'text'
+         });
+    },
+    'get': function() {
+        cart.prefilter_url();
+
+        $.ajax({
+            type: "GET",
+            dataType: 'text'
+         });
+    },
+    'csrf': function() {
         function getCookie(name) {
             var cookieValue = null;
             if (document.cookie && document.cookie != '') {
@@ -85,81 +77,52 @@ var cart = {
         function csrfSafeMethod(method) {
             return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
         }
-
-        $.ajaxSetup({
+         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
             }
-        });
-
+         });
+    },
+    'prefilter_url': function() {
         $.ajaxPrefilter( function( options ) {
-            options.url = $('div#cart').data('url');
+            options.url = $( 'div#cart' ).data( 'url' );
+    });
+    },
+    'prefilter_success': function( funct_name='' ) {
+        $.ajaxPrefilter( function( options ) {
+            options.success = function( data ) {
+                if ( funct_name == 'clear' ) {
+                    count_cart = 0;
+                    sum_cart = 0;
+                }
+                else {
+                    var obj = $.parseJSON( data );
+                    count_cart = obj.count_cart;
+                    sum_cart = obj.sum_cart;
+                };
+
+                $( 'div.cart-count' ).text( count_cart );
+                $( 'span.sum' ).text( sum_cart + ' грн' );
+            };
         });
-
-        if (action == 'remove') {
-            // Remove product from cart
-            $.ajax({
-                type: "POST",
-                data:{
-                    'product_pk': product_pk,
-                    'action': action
-                },
-                dataType: 'text'
-            })
-            .done(function(data) {
-                var obj = $.parseJSON(data);
-                $('div.cart-count').text(obj.count_cart);
-                $('span.sum').text(obj.sum_cart + ' грн');
-            });
-        }
-        else if (action == 'clear') {
-            // Clear cart
-            $.ajax({
-                type: "POST",
-                data:{
-                    'action': action
-                },
-                dataType: 'text'
-            })
-            .done(function() {
-                $('div.cart-count').text(0);
-                $('span.sum').text(0 + ' грн');
-            });
-        }
-        else {
-            // Add product to cart
-            $.ajax({
-                type: "POST",
-                data:{
-                    'product_pk': product_pk
-                },
-                dataType: 'text'
-            })
-            .done(function(data) {
-                var obj = $.parseJSON(data);
-                $('div.cart-count').text(obj.count_cart);
-                $('span.sum').text(obj.sum_cart + ' грн');
-                alert("status - " + obj.status);
-            });
-        };
     }
-}
+};
 
 
-$(document).ready(function() {
+$( document ).ready( function() {
 
     // For cart-display.html
-    $('button#remove').on('click', function() {
+    $( 'button#remove' ).on( 'click', function() {
         var product_pk = this.value;
-        cart.cart_change(product_pk,'remove');
+        cart.remove( product_pk );
     });
 
     //  For products_list.html and product.html
-    $('button#buy').on('click', function() {
+    $( 'button#buy' ).on( 'click', function() {
         var product_pk = this.value;
-        var quant = $(this).data('quant');
-        cart.add(product_pk, quant);
+        var quant = $( this ).data( 'quant' );
+        cart.set( product_pk, quant );
     });
 });

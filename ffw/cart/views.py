@@ -9,18 +9,18 @@ import models
 from products.models import Product
 from django.utils.translation import ugettext_lazy as _
 
-from django.core.context_processors import csrf
-from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect
-from django.views.generic import TemplateView
-from django.utils.decorators import method_decorator
 
-@csrf_protect
+from django.shortcuts import render_to_response
+
+from django.views.generic import TemplateView
+
+
+
 def set(request, *args, **kwargs):
 
     if request.is_ajax:
         if request.method == 'POST':
-            cont = cont_get(request)
+           
 
             request.session['products'] = request.session.get('products', {})
             request.session['sum_cart'] = 0
@@ -51,7 +51,7 @@ def set(request, *args, **kwargs):
             result(request)
 
     return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-        request.session['count_cart'])}), cont)
+        request.session['count_cart'])}))
 
 
 def result(request):
@@ -61,39 +61,26 @@ def result(request):
         [v['count'] for v in request.session['products'].values()])
 
 
-def cont_get(request):
-    cont = {}
-    cont.update(csrf(request))
-    return cont
-
-
-@csrf_protect
 def remove(request, *args, **kwargs):
     if request.is_ajax:
         if request.method == 'POST':
-            cont = cont_get(request)
+
 
             product_pk = request.POST.get('product_pk', '')
             request.session["products"].pop(product_pk)
             result(request)
 
         return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-            request.session['count_cart'])}), cont)
-'''
-class RemoveProduct:(View):
+            request.session['count_cart'])}))
 
-    def get(self, *args, **krequest)
-'''
-@csrf_protect
 def cart(request, *args, **kwargs):
     if request.is_ajax:
 
         if request.method == 'DELETE':
-            cont = cont_get(request)
             request.session['products'] = {}
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
-            return HttpResponse(json.dumps({}, cont))
+            return HttpResponse(json.dumps({}))
 
         elif request.method == 'GET':
             return HttpResponse(json.dumps({'products': request.session['products'],
@@ -102,21 +89,15 @@ def cart(request, *args, **kwargs):
 
 class Cart(TemplateView):
 
-    '''@method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        print(33333333)
-        return super(Cart, self).dispatch(*args, **kwargs)
-    '''
     def get(self,request, *args, **kwargs):
         print(22222)
         if request.is_ajax:
             if request.method == 'GET':
                 return HttpResponse(json.dumps({'products': request.session['products'],
                     'sum_cart': request.session['sum_cart'], 'count_cart': request.session['count_cart']}))
-            elif request.method == 'DELETE':
+        def post(self,request, *args, **kwargs):
                 print(111111)
-                cont = cont_get(request)
                 request.session['products'] = {}
                 request.session['sum_cart'] = 0
                 request.session['count_cart'] = 0
-                return HttpResponse(json.dumps({}, cont))
+                return HttpResponse(json.dumps({}))

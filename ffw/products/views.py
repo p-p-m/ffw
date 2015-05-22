@@ -10,9 +10,9 @@ import forms
 import models
 from django.utils.translation import ugettext_lazy as _
 
-from django.core.context_processors import csrf
+
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect
+
 
 
 class HomeView(View):

@@ -12,12 +12,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_protect
-
+from django.views.generic import TemplateView
+from django.utils.decorators import method_decorator
 
 @csrf_protect
 def set(request, *args, **kwargs):
 
-    #product_data = product_data_get(request)
     if request.is_ajax:
         if request.method == 'POST':
             cont = cont_get(request)
@@ -79,8 +79,11 @@ def remove(request, *args, **kwargs):
 
         return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
             request.session['count_cart'])}), cont)
+'''
+class RemoveProduct:(View):
 
-
+    def get(self, *args, **krequest)
+'''
 @csrf_protect
 def cart(request, *args, **kwargs):
     if request.is_ajax:
@@ -95,3 +98,25 @@ def cart(request, *args, **kwargs):
         elif request.method == 'GET':
             return HttpResponse(json.dumps({'products': request.session['products'],
                 'sum_cart': request.session['sum_cart'], 'count_cart': request.session['count_cart']}))
+
+
+class Cart(TemplateView):
+
+    '''@method_decorator(csrf_protect)
+    def dispatch(self, *args, **kwargs):
+        print(33333333)
+        return super(Cart, self).dispatch(*args, **kwargs)
+    '''
+    def get(self,request, *args, **kwargs):
+        print(22222)
+        if request.is_ajax:
+            if request.method == 'GET':
+                return HttpResponse(json.dumps({'products': request.session['products'],
+                    'sum_cart': request.session['sum_cart'], 'count_cart': request.session['count_cart']}))
+            elif request.method == 'DELETE':
+                print(111111)
+                cont = cont_get(request)
+                request.session['products'] = {}
+                request.session['sum_cart'] = 0
+                request.session['count_cart'] = 0
+                return HttpResponse(json.dumps({}, cont))

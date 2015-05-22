@@ -118,6 +118,8 @@ $(document).ready(function() {
     $('button#buy').on('click', function() {
         var product_pk = this.value;
         var quant = $(this).data('quant');
-        cart.set(product_pk, quant);
+        //cart.set(product_pk, quant);
+        //cart.get()
+        cart.clear()
    });
 });

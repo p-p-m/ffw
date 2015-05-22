@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 
-
+{% csrf_token %}
 {% load static i18n %}
 {% get_media_prefix as MEDIA_PREFIX %}
 {% get_static_prefix as STATIC_PREFIX %}

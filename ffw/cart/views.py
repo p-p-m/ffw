@@ -11,11 +11,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import TemplateView
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 
-class CartSet(TemplateView):
+class CartSet(View):
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
@@ -58,7 +58,7 @@ class CartSet(TemplateView):
                 request.session['count_cart']), 'products_cart': request.session['products_cart']}), cont)
 
 
-class CartRemove(TemplateView):
+class CartRemove(View):
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
@@ -69,14 +69,14 @@ class CartRemove(TemplateView):
             cont = cont_get(request)
 
             product_pk = request.POST.get('product_pk', '')
-            request.session["products_cart"].pop(product_pk)
+            del request.session["products_cart"][product_pk]
             result(request)
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
                  request.session['count_cart']),  'products_cart': request.session['products_cart']}), cont)
 
 
-class Cart(TemplateView):
+class Cart(View):
 
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):

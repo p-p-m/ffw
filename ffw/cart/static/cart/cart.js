@@ -1,8 +1,26 @@
 /*
-cart data in request.session: {"cart_sum": cart_sum, "cart-count": cart_count, "products": {product_pk_1: {'product_code': product_code,  'name': name,
-    'price': price,  'count': count, 'sum_': sum_}...}}
+cart data in request.session: {"cart_sum": cart_sum, "cart-count":
+        cart_count, "products": {product_pk_1: {'product_code': product_code,
+       'name': name,  'price': price,  'count': count, 'sum_': sum_}...}}
 
- cart.set()
+ cart.set(product_pk, quant, callback) - добавляет товар с кол-вом quant  в
+         корзину или устанавливает  количество данного товара в корзине равным
+         quant
+
+cart.remove(product_pk, callback) - удаляет товар из корзины и вызывает функцию
+        callback
+
+cart.get(callback) - получает данные корзины и вызывает функцию callback
+
+cart.clear(callback) - удаляет все товары из корзины и вызывает функцию
+        callback
+
+cart.products = {'product_pk': product_code,  'name': name,  'price': price,
+    'count': count, 'sum_': sum_}...}  словарь
+
+cart.sum - товаров в корзине на сумму
+
+cart.count - кол-во товаров в корзине
 */
 
 var cart = {

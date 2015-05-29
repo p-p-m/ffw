@@ -15,11 +15,13 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 
-class CartSet(View):
-
+class CSRFProtectMixin():
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
          return super(CartSet, self).dispatch(*args, **kwargs)
+
+
+class CartSet(View, CSRFProtectMixin):
 
     def post(self, request, *args, **kwargs):
 
@@ -38,11 +40,7 @@ class CartSet(View):
             name = product.name
             product_code = product.code
 
-            count = 0
-            if product_pk in request.session['products_cart'].keys():
-                count = request.session['products_cart'][product_pk].get('count',0)
-
-            count += quant
+            count = request.session['products_cart'].get(product_pk, {}).get('count', 0) + quant
             sum_ = round(count * price, 2)
 
             request.session['products_cart'][product_pk] = {
@@ -58,11 +56,7 @@ class CartSet(View):
                 request.session['count_cart']), 'products_cart': request.session['products_cart']}), cont)
 
 
-class CartRemove(View):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-         return super(CartRemove, self).dispatch(*args, **kwargs)
+class CartRemove(View, CSRFProtectMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -76,11 +70,7 @@ class CartRemove(View):
                  request.session['count_cart']),  'products_cart': request.session['products_cart']}), cont)
 
 
-class Cart(View):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(Cart, self).dispatch(*args, **kwargs)
+class Cart(View, CSRFProtectMixin):
 
     def get(self,request, *args, **kwargs):
         if request.is_ajax:

@@ -122,18 +122,18 @@ var cart = {
 
 $(document).ready(function() {
     cart.url =$('div#cart').data('url');
-    cart.get(function() {console.log(cart.products)});
-    cart.clear(function() {console.log(cart.products)});
+    cart.get(function() {console.log(cart.products, 'get')});
+    cart.clear(function() {console.log(cart.products, 'clear')});
     // For cart-display.html
     $('button#remove').on('click', function() {
         var product_pk = this.value;
-        cart.remove(product_pk, function() {console.log(cart.products)});
+        cart.remove(product_pk, function() {console.log(cart.products, 'remove')});
    });
 
     //  For products_list.html and product.html
     $('button#buy').on('click', function() {
         var product_pk = this.value;
         var quant = $(this).data('quant');
-        cart.set(product_pk, quant,function() {console.log(cart.products)});
+        cart.set(product_pk, quant,function() {console.log(cart.products, 'set')});
    });
 });

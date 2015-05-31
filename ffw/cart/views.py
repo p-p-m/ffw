@@ -15,17 +15,17 @@ from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 
-class CartSet(View):
-
+class CSRFProtectMixin():
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
          return super(CartSet, self).dispatch(*args, **kwargs)
 
+
+class CartSet(View, CSRFProtectMixin):
+
     def post(self, request, *args, **kwargs):
 
         if request.is_ajax:
-            cont = cont_get(request)
-
             request.session['products_cart'] = request.session.get('products_cart', {})
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
@@ -38,11 +38,7 @@ class CartSet(View):
             name = product.name
             product_code = product.code
 
-            count = 0
-            if product_pk in request.session['products_cart'].keys():
-                count = request.session['products_cart'][product_pk].get('count',0)
-
-            count += quant
+            count = request.session['products_cart'].get(product_pk, {}).get('count', 0) + quant
             sum_ = round(count * price, 2)
 
             request.session['products_cart'][product_pk] = {
@@ -55,32 +51,22 @@ class CartSet(View):
             result(request)
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                request.session['count_cart']), 'products_cart': request.session['products_cart']}), cont)
+                request.session['count_cart']), 'products_cart': request.session['products_cart']}))
 
 
-class CartRemove(View):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-         return super(CartRemove, self).dispatch(*args, **kwargs)
+class CartRemove(View, CSRFProtectMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            cont = cont_get(request)
-
             product_pk = request.POST.get('product_pk', '')
             del request.session["products_cart"][product_pk]
             result(request)
 
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart']),  'products_cart': request.session['products_cart']}), cont)
+                 request.session['count_cart']),  'products_cart': request.session['products_cart']}))
 
 
-class Cart(View):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(Cart, self).dispatch(*args, **kwargs)
+class Cart(View, CSRFProtectMixin):
 
     def get(self,request, *args, **kwargs):
         if request.is_ajax:
@@ -89,12 +75,11 @@ class Cart(View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            cont = cont_get(request)
             request.session['products_cart'] = {}
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart']),  'products_cart': request.session['products_cart']}), cont)
+                 request.session['count_cart']),  'products_cart': request.session['products_cart']}))
 
 
 def result(request):
@@ -104,9 +89,3 @@ def result(request):
     request.session['count_cart'] = sum(
         [v['count'] for v in request.session['products_cart'].values()])
 
-
-def cont_get(request):
-
-    cont = {}
-    cont.update(csrf(request))
-    return cont

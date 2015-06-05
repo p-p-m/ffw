@@ -8,11 +8,6 @@ from django.views.generic import ListView, View
 from gallery.models import Banner
 import forms
 import models
-from django.utils.translation import ugettext_lazy as _
-
-from django.core.context_processors import csrf
-from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_protect
 
 
 class HomeView(View):
@@ -77,6 +72,13 @@ class ProductListView(ListView):
         else:
             self.paginate_by = self.request.session.get(key, self.paginate_by)
         return self.paginate_by
+
+    def _get_selected_section(self):
+        if 'section' in self.kwargs:
+            try:
+                return models.Section.objects.get(slug=self.kwargs['section'])
+            except models.Section.DoesNotExist:
+                pass
 
     def _get_selected_category(self):
         if 'category' in self.kwargs:

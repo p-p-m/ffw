@@ -14,20 +14,29 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         models.Product.objects.all().delete()
+        models.Section.objects.all().delete()
         models.Category.objects.all().delete()
         models.Subcategory.objects.all().delete()
+        get_user_model().objects.all().delete()
         # admin
         get_user_model().objects.create_superuser(username='admin', password='admin', email='admin@i.ua')
+        self.stdout.write('Superuser admin/admin was created successfully')
+        # sections:
+        sections = [factories.SectionFactory() for _ in range(3)]
         # categories
-        categories = [factories.CategoryFactory() for _ in range(3)]
+        categories = []
+        for section in sections:
+            categories += [factories.CategoryFactory(section=section) for _ in range(3)]
         # subcategories
         subcategories = []
         for category in categories:
             subcategories += [factories.SubcategoryFactory(category=category) for _ in range(3)]
+        self.stdout.write('Sections, categories and subcategories were created successfully')
         # products
         for subcategory in subcategories:
             for _ in range(20):
                 factories.ProductFactory(subcategory=subcategory)
+        self.stdout.write('Products were created successfully')
         # filters:
         for category in categories:
             f = models.ProductFilter.objects.create(
@@ -38,3 +47,4 @@ class Command(BaseCommand):
                 attribute_name='Width', filter_type='NUMERIC_RANGES', category=category, name='Width filter')
             f.clean()
             f.save()
+        self.stdout.write('Products filters were created successfully')

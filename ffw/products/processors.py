@@ -4,7 +4,10 @@ from products import models
 
 
 def categories_processor(request):
-    return {'categories': models.Category.objects.filter(is_active=True).select_related('subcategories')}
+    sections = models.Section.objects.filter(is_active=True).select_related('categories', 'categories__subcategories')
+    return {
+        'sections': sections,
+    }
 
 
 def debug_processor(request):

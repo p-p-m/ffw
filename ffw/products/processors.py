@@ -3,7 +3,7 @@ from django.conf import settings
 from products import models
 
 
-def categories_processor(request):
+def sections_processor(request):
     sections = models.Section.objects.filter(is_active=True).select_related('categories', 'categories__subcategories')
     return {
         'sections': sections,

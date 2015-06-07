@@ -14,7 +14,6 @@ class FilterMixin(object):
     name = models.CharField(max_length=50)
     priority = models.FloatField('Priority', help_text='Filters with higher priority are displayed higher on page')
     is_manually_edited = models.BooleanField(default=False)
-    filtered_attribute_name = models.CharField(max_length=50)
 
     def get_queryset(self):
         raise NotImplemented()

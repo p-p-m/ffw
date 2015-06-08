@@ -1,26 +1,32 @@
 /*
+Connect:
+    1. <script src="{{ STATIC_URL }}cart/cart.js"> </script>
+    2. Должен быть задан урл в свойстве тега data-cart-url='some/url/'.
+
 cart data in request.session: {"cart_sum": cart_sum, "cart-count":
         cart_count, "products": {product_pk_1: {'product_code': product_code,
        'name': name,  'price': price,  'count': count, 'sum_': sum_}...}}
 
- cart.set(product_pk, quant, callback) - добавляет товар с кол-вом quant  в
-         корзину или устанавливает  количество данного товара в корзине равным
-         quant
+Object cart:
+    After  successfully execution all methods update the attributes of the cart and call function callback
 
-cart.remove(product_pk, callback) - удаляет товар из корзины и вызывает функцию
-        callback
+    Methods:
 
-cart.get(callback) - получает данные корзины и вызывает функцию callback
+        cart.set(product_pk, quant, callback) - set quantity of the product in the cart equal quant
 
-cart.clear(callback) - удаляет все товары из корзины и вызывает функцию
-        callback
+        cart.remove(product_pk, callback) - remove the product from the cart
 
-cart.products = {'product_pk': product_code,  'name': name,  'price': price,
-    'count': count, 'sum_': sum_}...}  словарь
+        cart.get(callback) - get attributes of the cart
 
-cart.sum - товаров в корзине на сумму
+        cart.clear(callback) -clear the cart
 
-cart.count - кол-во товаров в корзине
+     Attributes :
+        cart.products = {'product_pk': product_code,  'name': name,  'price': price,
+            'count': count, 'sum_': sum_}...} - dictionary
+
+        cart.sum - total cost of the cart products
+
+        cart.count - total quantity of the cart products
 */
 
 var cart = {
@@ -120,8 +126,9 @@ var cart = {
    },
 };
 
+
 $(document).ready(function() {
-    cart.url =$('div#cart').data('url');
+    cart.url =$('[data-cart-url]').data('cart-url')
     cart.get(function() {console.log(cart.products, 'get')});
     cart.clear(function() {console.log(cart.products, 'clear')});
     // For cart-display.html

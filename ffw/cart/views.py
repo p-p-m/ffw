@@ -20,8 +20,19 @@ class CSRFProtectMixin():
     def dispatch(self, *args, **kwargs):
          return super(CartSet, self).dispatch(*args, **kwargs)
 
+class CartResult(View, CSRFProtectMixin):
 
-class CartSet(View, CSRFProtectMixin):
+    def format_response(self, session):
+        session['sum_cart'] = round(sum(
+            [v['sum_'] for v in session['products_cart'].values()]), 2)
+        session['count_cart'] = sum(
+            [v['quant'] for v in session['products_cart'].values()])
+
+        return HttpResponse(json.dumps({'sum_cart': session['sum_cart'], 'count_cart': (
+                session['count_cart']), 'products_cart': session['products_cart']}))
+
+
+class CartSet(CartResult):
 
     def post(self, request, *args, **kwargs):
 
@@ -49,30 +60,23 @@ class CartSet(View, CSRFProtectMixin):
                     'quant': quant,
                     'sum_': sum_}
 
-            result(request)
-
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                request.session['count_cart']), 'products_cart': request.session['products_cart']}))
+            return self.format_response(request.session)
 
 
-class CartRemove(View, CSRFProtectMixin):
+class CartRemove(CartResult):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk = request.POST.get('product_pk', '')
             del request.session["products_cart"][product_pk]
-            result(request)
 
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart']),  'products_cart': request.session['products_cart']}))
+            return self.format_response(request.session)
 
-
-class Cart(View, CSRFProtectMixin):
+class Cart(CartResult):
 
     def get(self,request, *args, **kwargs):
         if request.is_ajax:
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart']),  'products_cart': request.session['products_cart']}))
+            return self.format_response(request.session)
 
     def post(self, request, *args, **kwargs):
         '''
@@ -82,14 +86,5 @@ class Cart(View, CSRFProtectMixin):
             request.session['products_cart'] = {}
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart']),  'products_cart': request.session['products_cart']}))
 
-
-def result(request):
-
-    request.session['sum_cart'] = round(sum(
-        [v['sum_'] for v in request.session['products_cart'].values()]), 2)
-    request.session['count_cart'] = sum(
-        [v['quant'] for v in request.session['products_cart'].values()])
-
+            return self.format_response(request.session)

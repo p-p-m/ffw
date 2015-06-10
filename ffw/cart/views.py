@@ -32,21 +32,22 @@ class CartSet(View, CSRFProtectMixin):
 
             product_pk = request.POST.get('product_pk', '')
             quant = int(request.POST.get('quant', 0))
-
             product = get_object_or_404(Product.objects, pk=product_pk)
-            price = float(product.price_uah)
-            name = product.name
-            product_code = product.code
 
-            count = request.session['products_cart'].get(product_pk, {}).get('count', 0) + quant
-            sum_ = round(count * price, 2)
+            if quant == 0:
+                del request.session["products_cart"][product_pk]
+            elif quant > 0:
+                price = float(product.price_uah)
+                name = product.name
+                product_code = product.code
+                sum_ = round(quant * price, 2)
 
-            request.session['products_cart'][product_pk] = {
-                'product_code': product_code,
-                'name': name,
-                'price': price,
-                'count': count,
-                'sum_': sum_}
+                request.session['products_cart'][product_pk] = {
+                    'product_code': product_code,
+                    'name': name,
+                    'price': price,
+                    'quant': quant,
+                    'sum_': sum_}
 
             result(request)
 
@@ -74,6 +75,9 @@ class Cart(View, CSRFProtectMixin):
                  request.session['count_cart']),  'products_cart': request.session['products_cart']}))
 
     def post(self, request, *args, **kwargs):
+        '''
+        Clear cart
+        '''
         if request.is_ajax:
             request.session['products_cart'] = {}
             request.session['sum_cart'] = 0
@@ -87,5 +91,5 @@ def result(request):
     request.session['sum_cart'] = round(sum(
         [v['sum_'] for v in request.session['products_cart'].values()]), 2)
     request.session['count_cart'] = sum(
-        [v['count'] for v in request.session['products_cart'].values()])
+        [v['quant'] for v in request.session['products_cart'].values()])
 

@@ -73,6 +73,9 @@ class Cart(View, CSRFProtectMixin):
             return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
                  request.session['count_cart']),  'products_cart': request.session['products_cart']}))
 
+    '''
+    Clear cart
+    '''
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             request.session['products_cart'] = {}

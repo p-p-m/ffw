@@ -78,6 +78,7 @@ class Cart(CartResult):
         if request.is_ajax:
             return self.format_response(request.session)
 
+
     def post(self, request, *args, **kwargs):
         '''
         Clear cart

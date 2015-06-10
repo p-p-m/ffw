@@ -11,101 +11,81 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import TemplateView
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 
-class CartSet(TemplateView):
-
+class CSRFProtectMixin():
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
          return super(CartSet, self).dispatch(*args, **kwargs)
 
+class CartResult(View, CSRFProtectMixin):
+
+    def format_response(self, session):
+        session['sum_cart'] = round(sum(
+            [v['sum_'] for v in session['products_cart'].values()]), 2)
+        session['count_cart'] = sum(
+            [v['quant'] for v in session['products_cart'].values()])
+
+        return HttpResponse(json.dumps({'sum_cart': session['sum_cart'], 'count_cart': (
+                session['count_cart']), 'products_cart': session['products_cart']}))
+
+
+class CartSet(CartResult):
+
     def post(self, request, *args, **kwargs):
 
         if request.is_ajax:
-            cont = cont_get(request)
-
-            request.session['products'] = request.session.get('products', {})
+            request.session['products_cart'] = request.session.get('products_cart', {})
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
 
             product_pk = request.POST.get('product_pk', '')
             quant = int(request.POST.get('quant', 0))
-
             product = get_object_or_404(Product.objects, pk=product_pk)
-            price = float(product.price_uah)
-            name = product.name
-            product_code = product.code
 
-            count = 0
-            if product_pk in request.session['products'].keys():
-                count = request.session['products'][product_pk].get('count',0)
+            if quant == 0:
+                del request.session["products_cart"][product_pk]
+            elif quant > 0:
+                price = float(product.price_uah)
+                name = product.name
+                product_code = product.code
+                sum_ = round(quant * price, 2)
 
-            count += quant
-            sum_ = round(count * price, 2)
+                request.session['products_cart'][product_pk] = {
+                    'product_code': product_code,
+                    'name': name,
+                    'price': price,
+                    'quant': quant,
+                    'sum_': sum_}
 
-            request.session['products'][product_pk] = {
-                'product_code': product_code,
-                'name': name,
-                'price': price,
-                'count': count,
-                'sum_': sum_}
-
-            result(request)
-
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                request.session['count_cart'])}), cont)
+            return self.format_response(request.session)
 
 
-class CartRemove(TemplateView):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-         return super(CartRemove, self).dispatch(*args, **kwargs)
+class CartRemove(CartResult):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            cont = cont_get(request)
-
             product_pk = request.POST.get('product_pk', '')
-            request.session["products"].pop(product_pk)
-            result(request)
+            del request.session["products_cart"][product_pk]
 
-            return HttpResponse(json.dumps({'sum_cart': request.session['sum_cart'], 'count_cart': (
-                 request.session['count_cart'])}), cont)
+            return self.format_response(request.session)
 
-
-class Cart(TemplateView):
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(Cart, self).dispatch(*args, **kwargs)
+class Cart(CartResult):
 
     def get(self,request, *args, **kwargs):
         if request.is_ajax:
-            return HttpResponse(json.dumps({'products': request.session['products'],
-                'sum_cart': request.session['sum_cart'], 'count_cart': request.session['count_cart']}))
+            return self.format_response(request.session)
+
 
     def post(self, request, *args, **kwargs):
+        '''
+        Clear cart
+        '''
         if request.is_ajax:
-            cont = cont_get(request)
-            request.session['products'] = {}
+            request.session['products_cart'] = {}
             request.session['sum_cart'] = 0
             request.session['count_cart'] = 0
-            return HttpResponse(json.dumps({}, cont))
 
-
-def result(request):
-
-    request.session['sum_cart'] = round(sum(
-        [v['sum_'] for v in request.session['products'].values()]), 2)
-    request.session['count_cart'] = sum(
-        [v['count'] for v in request.session['products'].values()])
-
-
-def cont_get(request):
-
-    cont = {}
-    cont.update(csrf(request))
-    return cont
+            return self.format_response(request.session)

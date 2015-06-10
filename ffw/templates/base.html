@@ -26,8 +26,6 @@
 </head>
 <body>
 
- <div id='cart'   data-url="{% url 'cart' %}"></div>
-
  <!-- menus -->
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}
@@ -53,8 +51,6 @@
     <script src="{% static 'cart/cart.js' %}"> </script>
     <!--<script src="{{ STATIC_URL }}cart/cart.js"> </script>-->
 {% endblock basejs %}
-
-    
 
 
 </body>

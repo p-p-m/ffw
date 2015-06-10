@@ -1,9 +1,47 @@
+/*
+Connect:
+    1. <script src="{{ STATIC_URL }}cart/cart.js"> </script>
+    2. Должен быть задан урл в свойстве тега data-cart-url='some/url/'.
+
+cart data in request.session: {"cart_sum": cart_sum, "cart-count":
+        cart_count, "products": {product_pk_1: {'product_code': product_code,
+       'name': name,  'price': price,  'quant': quant, 'sum_': sum_}...}}
+
+Object cart:
+    After  successfully execution all methods update the attributes of the cart and call function callback
+
+    Methods:
+
+        cart.set(product_pk, quant, callback) - set quantity of the product in the cart equal quant
+
+        cart.remove(product_pk, callback) - remove the product from the cart
+
+        cart.get(callback) - get attributes of the cart
+
+        cart.clear(callback) -clear the cart
+
+     Attributes :
+        cart.products = {'product_pk': product_code,  'name': name,  'price': price,
+           'quant': quant, 'sum_': sum_}...} - dictionary
+
+        cart.sum - total cost of the cart products
+
+        cart.count - total quantity of the cart products
+*/
+
 var cart = {
     'products': {},
     'sum': 0,
     'count': 0,
     'url': '',
-    'set': function(product_pk, quant) {
+    'updateCartAndCallback': function(data,callback) {
+            var obj = $.parseJSON(data);
+            cart.count = obj.count_cart;
+            cart.sum = obj.sum_cart;
+            cart.products = obj.products_cart;
+            callback();
+        },
+    'set': function(product_pk, quant, callback) {
         cart.csrf();
 
         $.ajax({
@@ -14,12 +52,12 @@ var cart = {
                 'quant': quant
            },
             dataType: 'text'
-       })
+        })
         .done(function(data) {
-             cart.event_success('set', data);
-       });
-   },
-    'remove': function(product_pk) {
+             cart.updateCartAndCallback(data, callback);
+        });
+    },
+    'remove': function(product_pk, callback) {
         cart.csrf();
 
         $.ajax({
@@ -31,11 +69,10 @@ var cart = {
             dataType: 'text'
        })
         .done(function(data) {
-             cart.event_success('remove', data);
-       });
-
-   },
-    'clear': function() {
+             cart.updateCartAndCallback(data, callback);
+        });
+    },
+    'clear': function(callback) {
         cart.csrf();
 
         $.ajax({
@@ -44,19 +81,19 @@ var cart = {
             dataType: 'text'
        })
         .done(function(data) {
-             cart.event_success('clear', data);
-       });
-
+             cart.updateCartAndCallback(data, callback);
+        });
    },
-    'get': function() {
+    'get': function(callback) {
         $.ajax({
             url: cart.url,
             type: "GET",
             dataType: 'text'
-       }).done(function(data) {
-         alert(data);
-       });
-   },
+       })
+       .done(function(data) {
+             cart.updateCartAndCallback(data, callback);
+        });
+    },
     'csrf': function() {
         function getCookie(name) {
             var cookieValue = null;
@@ -87,39 +124,4 @@ var cart = {
            }
         });
    },
-    'event_success':  function(funct_name='', data) {
-        if (funct_name == 'clear') {
-            count_cart = 0;
-            sum_cart = 0;
-       }
-        else {
-            var obj = $.parseJSON(data);
-            count_cart = obj.count_cart;
-            sum_cart = obj.sum_cart;
-       };
-
-        $('div.cart-count').text(count_cart);
-        $('span.sum').text(sum_cart + ' грн');
-   }
 };
-
-
-$(document).ready(function() {
-
-    cart.url =$('div#cart').data('url');
-
-    // For cart-display.html
-    $('button#remove').on('click', function() {
-        var product_pk = this.value;
-        cart.remove(product_pk);
-   });
-
-    //  For products_list.html and product.html
-    $('button#buy').on('click', function() {
-        var product_pk = this.value;
-        var quant = $(this).data('quant');
-        cart.set(product_pk, quant);
-        //cart.get()
-        //cart.clear()
-   });
-});

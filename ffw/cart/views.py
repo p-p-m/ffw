@@ -11,14 +11,16 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
+from products.models import Product
 
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
          return super(CartSet, self).dispatch(*args, **kwargs)
+
 
 class CartResult(View, CSRFProtectMixin):
 
@@ -32,7 +34,7 @@ class CartResult(View, CSRFProtectMixin):
                 session['count_cart']), 'products_cart': session['products_cart']}))
 
 
-class CartSet(CartResult):
+class CartSetView(CartResult):
 
     def post(self, request, *args, **kwargs):
 
@@ -63,7 +65,7 @@ class CartSet(CartResult):
             return self.format_response(request.session)
 
 
-class CartRemove(CartResult):
+class CartRemoveView(CartResult):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -72,7 +74,8 @@ class CartRemove(CartResult):
 
             return self.format_response(request.session)
 
-class Cart(CartResult):
+
+class CartView(CartResult):
 
     def get(self,request, *args, **kwargs):
         if request.is_ajax:
@@ -89,3 +92,13 @@ class Cart(CartResult):
             request.session['count_cart'] = 0
 
             return self.format_response(request.session)
+
+
+class CartTestView(TemplateView):
+
+    template_name = 'cart_test.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(CartTestView, self).get_context_data(**kwargs)
+        context['products'] = Product.objects.all()
+        return context

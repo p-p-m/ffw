@@ -3,7 +3,7 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, TemplateView
 
 from gallery.models import Banner
 import forms
@@ -111,6 +111,12 @@ class ProductListView(ListView):
 
 
 class ProductView(View):
+
     def get(self, request, product):
         product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
         return render(request, 'products/product.html', {'product': product})
+
+
+class CartTest(TemplateView):
+
+    template_name = 'cart_test.html '

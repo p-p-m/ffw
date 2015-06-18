@@ -1,0 +1,33 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+ 
+{% for product in products %}
+    <div >
+        {{product.name}}  {{product.price_uah}}
+        <button  id="buy" value={{product.pk}}>Купить</button>
+        <button  id="remove" value={{product.pk}}>Удалить</button>
+    </div>
+{% endfor %}
+
+<div>
+    <button  id="get" >Получить данные корзины</button>
+</div>
+
+<div>
+    <button  id="clear" >Очистить корзину</button>
+</div>
+
+{% block basejs %}
+    <script src="{% static 'cart/cart.js' %}"> </script>
+{% endblock basejs %}
+
+
+</body>
+</html>

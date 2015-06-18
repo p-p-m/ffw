@@ -21,7 +21,7 @@ Object cart:
         cart.clear(callback) -clear the cart
 
      Attributes :
-        cart.products = {'product_pk': product_code,  'name': name,  'price': price,
+        cart.products = {{'product_pk': product_code,  'name': name,  'price': price,
            'quant': quant, 'sum_': sum_}...} - dictionary
 
         cart.sum - total cost of the cart products
@@ -124,4 +124,9 @@ var cart = {
            }
         });
    },
-};
+}
+
+$(document).ready(function() {
+ 
+ 
+})

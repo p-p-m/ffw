@@ -22,7 +22,7 @@ class CSRFProtectMixin():
          return super(CartSet, self).dispatch(*args, **kwargs)
 
 
-class CartResult(View, CSRFProtectMixin):
+class CartResultMixin(View, CSRFProtectMixin):
 
     def format_response(self, session):
         session['sum_cart'] = round(sum(
@@ -34,8 +34,10 @@ class CartResult(View, CSRFProtectMixin):
                 session['count_cart']), 'products_cart': session['products_cart']}))
 
 
-class CartSetView(CartResult):
-
+class CartSetView(CartResultMixin):
+    '''
+    If quantity of product is None or  is less 0, then  this equivalent quantity equal 0
+    '''
     def post(self, request, *args, **kwargs):
 
         if request.is_ajax:
@@ -44,12 +46,17 @@ class CartSetView(CartResult):
             request.session['count_cart'] = 0
 
             product_pk = request.POST.get('product_pk', '')
-            quant = int(request.POST.get('quant', 0))
+            try:
+                quant = int(request.POST.get('quant', '0'))
+            except ValueError:
+                quant = 0
+
             product = get_object_or_404(Product.objects, pk=product_pk)
 
-            if quant == 0:
-                del request.session["products_cart"][product_pk]
-            elif quant > 0:
+            if quant <= 0:
+                if product_pk in request.session["products_cart"]:
+                    request.session["products_cart"].pop(product_pk)
+            else:
                 price = float(product.price_uah)
                 name = product.name
                 product_code = product.code
@@ -65,19 +72,21 @@ class CartSetView(CartResult):
             return self.format_response(request.session)
 
 
-class CartRemoveView(CartResult):
+class CartRemoveView(CartResultMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk = request.POST.get('product_pk', '')
-            del request.session["products_cart"][product_pk]
+
+            if product_pk in request.session["products_cart"]:
+                request.session["products_cart"].pop(product_pk)
 
             return self.format_response(request.session)
 
 
-class CartView(CartResult):
+class CartView(CartResultMixin):
 
-    def get(self,request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         if request.is_ajax:
             return self.format_response(request.session)
 
@@ -95,9 +104,12 @@ class CartView(CartResult):
 
 
 class CartTestView(TemplateView):
-
-    template_name = 'cart_test.html'
+    '''
+    For test
+    '''
     
+    template_name = 'cart_test.html'
+
     def get_context_data(self, **kwargs):
         context = super(CartTestView, self).get_context_data(**kwargs)
         context['products'] = Product.objects.all()

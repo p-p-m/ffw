@@ -126,7 +126,3 @@ var cart = {
    },
 }
 
-$(document).ready(function() {
- 
- 
-})

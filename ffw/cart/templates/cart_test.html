@@ -1,5 +1,9 @@
+<!--For test only-->
+
 {% load staticfiles %}
 {% load i18n %}
+
+{% csrf_token %}
 
 <!DOCTYPE html>
 <html lang="ru-RU">
@@ -7,10 +11,14 @@
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
- 
+
+<div id='cart'   data-url="{% url 'cart' %}"></div>
+
 {% for product in products %}
     <div >
-        {{product.name}}  {{product.price_uah}}
+        {{product.name}}
+        <input id = {{product.pk}} type = text  value =3> </input>
+        {{product.price_uah}} грн
         <button  id="buy" value={{product.pk}}>Купить</button>
         <button  id="remove" value={{product.pk}}>Удалить</button>
     </div>
@@ -24,8 +32,10 @@
     <button  id="clear" >Очистить корзину</button>
 </div>
 
+<div id = 'products'></div>
 {% block basejs %}
     <script src="{% static 'cart/cart.js' %}"> </script>
+    <script src="{% static 'cart/cart_test.js' %}"> </script>
 {% endblock basejs %}
 
 

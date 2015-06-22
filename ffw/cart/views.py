@@ -25,13 +25,24 @@ class CSRFProtectMixin():
 class CartResultMixin(View, CSRFProtectMixin):
 
     def format_response(self, session):
-        session['sum_cart'] = round(sum(
-            [v['sum_'] for v in session['products_cart'].values()]), 2)
-        session['count_cart'] = sum(
-            [v['quant'] for v in session['products_cart'].values()])
+        if 'products_cart' in session:
+            session['sum_cart'] = round(sum(
+                [v['sum_'] for v in session['products_cart'].values()]), 2)
+            sum_cart = session['sum_cart']
 
-        return HttpResponse(json.dumps({'sum_cart': session['sum_cart'], 'count_cart': (
-                session['count_cart']), 'products_cart': session['products_cart']}))
+            session['count_cart'] = sum(
+                [v['quant'] for v in session['products_cart'].values()])
+            count_cart = session['count_cart']
+
+            products_cart = session['products_cart']
+        else:
+            sum_cart = 0
+            count_cart = 0
+            products_cart = {}
+
+
+        return HttpResponse(json.dumps({'sum_cart': sum_cart, 'count_cart':
+                count_cart, 'products_cart': products_cart}))
 
 
 class CartSetView(CartResultMixin):
@@ -96,9 +107,12 @@ class CartView(CartResultMixin):
         Clear cart
         '''
         if request.is_ajax:
-            request.session['products_cart'] = {}
-            request.session['sum_cart'] = 0
-            request.session['count_cart'] = 0
+            if 'products_cart' in request.session :
+                request.session.pop('products_cart')
+            if 'sum_cart' in request.session :
+                request.session.pop('sum_cart')
+            if 'count_cart' in request.session :
+                request.session.pop('count_cart')
 
             return self.format_response(request.session)
 
@@ -107,7 +121,7 @@ class CartTestView(TemplateView):
     '''
     For test
     '''
-    
+
     template_name = 'cart_test.html'
 
     def get_context_data(self, **kwargs):

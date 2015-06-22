@@ -10,7 +10,10 @@ class FilterTypes(object):
 
 
 # XXX: This filter is not general. It cannot handle ProductAttribute model right
-class FilterMixin(object):
+class FilterMixin(models.Model):
+    class Meta:
+        abstract = True
+
     name = models.CharField(max_length=50)
     priority = models.FloatField('Priority', help_text='Filters with higher priority are displayed higher on page')
     is_manually_edited = models.BooleanField(default=False)
@@ -18,22 +21,17 @@ class FilterMixin(object):
     def get_queryset(self):
         raise NotImplemented()
 
-    def filter(self, *args, **kwargs):
-        return self.get_queryset().filter(self.get_filter_query(self.filtered_attribute_name, *args, **kwargs))
-
     def get_filter_query(self, field, **kwargs):
         raise NotImplemented()
 
     def get_type(self):
         raise NotImplemented()
 
-    def update(self):
-        if self.is_manually_edited:
-            return
-        self.base_update(self.filtered_attribute_name)
-
     def base_update(self, field):
         raise NotImplemented()
+
+    def get_item_prefix(self):
+        return '{}-{}'.format(self.get_type(), self.id)
 
 
 class NumericFilterMixin(FilterMixin):
@@ -43,10 +41,16 @@ class NumericFilterMixin(FilterMixin):
     max_value = models.FloatField('Max')
     min_value = models.FloatField('Min')
 
+    class Meta:
+        abstract = True
+
     def get_type(self):
         return FilterTypes.NUMERIC
 
     def get_filter_query(self, field, selected_min_value, selected_max_value):
+        print {
+            '{}__gte'.format(field): selected_min_value,
+            '{}__lte'.format(field): selected_max_value}
         return models.Q(**{
             '{}__gte'.format(field): selected_min_value,
             '{}__lte'.format(field): selected_max_value})
@@ -67,6 +71,9 @@ class ChoicesFilterMixin(FilterMixin):
     """
     choices = models.TextField('Choices', help_text='Comma-separated list of choices')
 
+    class Meta:
+        abstract = True
+
     def get_type(self):
         return FilterTypes.CHOICES
 
@@ -84,14 +91,19 @@ class IntervalsFilterMixin(FilterMixin):
     intervals = models.TextField(
         'Intervals', help_text='Comma-separated list of intervals. Example: 0-100, 100-200 ...')
 
+    class Meta:
+        abstract = True
+
     def get_type(self):
         return FilterTypes.INTERVALS
 
     def get_formatted_intervals(self):
         intervals = [interval.strip() for interval in self.intervals.split(',')]
-        return [(float(i.split('-')[0].strip()), float(i.split('-'))[1].strip()) for i in intervals]
+        print [(float(i.split('-')[0].strip()), float(i.split('-')[1].strip())) for i in intervals]
+        return [(float(i.split('-')[0].strip()), float(i.split('-')[1].strip())) for i in intervals]
 
     def get_filter_query(self, field, intervals):
         query = models.Q()
         for min_value, max_value in intervals:
             query |= models.Q(**{'{}__gte'.format(field): min_value, '{}__lte'.format(field): max_value})
+        return query

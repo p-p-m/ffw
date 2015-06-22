@@ -1,0 +1,15 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/normalize.css">
+<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+{% for filter in filters %}
+    {{ filter.name }} <hr/>
+    {% include 'filters/filter.html' %}
+{% endfor %}
+
+<script src="/static/js/dependecies.js"></script>
+
+<script src="{% static 'filters/filters.js' %}"> </script>
+<script src="{% static 'assembly/filters.js' %}"> </script>

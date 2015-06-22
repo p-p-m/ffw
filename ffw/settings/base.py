@@ -26,10 +26,13 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
 
+    'filters',
     'products',
     'common_pages',
     'gallery',
     'cart',
+
+    'assembly',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,6 +102,8 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'cart', 'static'),
+    os.path.join(PROJECT_ROOT, 'ffw', 'filters', 'static'),
+    os.path.join(PROJECT_ROOT, 'ffw', 'assembly', 'static'),
 )
 
 

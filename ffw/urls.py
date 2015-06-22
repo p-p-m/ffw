@@ -11,6 +11,7 @@ urlpatterns = patterns(
     '',
     # Custom applications
     url(r'^', include('products.urls')),
+    url(r'^', include('assembly.urls')),
     url(r'^common_pages/', include('common_pages.urls')),
     url(r'^gallery/', include('gallery.urls')),
     url(r'^cart/', include('cart.urls')),

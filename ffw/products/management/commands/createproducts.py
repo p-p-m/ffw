@@ -17,6 +17,7 @@ class Command(BaseCommand):
         models.Section.objects.all().delete()
         models.Category.objects.all().delete()
         models.Subcategory.objects.all().delete()
+        models.Characteristic.objects.all().delete()
         get_user_model().objects.all().delete()
         # admin
         get_user_model().objects.create_superuser(username='admin', password='admin', email='admin@i.ua')
@@ -32,10 +33,14 @@ class Command(BaseCommand):
         for category in categories:
             subcategories += [factories.SubcategoryFactory(category=category) for _ in range(3)]
         self.stdout.write('Sections, categories and subcategories were created successfully')
+        characteristics = [factories.CharacteristicFactory.build() for _ in range(50)]
+        models.Characteristic.objects.bulk_create(characteristics)
+        self.stdout.write('Characteristics were created successfully')
         # products
         for subcategory in subcategories:
-            for _ in range(20):
-                factories.ProductFactory(subcategory=subcategory)
+            models.Product.objects.bulk_create(
+                [factories.ProductFactory.build(subcategory=subcategory) for _ in range(10)])
+            self.stdout.write('Products for subcategory {} were created successfully'.format(subcategory))
         self.stdout.write('Products were created successfully')
         # filters:
         for category in categories:

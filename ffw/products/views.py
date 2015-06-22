@@ -41,6 +41,8 @@ class ProductListView(ListView):
             queryset = queryset.filter(subcategory__slug=self.kwargs['subcategory'])
         elif 'category' in self.kwargs:
             queryset = queryset.filter(subcategory__category__slug=self.kwargs['category'])
+        elif 'section' in self.kwargs:
+            queryset = queryset.filter(subcategory__category__section__slug=self.kwargs['section'])
 
         sort_form = forms.SortForm(self.request.GET)
         if sort_form.is_valid():

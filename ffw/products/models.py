@@ -16,8 +16,22 @@ from model_utils.models import TimeStampedModel
 
 import exceptions
 
-
 logger = logging.getLogger(__name__)
+
+
+@python_2_unicode_compatible
+class Characteristic(models.Model):
+    class Meta:
+        verbose_name = _('Characteristic')
+        verbose_name_plural = _('Characteristics')
+
+    name = models.CharField(_('Characteristic name'), max_length=255)
+    description = models.TextField(_('Characteristic description'), blank=True)
+    default_value = models.CharField(_('Default value'), max_length=127, blank=True)
+    units = models.CharField(_('Units'), max_length=50, blank=True)
+
+    def __str__(self):
+        return self.name
 
 
 # XXX: One abstract model for section category and subcategory has to be created.
@@ -33,6 +47,7 @@ class Section(models.Model):
         _('Section slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     is_active = models.BooleanField(default=True)
+    characteristics = models.ManyToManyField(Characteristic)
 
     def __str__(self):
         return self.name
@@ -57,6 +72,7 @@ class Category(models.Model):
     section = models.ForeignKey(Section, verbose_name=_('Section'), related_name='categories')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
     is_active = models.BooleanField(default=True)
+    characteristics = models.ManyToManyField(Characteristic)
 
     def __str__(self):
         return '{}-{}'.format(self.section, self.name)
@@ -81,6 +97,7 @@ class Subcategory(models.Model):
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
     is_active = models.BooleanField(default=True)
+    characteristics = models.ManyToManyField(Characteristic)
 
     def __str__(self):
         return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)
@@ -99,7 +116,7 @@ class Product(TimeStampedModel):
     slug = models.SlugField(
         _('Product slug'), max_length=255, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
-    code = models.CharField(_('Product code'), max_length=127, unique=True)
+
     subcategory = models.ForeignKey(
         Subcategory, verbose_name=_('Product subcategory'), related_name='products')
 
@@ -157,12 +174,22 @@ class Product(TimeStampedModel):
 
 
 @python_2_unicode_compatible
+class ProductConfiguration(models.Model):
+    class Meta:
+        verbose_name = _('Product configuration')
+        verbose_name_plural = _('Product configurations')
+
+    code = models.CharField(_('Product configuration code'), max_length=127, unique=True)
+    is_active = models.BooleanField(_('Is configuration active'), default=True)
+
+
+@python_2_unicode_compatible
 class ProductAttribute(models.Model):
     class Meta:
         verbose_name = _('Product attribute')
         verbose_name_plural = _('Product attributes')
 
-    product = models.ForeignKey(Product, related_name='attributes')
+    product_configuration = models.ForeignKey(ProductConfiguration, related_name='attributes')
     name = models.CharField(_('Attribute name'), max_length=63)
     value = models.CharField(_('Attribute value'), max_length=31)
     value_float = models.FloatField(

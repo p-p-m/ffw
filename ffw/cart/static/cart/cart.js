@@ -57,6 +57,22 @@ var cart = {
              cart.updateCartAndCallback(data, callback);
         });
     },
+    'add': function(product_pk, quant, callback) {
+        cart.csrf();
+
+        $.ajax({
+            url: cart.url + 'add/',
+            type: "POST",
+            data:{
+                'product_pk': product_pk,
+                'quant': quant
+           },
+            dataType: 'text'
+        })
+        .done(function(data) {
+             cart.updateCartAndCallback(data, callback);
+        });
+    },
     'remove': function(product_pk, callback) {
         cart.csrf();
 

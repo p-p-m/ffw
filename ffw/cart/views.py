@@ -45,44 +45,6 @@ class CartResultMixin(View, CSRFProtectMixin):
                 count_cart, 'products_cart': products_cart}))
 
 
-class CartSetView(CartResultMixin):
-    '''
-    If quantity of product is None or  is less 0, then  this equivalent quantity equal 0
-    '''
-    def post(self, request, *args, **kwargs):
-
-        if request.is_ajax:
-            request.session['products_cart'] = request.session.get('products_cart', {})
-            request.session['sum_cart'] = 0
-            request.session['count_cart'] = 0
-
-            product_pk = request.POST.get('product_pk', '')
-            try:
-                quant = int(request.POST.get('quant', '0'))
-            except ValueError:
-                quant = 0
-
-            product = get_object_or_404(Product.objects, pk=product_pk)
-
-            if quant <= 0:
-                if product_pk in request.session["products_cart"]:
-                    request.session["products_cart"].pop(product_pk)
-            else:
-                price = float(product.price_uah)
-                name = product.name
-                product_code = product.code
-                sum_ = round(quant * price, 2)
-
-                request.session['products_cart'][product_pk] = {
-                    'product_code': product_code,
-                    'name': name,
-                    'price': price,
-                    'quant': quant,
-                    'sum_': sum_}
-
-            return self.format_response(request.session)
-
-
 class CartRemoveView(CartResultMixin):
 
     def post(self, request, *args, **kwargs):
@@ -128,3 +90,58 @@ class CartTestView(TemplateView):
         context = super(CartTestView, self).get_context_data(**kwargs)
         context['products'] = Product.objects.all()
         return context
+
+
+class CartSetView(CartResultMixin):
+    '''
+    Super for CartAddView
+    '''
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax:
+            session = request.session
+            session['products_cart'] = session.get('products_cart', {})
+            session['sum_cart'] = 0
+            session['count_cart'] = 0
+
+            product_pk = request.POST.get('product_pk', '')
+            try:
+                quant = int(request.POST.get('quant', '0'))
+            except ValueError:
+                quant = 0
+
+            product = get_object_or_404(Product.objects, pk=product_pk)
+            if quant <= 0:
+                if product_pk in session["products_cart"]:
+                    self.change_session(session["products_cart"], product_pk)
+            else:
+                price = float(product.price_uah)
+                name = product.name
+                product_code = product.code
+                quant = self.calc_quant(session, product_pk, quant)
+                sum_ = round( quant * price, 2)
+
+                session['products_cart'][product_pk] = {
+                    'product_code': product_code,
+                    'name': name,
+                    'price': price,
+                    'quant': quant,
+                    'sum_': sum_}
+
+        return self.format_response(session)
+
+    def change_session(self, products_cart, product_pk):
+        products_cart.pop(product_pk)
+
+    def calc_quant(self, session, product_pk, quant):
+        return quant
+
+
+class CartAddView(CartSetView):
+
+    def change_session(self, products_cart, product_pk):
+        pass
+
+    def calc_quant(self, session, product_pk, quant):
+        if product_pk in session["products_cart"]:
+            quant += session["products_cart"][product_pk]['quant']
+        return quant

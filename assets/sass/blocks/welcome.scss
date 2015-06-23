@@ -39,7 +39,7 @@
                 background-size: 100%;
             } // logo
         } // &.logo-box
-        &.baner-box {
+        &.search-box {
             @include table-cell;
             @include bp(sm) {
                 @include table-cell;
@@ -50,29 +50,18 @@
             @include bp(lg) {
                 @include table-cell;
             } // lg
-            .banners {
-                overflow: hidden;
-                height: 200px;
-            } // baners
-            .baner {
-                background: url(/static/images/baner.png);
-                background-size: cover !important;
-                background-position: 50% 50% !important;
-                width: 100%;
-                height: 200px;
-                float: left;
-                display: none;
-                @include bp(sm) {
-                    display: block;
-                } // sm
-                @include bp(md) {
-                    display: block;
-                } // md
-                @include bp(lg) {
-                    display: block;
-                } // lg
-            } // banner
-        } // &.baner-box
+            position: relative;
+            .search {
+                font-size: rem(18);
+                border-radius: 3px;
+                border: 1px solid #d1d1d1;
+                padding: 10px 15px;
+                font-family: PT Sans Narrow;
+                width: 94%;
+                position: absolute;
+                top: 35%;
+            } // search
+        } // &.search-box
         &.info-box {
             width: 50%;
             padding-left: 20px;

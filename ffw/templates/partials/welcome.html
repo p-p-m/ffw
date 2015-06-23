@@ -12,7 +12,10 @@
         </div>
 
         <div class="welcome-block info-box">
+
+            <!-- info -->
             <div class="info">
+
                 <!-- phones -->
                 <div class="info-block phones">
                     <ul>
@@ -22,6 +25,7 @@
                     </ul>
                 </div>
                 <!-- /phones -->
+
                 <!-- email -->
                 <div class="info-block email">
                     <ul>
@@ -29,19 +33,22 @@
                     </ul>
                 </div>
                 <!-- /email -->
-                <!-- cart -->
-                <div class="info-block cart">
-                    <a class="cart-display-link" data-role="cart-display-trigger">
-                        <div class="cart-count" data-role="cart-display-trigger-count">{{ request.session.count_cart }}</div>
-                        <span class="cart-info">
-                            <span class="text-cart">В корзине</span>
-                            <span>товаров на сумму</span>
-                            <span class="sum">{{ request.session.sum_cart }} грн.</span>
-                        </span>
-                    </a>
-                </div>
-                <!-- /cart -->
+
             </div>
+            <!-- /info -->
+
+            <!-- cart -->
+            <div class="info-block cart">
+                <a class="cart-display-link" data-role="cart-display-trigger">
+                    <div class="cart-count" data-role="cart-display-trigger-count">{{ request.session.count_cart }}</div>
+                    <div class="cart-info">
+                        <span class="text-cart">В корзине</span>
+                        <span>товаров на сумму</span>
+                        <span class="sum">{{ request.session.sum_cart }} грн.</span>
+                    </div>
+                </a>
+            </div>
+            <!-- /cart -->
         </div>
     </div>
 </div>

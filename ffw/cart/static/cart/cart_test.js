@@ -11,6 +11,7 @@ $(document).ready(function() {
                          + " " + cart.products[product].quant  +"шт"+ "*" + cart.products[product].price + "грн" + "=" + cart.products[product].sum_  + "грн" + '<br>';
                  };
               $("div#products").html(str);
+              $("div#dict").text("products - " + cart.products.toSource());
         },
      };
 

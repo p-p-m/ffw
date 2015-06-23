@@ -22,20 +22,37 @@ class CSRFProtectMixin():
          return super(CartSet, self).dispatch(*args, **kwargs)
 
 
-class CartResultMixin(View, CSRFProtectMixin):
+class CartClearMixin():
+
+    def cart_clear(self, session):
+        if 'products_cart' in session :
+            del session['products_cart']
+        if 'sum_cart' in session :
+            del session['sum_cart']
+        if 'count_cart' in session :
+            del session['count_cart']
+
+
+class CartResultMixin(View, CSRFProtectMixin, CartClearMixin):
 
     def format_response(self, session):
         if 'products_cart' in session:
-            session['sum_cart'] = round(sum(
-                [v['sum_'] for v in session['products_cart'].values()]), 2)
-            sum_cart = session['sum_cart']
+            if session["products_cart"] == {}:
+                self.cart_clear(session)
+                sum_cart = 0
+                count_cart = 0
+                products_cart = {}
+            else:
+                session['sum_cart'] = round(sum(
+                    [v['sum_'] for v in session['products_cart'].values()]), 2)
+                session['count_cart'] = sum(
+                    [v['quant'] for v in session['products_cart'].values()])
 
-            session['count_cart'] = sum(
-                [v['quant'] for v in session['products_cart'].values()])
-            count_cart = session['count_cart']
-
-            products_cart = session['products_cart']
+                count_cart = session['count_cart']
+                sum_cart = session['sum_cart']
+                products_cart = session['products_cart']
         else:
+            self.cart_clear(session)
             sum_cart = 0
             count_cart = 0
             products_cart = {}
@@ -52,12 +69,12 @@ class CartRemoveView(CartResultMixin):
             product_pk = request.POST.get('product_pk', '')
 
             if product_pk in request.session["products_cart"]:
-                request.session["products_cart"].pop(product_pk)
+                del request.session["products_cart"][product_pk]
 
             return self.format_response(request.session)
 
 
-class CartView(CartResultMixin):
+class CartView(CartResultMixin, CartClearMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -69,12 +86,7 @@ class CartView(CartResultMixin):
         Clear cart
         '''
         if request.is_ajax:
-            if 'products_cart' in request.session :
-                request.session.pop('products_cart')
-            if 'sum_cart' in request.session :
-                request.session.pop('sum_cart')
-            if 'count_cart' in request.session :
-                request.session.pop('count_cart')
+            self.cart_clear(request.session)
 
             return self.format_response(request.session)
 
@@ -100,8 +112,6 @@ class CartSetView(CartResultMixin):
         if request.is_ajax:
             session = request.session
             session['products_cart'] = session.get('products_cart', {})
-            session['sum_cart'] = 0
-            session['count_cart'] = 0
 
             product_pk = request.POST.get('product_pk', '')
             try:

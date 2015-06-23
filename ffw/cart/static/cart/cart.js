@@ -14,6 +14,8 @@ Object cart:
 
         cart.set(product_pk, quant, callback) - set quantity of the product in the cart equal quant
 
+        cart.add(product_pk, quant, callback) - add quantity of the product in the cart equal quant
+
         cart.remove(product_pk, callback) - remove the product from the cart
 
         cart.get(callback) - get attributes of the cart

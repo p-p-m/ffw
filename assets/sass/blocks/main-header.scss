@@ -76,11 +76,14 @@
     } // currency-mobile
     .small-menu {
         @include clear-list-inline;
-        float: left;
         font-size: rem(23);
         font-family: PT Sans Narrow;
         .small-menu-item {
             display: none;
+            float: left;
+                &:last-child {
+                    float: right;
+                } // last-child
             @include bp(sm) {
                 @include inline-middle;
             } // sm

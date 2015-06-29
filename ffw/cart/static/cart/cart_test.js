@@ -33,7 +33,8 @@ $(document).ready(function() {
    $('button#add').on('click', function() {
         var product_pk = this.value;
         quant = $('#'+product_pk).val();
-        cart.add(product_pk, quant, cartTest.getProducts);
+        var test = true;
+        cart.add(product_pk, quant, test, cartTest.getProducts);
    });
 
 

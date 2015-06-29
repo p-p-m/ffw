@@ -43,7 +43,7 @@ var cart = {
             cart.products = obj.products_cart;
             callback();
         },
-    'set': function(product_pk, quant, test=false,callback) {
+    'set': function(product_pk, quant, test=false, callback) {
         cart.csrf();
 
         $.ajax({
@@ -60,7 +60,7 @@ var cart = {
              cart.updateCartAndCallback(data, callback);
         });
     },
-    'add': function(product_pk, quant, callback) {
+    'add': function(product_pk, quant, test=false, callback) {
         cart.csrf();
 
         $.ajax({
@@ -68,7 +68,8 @@ var cart = {
             type: "POST",
             data:{
                 'product_pk': product_pk,
-                'quant': quant
+                'quant': quant,
+                'test': test
            },
             dataType: 'text'
         })
@@ -144,4 +145,3 @@ var cart = {
         });
    },
 }
-

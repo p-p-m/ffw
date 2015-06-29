@@ -34,7 +34,7 @@ class CartClearMixin():
             del session['count_cart']
 
 
-class CartResultMixin(View, CSRFProtectMixin, CartClearMixin):
+class CartResultView(View, CSRFProtectMixin, CartClearMixin):
 
     def format_response(self, session):
         if 'products_cart' in session:
@@ -63,7 +63,7 @@ class CartResultMixin(View, CSRFProtectMixin, CartClearMixin):
                 count_cart, 'products_cart': products_cart}))
 
 
-class CartRemoveView(CartResultMixin):
+class CartRemoveView(CartResultView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -75,7 +75,7 @@ class CartRemoveView(CartResultMixin):
             return self.format_response(request.session)
 
 
-class CartView(CartResultMixin, CartClearMixin):
+class CartView(CartResultView, CartClearMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -84,9 +84,9 @@ class CartView(CartResultMixin, CartClearMixin):
 
 
     def post(self, request, *args, **kwargs):
-        '''
+        """
         Clear cart
-        '''
+        """
         if request.is_ajax:
             self.cart_clear(request.session)
 
@@ -94,9 +94,9 @@ class CartView(CartResultMixin, CartClearMixin):
 
 
 class CartTestView(TemplateView):
-    '''
+    """
     For test
-    '''
+    """
 
     template_name = 'cart_test.html'
 
@@ -106,10 +106,10 @@ class CartTestView(TemplateView):
         return context
 
 
-class CartSetView(CartResultMixin):
-    '''
+class CartSetView(CartResultView):
+    """
     Super for CartAddView
-    '''
+    """
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             session = request.session

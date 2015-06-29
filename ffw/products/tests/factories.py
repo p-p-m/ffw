@@ -3,7 +3,15 @@ from decimal import Decimal
 import factory
 import factory.fuzzy
 
-from products import models
+from .. import models
+
+
+class SectionFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Section
+
+    name = factory.Sequence(lambda n: 'Section #%s' % n)
+    slug = factory.Sequence(lambda n: 'section-%s' % n)
 
 
 class CategoryFactory(factory.DjangoModelFactory):
@@ -12,6 +20,7 @@ class CategoryFactory(factory.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: 'Category #%s' % n)
     slug = factory.Sequence(lambda n: 'category-%s' % n)
+    section = factory.SubFactory(SectionFactory)
 
 
 class SubcategoryFactory(factory.DjangoModelFactory):
@@ -19,7 +28,7 @@ class SubcategoryFactory(factory.DjangoModelFactory):
         model = models.Subcategory
 
     name = factory.Sequence(lambda n: 'Subcategory #%s' % n)
-    slug = factory.Sequence(lambda n: 'Subcategory-%s' % n)
+    slug = factory.Sequence(lambda n: 'subcategory-%s' % n)
     category = factory.SubFactory(CategoryFactory)
 
 

@@ -49,7 +49,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.static",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    'products.processors.categories_processor',
+    'products.processors.sections_processor',
     'products.processors.debug_processor',
     'gallery.processors.top_banner_processor',
     'django.core.context_processors.request',

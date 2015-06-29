@@ -20,15 +20,17 @@ import exceptions
 logger = logging.getLogger(__name__)
 
 
+# XXX: One abstract model for section category and subcategory has to be created.
+#      Maybe they also have to be moved to one separate application.
 @python_2_unicode_compatible
-class Category(models.Model):
+class Section(models.Model):
     class Meta:
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+        verbose_name = _('Section')
+        verbose_name_plural = _('Section')
 
-    name = models.CharField(_('Category name'), max_length=127)
+    name = models.CharField(_('Section name'), max_length=127)
     slug = models.CharField(
-        _('Category slug'), max_length=127, unique=True,
+        _('Section slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     is_active = models.BooleanField(default=True)
 
@@ -37,6 +39,30 @@ class Category(models.Model):
 
     def get_url(self):
         return reverse('products', args=(self.slug,))
+
+    def get_categories(self):
+        return self.categories.all()
+
+
+@python_2_unicode_compatible
+class Category(models.Model):
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
+    name = models.CharField(_('Subcategory name'), max_length=127)
+    slug = models.CharField(
+        _('Category slug'), max_length=127, unique=True,
+        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
+    section = models.ForeignKey(Section, verbose_name=_('Section'), related_name='categories')
+    image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return '{}-{}'.format(self.section, self.name)
+
+    def get_url(self):
+        return reverse('products', args=(self.section.slug, self.slug))
 
     def get_subcategories(self):
         return self.subcategories.all()
@@ -50,17 +76,17 @@ class Subcategory(models.Model):
 
     name = models.CharField(_('Subcategory name'), max_length=127)
     slug = models.CharField(
-        _('Category slug'), max_length=127, unique=True,
+        _('Subcategory slug'), max_length=127, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
-    image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
+    image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return '{}-{}'.format(self.category, self.name)
+        return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)
 
     def get_url(self):
-        return reverse('products', args=(self.category.slug, self.slug))
+        return reverse('products', args=(self.category.section.slug, self.category.slug, self.slug))
 
 
 @python_2_unicode_compatible
@@ -95,7 +121,10 @@ class Product(TimeStampedModel):
     def clean(self):
         if not self.price_uah and not self.price_usd and not self.price_eur:
             raise ValidationError('At least one price has to be defined')
+        # XXX: I am not sure that this is right place for prices initialization
+        self.init_prices()
 
+    def init_prices(self):
         if self.price_uah:
             value = float(self.price_uah)
         elif self.price_usd:
@@ -174,6 +203,7 @@ class ProductImage(models.Model):
     description = models.CharField(_('Image description'), max_length=127, blank=True)
 
 
+# XXX: Filter will be moved to separate application
 @python_2_unicode_compatible
 class ProductFilter(models.Model):
     class Meta:

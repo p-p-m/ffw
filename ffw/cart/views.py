@@ -14,7 +14,8 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
 from products.models import Product
-
+from models import TestProduct
+from django.conf import settings
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
@@ -78,6 +79,7 @@ class CartView(CartResultMixin, CartClearMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
+            print(getattr(settings, 'CART_SETTINGS'),222)
             return self.format_response(request.session)
 
 
@@ -114,12 +116,15 @@ class CartSetView(CartResultMixin):
             session['products_cart'] = session.get('products_cart', {})
 
             product_pk = request.POST.get('product_pk', '')
+            test = request.POST.get("test", False)
             try:
                 quant = int(request.POST.get('quant', '0'))
             except ValueError:
                 quant = 0
-
-            product = get_object_or_404(Product.objects, pk=product_pk)
+            if test == False:
+                product = get_object_or_404(Product.objects, pk=product_pk)
+            else:
+                 product = get_object_or_404(TestProduct.objects, pk=product_pk)
             if quant <= 0:
                 if product_pk in session["products_cart"]:
                     self.change_session(session["products_cart"], product_pk)

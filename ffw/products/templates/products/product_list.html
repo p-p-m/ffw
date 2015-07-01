@@ -5,15 +5,16 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
+
 <!-- view-title-box -->
 <div class="view-title-box with-filters">
     <div class="wrap">
         <h1 class="view-title">
-        {% if selected_subcategory %}
-            {{ selected_subcategory.name }}
-        {% else %}
-            {{ selected_category.name }}
-        {% endif %}
+            {% if selected_subcategory %}
+                {{ selected_subcategory.name }}
+            {% else %}
+                {{ selected_category.name }}
+            {% endif %}
         </h1>
         <div class="filter-line">
             <ul class="filters">
@@ -81,32 +82,32 @@
                 </div>
             </div>
             {% for group in filter_form.fields_groups %}
-            <div class="producer slider-box stand-alone">
-                <h3 class="filter-title">{{ group.name }}</h3>
-                {% if group.type == 'numeric' %}
-                    <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>
-                    <div class="slider-box" data-role='filter-slider'>
-                        <div id="slider" data-min="{{ group.fields.0.field.min_value }}" data-max="{{ group.fields.1.field.max_value }}"></div>
-                        <div class="values-fields">
-                            <div class="values-item">
-                                <input type="text" data-role="field-min" name="{{ group.fields.0.name }}">
-                            </div>
-                            <div class="values-item">
-                                <span>–</span>
-                            </div>
-                            <div class="values-item">
-                                <input type="text" data-role="field-max" name="{{ group.fields.1.name }}">
+                <div class="producer slider-box stand-alone">
+                    <h3 class="filter-title">{{ group.name }}</h3>
+                    {% if group.type == 'numeric' %}
+                        <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>
+                        <div class="slider-box" data-role='filter-slider'>
+                            <div id="slider" data-min="{{ group.fields.0.field.min_value }}" data-max="{{ group.fields.1.field.max_value }}"></div>
+                            <div class="values-fields">
+                                <div class="values-item">
+                                    <input type="text" data-role="field-min" name="{{ group.fields.0.name }}">
+                                </div>
+                                <div class="values-item">
+                                    <span>–</span>
+                                </div>
+                                <div class="values-item">
+                                    <input type="text" data-role="field-max" name="{{ group.fields.1.name }}">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% else %}
-                <ul class="main-filters">
-                    {% for field in group.fields %}
-                    <li><span class="item" data-role="filter-item-toggle" name="{{ field.name }}">{{ field.label }}</span></li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
+                    {% else %}
+                        <ul class="main-filters">
+                            {% for field in group.fields %}
+                            <li><span class="item" data-role="filter-item-toggle" name="{{ field.name }}">{{ field.label }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
             {% endfor %}
             <div class="apply-box">
                 <a id='show-button' class="button button-blue apply">{% trans 'Show products' %}</a>
@@ -149,5 +150,5 @@
 {% endblock content %}
 
 {% block js %}
-<script src="{{ STATIC_URL }}/jsdev/product-list.js"></script>
+  <script src="{{ STATIC_URL }}jsdev/product-list.js"></script>
 {% endblock js %}

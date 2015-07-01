@@ -1,8 +1,9 @@
+#  -*- coding: utf-8 -*-
 import json
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, TemplateView
 
 from gallery.models import Banner
 import forms
@@ -72,6 +73,13 @@ class ProductListView(ListView):
             self.paginate_by = self.request.session.get(key, self.paginate_by)
         return self.paginate_by
 
+    def _get_selected_section(self):
+        if 'section' in self.kwargs:
+            try:
+                return models.Section.objects.get(slug=self.kwargs['section'])
+            except models.Section.DoesNotExist:
+                pass
+
     def _get_selected_category(self):
         if 'category' in self.kwargs:
             try:
@@ -109,3 +117,8 @@ class ProductView(View):
     def get(self, request, product):
         product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
         return render(request, 'products/product.html', {'product': product})
+
+
+class CartTest(TemplateView):
+
+    template_name = 'cart_test.html '

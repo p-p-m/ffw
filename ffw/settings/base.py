@@ -109,5 +109,3 @@ CONSTANCE_CONFIG = {
     'USD_RATE': (24, 'UAH/USD rate'),
     'EUR_RATE': (26, 'UAH/EUR rate'),
 }
-
-CART_SETTINGS = {}

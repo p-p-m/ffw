@@ -15,7 +15,8 @@ from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
 from products.models import Product
 from models import TestProduct
-from django.conf import settings
+from django.db.models import get_model
+import settings
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
@@ -79,7 +80,6 @@ class CartView(CartResultView, CartClearMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
-            print(getattr(settings, 'CART_SETTINGS'),222)
             return self.format_response(request.session)
 
 
@@ -121,17 +121,31 @@ class CartSetView(CartResultView):
                 quant = int(request.POST.get('quant', '0'))
             except ValueError:
                 quant = 0
-            if test == False:
-                product = get_object_or_404(Product.objects, pk=product_pk)
+
+            if test:
+                appl_name = 'cart'
+                model_name = 'TestProduct'
+                price_field_name =  'price_uah'
+                code_field_name = 'code'
+                name_field_name = 'name'
             else:
-                 product = get_object_or_404(TestProduct.objects, pk=product_pk)
+                cart_settings = settings.CART_SETTINGS
+                appl_name = cart_settings['appl_name']
+                model_name = cart_settings['model_name']
+                price_field_name =  cart_settings['price_field_name']
+                code_field_name = cart_settings['code_field_name']
+                name_field_name = cart_settings['name_field_name']
+
             if quant <= 0:
                 if product_pk in session["products_cart"]:
                     self.change_session(session["products_cart"], product_pk)
             else:
-                price = float(product.price_uah)
-                name = product.name
-                product_code = product.code
+                model_product = get_model(appl_name, model_name)
+                product = get_object_or_404(model_product.objects, pk=product_pk)
+                price = float(product.__dict__[price_field_name])
+                name = product.__dict__[name_field_name]
+                product_code = product.__dict__[code_field_name]
+
                 quant = self.calc_quant(session, product_pk, quant)
                 sum_ = round( quant * price, 2)
 

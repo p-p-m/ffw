@@ -17,6 +17,7 @@ from products.models import Product
 from models import TestProduct
 from django.db.models import get_model
 import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
@@ -101,8 +102,18 @@ class CartTestView(TemplateView):
     template_name = 'cart_test.html'
 
     def get_context_data(self, **kwargs):
+        name_list = ('Утюг', 'Самовар', 'Холодильник', 'Пылесос', 'Фонарь')
+        code_list = ('УлшН7', 'Сбор3ю4', 'Х99г7', 'ПкеН6', 'Ф342ц')
+        price_list = (100.50, 300.00, 1000.00, 700.00, 93.00)
+        TestProduct.objects.all().delete()
+
+        k = 1
+        while k <= 5:
+            t_pr = TestProduct.objects.create(pk=k, name = name_list[k-1], price_uah = price_list[k-1], code = code_list[k-1])
+            k+=1
+
         context = super(CartTestView, self).get_context_data(**kwargs)
-        context['products'] = Product.objects.all()
+        context['products'] = TestProduct.objects.all()
         return context
 
 

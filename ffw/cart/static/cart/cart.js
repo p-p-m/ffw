@@ -29,6 +29,10 @@ Object cart:
         cart.sum - total cost of the cart products
 
         cart.count - total quantity of the cart products
+
+
+Testing apllication cart:
+    url = 'cart/test'
 */
 
 var cart = {

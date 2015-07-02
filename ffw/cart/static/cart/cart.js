@@ -33,6 +33,16 @@ Object cart:
 
 Testing apllication cart:
     url = 'cart/test'
+
+Settings:
+    There is necessary insert in  settings:
+    CART_SETTINGS = {
+        'model_name': model_name,
+        'appl_name': appl_name,
+        'price_field_name': price_field_name,
+        'code_field_name': code_field_name,
+        'name_field_name': name_field_name
+    }
 */
 
 var cart = {

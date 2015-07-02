@@ -338,4 +338,4 @@ class ProductComment(TimeStampedModel):
     negaitive = models.TextField(_('Negative'))
     rating = models.FloatField(_('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)])
     comment = models.TextField(_('Comment'))
-    is_approved = models.BooleanField(_('Is approved'),default=False)
+    is_approved = models.BooleanField(_('Is approved'), default=False)

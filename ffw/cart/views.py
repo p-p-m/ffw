@@ -1,23 +1,20 @@
 #  -*- coding: utf-8 -*-
+
 import json
 
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-
-import models
-from products.models import Product
-from django.utils.translation import ugettext_lazy as _
-
 from django.core.context_processors import csrf
-from django.shortcuts import render_to_response
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import get_model
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
-from products.models import Product
+
 from models import TestProduct
-from django.db.models import get_model
+from products.models import Product
 import settings
-from django.core.exceptions import ObjectDoesNotExist
+
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
@@ -134,14 +131,14 @@ class CartSetView(CartResultView):
                 quant = 0
 
             if test:
-                appl_name = 'cart'
+                app_name = 'cart'
                 model_name = 'TestProduct'
                 price_field_name =  'price_uah'
                 code_field_name = 'code'
                 name_field_name = 'name'
             else:
                 cart_settings = settings.CART_SETTINGS
-                appl_name = cart_settings['appl_name']
+                app_name = cart_settings['app_name']
                 model_name = cart_settings['model_name']
                 price_field_name =  cart_settings['price_field_name']
                 code_field_name = cart_settings['code_field_name']
@@ -151,10 +148,11 @@ class CartSetView(CartResultView):
                 if product_pk in session["products_cart"]:
                     self.change_session(session["products_cart"], product_pk)
             else:
-                model_product = get_model(appl_name, model_name)
+                model_product = get_model(app_name, model_name)
                 product = get_object_or_404(model_product.objects, pk=product_pk)
                 price = float(product.__dict__[price_field_name])
-                name = product.__dict__[name_field_name]
+                #name = product.__dict__[name_field_name]
+                name = getattr(product,name_field_name)
                 product_code = product.__dict__[code_field_name]
 
                 quant = self.calc_quant(session, product_pk, quant)

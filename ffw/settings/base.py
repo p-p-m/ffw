@@ -33,6 +33,7 @@ INSTALLED_APPS = (
     'cart',
 
     'assembly',
+    'box_admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -104,6 +105,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'ffw', 'cart', 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'filters', 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'assembly', 'static'),
+    os.path.join(PROJECT_ROOT, 'ffw', 'static'),
 )
 
 

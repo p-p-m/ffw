@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class FilterTypes(object):
@@ -9,15 +11,19 @@ class FilterTypes(object):
     INTERVALS = 'intervals'
 
 
-# XXX: This filter is not general. It cannot handle ProductAttribute model right
 class FilterMixin(models.Model):
     class Meta:
         abstract = True
 
     name = models.CharField(max_length=50)
-    priority = models.FloatField('Priority', help_text='Filters with higher priority are displayed higher on page')
-    is_manually_edited = models.BooleanField(default=False)
+    priority = models.FloatField(
+        _('Priority'), default=1, help_text=_('Filters with higher priority are displayed higher on page'))
+    is_auto_update = models.BooleanField(
+        default=False,
+        help_text=_('If auto update is activated - filter will be'
+                    ' automatically fill his fields.'))
 
+    # TODO: Add description for this methods
     def get_queryset(self):
         raise NotImplemented()
 
@@ -30,6 +36,9 @@ class FilterMixin(models.Model):
     def base_update(self, field):
         raise NotImplemented()
 
+    def update(self):
+        raise NotImplemented()
+
     def get_item_prefix(self):
         return '{}-{}'.format(self.get_type(), self.id)
 
@@ -38,8 +47,8 @@ class NumericFilterMixin(FilterMixin):
     """
     Abstract numeric filter mixin
     """
-    max_value = models.FloatField('Max')
-    min_value = models.FloatField('Min')
+    max_value = models.FloatField(_('Max'), default=0)
+    min_value = models.FloatField(_('Min'), default=0)
 
     class Meta:
         abstract = True
@@ -69,7 +78,7 @@ class ChoicesFilterMixin(FilterMixin):
     """
     Abstract choices filter mixin
     """
-    choices = models.TextField('Choices', help_text='Comma-separated list of choices')
+    choices = models.TextField(_('Choices'), blank=True, help_text=_('Comma-separated list of choices'))
 
     class Meta:
         abstract = True
@@ -83,13 +92,18 @@ class ChoicesFilterMixin(FilterMixin):
     def get_filter_query(self, field, choices):
         return models.Q(**{'{}__in'.format(field): choices})
 
+    def base_update(self, field):
+        choices = set(self.get_queryset().values_list(field, flat=True))
+        self.choices = ', '.join(choices)
+        self.save()
+
 
 class IntervalsFilterMixin(FilterMixin):
     """
     Abstract intervals filter mixin
     """
     intervals = models.TextField(
-        'Intervals', help_text='Comma-separated list of intervals. Example: 0-100, 100-200 ...')
+        _('Intervals'), blank=True, help_text=_('Comma-separated list of intervals. Example: 0-100, 100-200 ...'))
 
     class Meta:
         abstract = True
@@ -99,7 +113,6 @@ class IntervalsFilterMixin(FilterMixin):
 
     def get_formatted_intervals(self):
         intervals = [interval.strip() for interval in self.intervals.split(',')]
-        print [(float(i.split('-')[0].strip()), float(i.split('-')[1].strip())) for i in intervals]
         return [(float(i.split('-')[0].strip()), float(i.split('-')[1].strip())) for i in intervals]
 
     def get_filter_query(self, field, intervals):
@@ -107,3 +120,14 @@ class IntervalsFilterMixin(FilterMixin):
         for min_value, max_value in intervals:
             query |= models.Q(**{'{}__gte'.format(field): min_value, '{}__lte'.format(field): max_value})
         return query
+
+    def clean(self):
+        if self.is_auto_update:
+            raise ValidationError('Interval filter does not support auto update')
+        if not self.intervals:
+            raise ValidationError('Intervals have to be manually inserted for interval filter')
+        try:
+            self.get_formatted_intervals()
+        except (IndexError, ValueError):
+            raise ValidationError('Intervals are inputed in wrong format')
+        return super(IntervalsFilterMixin, self).clean()

@@ -1,29 +1,27 @@
 from django.db import models
 
 from filters.models import NumericFilterMixin, ChoicesFilterMixin, IntervalsFilterMixin
-from products.models import Characteristic, Section, Category, Subcategory
+from products import models as products_models
+
+from .managers import ProductFilterManager
 
 
 class BaseFilter(models.Model):
     class Meta:
         abstract = True
 
-    section = models.ForeignKey(Section, null=True)
-    category = models.ForeignKey(Category, null=True)
-    subcategory = models.ForeignKey(Subcategory, null=True)
+    objects = ProductFilterManager()
 
-
-class BaseAttributeFilter(BaseFilter):
-    characteristic = models.ForeignKey(Characteristic)
-
-    class Meta:
-        abstract = True
+    section = models.ForeignKey(products_models.Section, null=True)
+    category = models.ForeignKey(products_models.Category, null=True)
+    subcategory = models.ForeignKey(products_models.Subcategory, null=True)
+    characteristic = models.ForeignKey(products_models.Characteristic)
 
     def get_attribute_query(self):
         return models.Q(attributes__name=self.characteristic.name)
 
 
-class NumericAttributeFilter(NumericFilterMixin, BaseAttributeFilter):
+class NumericAttributeFilter(NumericFilterMixin, BaseFilter):
 
     def _get_min_and_max(self, request):
         selected_max_value = request.GET.get('{}-max'.format(self.get_item_prefix()), self.max_value)
@@ -36,8 +34,11 @@ class NumericAttributeFilter(NumericFilterMixin, BaseAttributeFilter):
         filter_query = self.get_filter_query('attributes__value_float', selected_min_value, selected_max_value)
         return queryset.filter(attribute_query, filter_query)
 
+    def update(self):
+        return super(NumericAttributeFilter, self).base_update(field='value_float')
 
-class ChoicesAttributeFilter(ChoicesFilterMixin, BaseAttributeFilter):
+
+class ChoicesAttributeFilter(ChoicesFilterMixin, BaseFilter):
 
     def _get_choices(self, request):
         choices = []
@@ -52,8 +53,11 @@ class ChoicesAttributeFilter(ChoicesFilterMixin, BaseAttributeFilter):
         filter_query = self.get_filter_query('attributes__value', choices)
         return queryset.filter(attribute_query, filter_query)
 
+    def update(self):
+        return super(ChoicesAttributeFilter, self).base_update(field='value')
 
-class IntervalsAttributeFilter(IntervalsFilterMixin, BaseAttributeFilter):
+
+class IntervalsAttributeFilter(IntervalsFilterMixin, BaseFilter):
 
     def _get_intervals(self, request):
         intervals = []
@@ -69,32 +73,3 @@ class IntervalsAttributeFilter(IntervalsFilterMixin, BaseAttributeFilter):
         attribute_query = self.get_attribute_query()
         filter_query = self.get_filter_query('attributes__value', intervals)
         return queryset.filter(attribute_query, filter_query)
-
-
-# Do we need this fields?
-# class BaseFieldFilter(BaseFilter):
-#     field_name = models.CharField(max_length=50)
-
-#     class Meta:
-#         abstract = True
-
-
-# class NumericFieldFilter(NumericFilterMixin, BaseFieldFilter):
-
-#     def filter(self, queryset, selected_max_value, selected_min_value):
-#         filter_query = self.get_filter_query(self.field_name, selected_min_value, selected_max_value)
-#         return queryset.filter(filter_query)
-
-
-# class ChoicesFieldFilter(ChoicesFilterMixin, BaseFieldFilter):
-
-#     def filter(self, queryset, choices):
-#         filter_query = self.get_filter_query(self.field_name, choices)
-#         return queryset.filter(filter_query)
-
-
-# class IntervalsFieldFilter(IntervalsFilterMixin, BaseFieldFilter):
-
-#     def filter(self, queryset, intervals):
-#         filter_query = self.get_filter_query(self.field_name, intervals)
-#         return queryset.filter(filter_query)

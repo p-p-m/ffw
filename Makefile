@@ -45,5 +45,5 @@ validate:
 
 reinitdb:
 	$(MANAGESCRIPT) flush --noinput
-	$(MANAGESCRIPT) createproducts
+	$(MANAGESCRIPT) createtestdata
 	$(MANAGESCRIPT) createbanners

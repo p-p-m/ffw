@@ -150,10 +150,9 @@ class CartSetView(CartResultView):
             else:
                 model_product = get_model(app_name, model_name)
                 product = get_object_or_404(model_product.objects, pk=product_pk)
-                price = float(product.__dict__[price_field_name])
-                #name = product.__dict__[name_field_name]
-                name = getattr(product,name_field_name)
-                product_code = product.__dict__[code_field_name]
+                price = float(self.get_object_attribute(price_field_name, product))
+                name = self.get_object_attribute(name_field_name, product)
+                product_code = self.get_object_attribute(code_field_name, product)
 
                 quant = self.calc_quant(session, product_pk, quant)
                 sum_ = round( quant * price, 2)
@@ -166,6 +165,9 @@ class CartSetView(CartResultView):
                     'sum_': sum_}
 
         return self.format_response(session)
+
+    def get_object_attribute(self, field_name, obj):
+        return reduce(getattr, field_name.split("."), obj)
 
     def change_session(self, products_cart, product_pk):
         products_cart.pop(product_pk)

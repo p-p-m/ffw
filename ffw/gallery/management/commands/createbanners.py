@@ -11,7 +11,4 @@ class Command(BaseCommand):
     help = 'Creates top and main banners'
 
     def handle(self, *args, **options):
-        b = models.Banner(name='top')
-        b.save()
-        b = models.Banner(name='main')
-        b.save()
+        models.Banner.objects.get_or_create(name='main')

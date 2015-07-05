@@ -527,7 +527,6 @@
         CartDisplay();
         productFiltersShow();
         filtersItems();
-        priceRange('price', 0, 1000, [10, 500]);
         Tabs();
         popupSearch();
         productSubMenu();

@@ -20,7 +20,7 @@ class BaseFilterInline(admin.TabularInline):
 
         if db_field.name == 'characteristic':
             if request._obj_ is not None:
-                field.queryset = request._obj_.characteristics.all()
+                field.queryset = request._obj_.characteristics.filter(is_default=False).all()
             else:
                 field.queryset = field.queryset.none()
 

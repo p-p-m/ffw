@@ -15,7 +15,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
 
-from . import exceptions, managers
+from . import exceptions
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,6 @@ class Characteristic(models.Model):
     default_value = models.CharField(_('Default value'), max_length=127, blank=True)
     units = models.CharField(_('Units'), max_length=50, blank=True)
     is_default = models.BooleanField(default=False)
-
-    objects = managers.NotDefaultManager()
 
     def __str__(self):
         return self.name

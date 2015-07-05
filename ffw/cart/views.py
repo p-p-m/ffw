@@ -1,25 +1,25 @@
 #  -*- coding: utf-8 -*-
+
 import json
 
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-
-import models
-from products.models import Product
-from django.utils.translation import ugettext_lazy as _
-
 from django.core.context_processors import csrf
-from django.shortcuts import render_to_response
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import get_model
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
+
+from models import TestProduct
 from products.models import Product
+import settings
 
 
 class CSRFProtectMixin():
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
-         return super(CartSet, self).dispatch(*args, **kwargs)
+         return super(CSRFProtectMixin, self).dispatch(*args, **kwargs)
 
 
 class CartClearMixin():
@@ -33,7 +33,7 @@ class CartClearMixin():
             del session['count_cart']
 
 
-class CartResultMixin(View, CSRFProtectMixin, CartClearMixin):
+class CartResultView(View, CSRFProtectMixin, CartClearMixin):
 
     def format_response(self, session):
         if 'products_cart' in session:
@@ -62,7 +62,7 @@ class CartResultMixin(View, CSRFProtectMixin, CartClearMixin):
                 count_cart, 'products_cart': products_cart}))
 
 
-class CartRemoveView(CartResultMixin):
+class CartRemoveView(CartResultView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -74,7 +74,7 @@ class CartRemoveView(CartResultMixin):
             return self.format_response(request.session)
 
 
-class CartView(CartResultMixin, CartClearMixin):
+class CartView(CartResultView, CartClearMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -82,9 +82,9 @@ class CartView(CartResultMixin, CartClearMixin):
 
 
     def post(self, request, *args, **kwargs):
-        '''
+        """
         Clear cart
-        '''
+        """
         if request.is_ajax:
             self.cart_clear(request.session)
 
@@ -92,41 +92,68 @@ class CartView(CartResultMixin, CartClearMixin):
 
 
 class CartTestView(TemplateView):
-    '''
+    """
     For test
-    '''
+    """
 
     template_name = 'cart_test.html'
 
     def get_context_data(self, **kwargs):
+        name_list = ('Утюг', 'Самовар', 'Холодильник', 'Пылесос', 'Фонарь')
+        code_list = ('УлшН7', 'Сбор3ю4', 'Х99г7', 'ПкеН6', 'Ф342ц')
+        price_list = (100.50, 300.00, 1000.00, 700.00, 93.00)
+        TestProduct.objects.all().delete()
+
+        k = 1
+        while k <= 5:
+            t_pr = TestProduct.objects.create(pk=k, name = name_list[k-1], price_uah = price_list[k-1], code = code_list[k-1])
+            k+=1
+
         context = super(CartTestView, self).get_context_data(**kwargs)
-        context['products'] = Product.objects.all()
+        context['products'] = TestProduct.objects.all()
         return context
 
 
-class CartSetView(CartResultMixin):
-    '''
+class CartSetView(CartResultView):
+    """
     Super for CartAddView
-    '''
+    """
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             session = request.session
             session['products_cart'] = session.get('products_cart', {})
 
             product_pk = request.POST.get('product_pk', '')
+            test = request.POST.get("test", False)
             try:
                 quant = int(request.POST.get('quant', '0'))
             except ValueError:
                 quant = 0
 
-            product = get_object_or_404(Product.objects, pk=product_pk)
+            if test:
+                app_name = 'cart'
+                model_name = 'TestProduct'
+                price_field_name =  'price_uah'
+                code_field_name = 'code'
+                name_field_name = 'name'
+            else:
+                cart_settings = settings.CART_SETTINGS
+                app_name = cart_settings['app_name']
+                model_name = cart_settings['model_name']
+                price_field_name =  cart_settings['price_field_name']
+                code_field_name = cart_settings['code_field_name']
+                name_field_name = cart_settings['name_field_name']
+
             if quant <= 0:
                 if product_pk in session["products_cart"]:
                     self.change_session(session["products_cart"], product_pk)
             else:
-                price = float(product.price_uah)
-                name = product.name
-                product_code = product.code
+                model_product = get_model(app_name, model_name)
+                product = get_object_or_404(model_product.objects, pk=product_pk)
+                price = float(self.get_object_attribute(price_field_name, product))
+                name = self.get_object_attribute(name_field_name, product)
+                product_code = self.get_object_attribute(code_field_name, product)
+
                 quant = self.calc_quant(session, product_pk, quant)
                 sum_ = round( quant * price, 2)
 
@@ -138,6 +165,9 @@ class CartSetView(CartResultMixin):
                     'sum_': sum_}
 
         return self.format_response(session)
+
+    def get_object_attribute(self, field_name, obj):
+        return reduce(getattr, field_name.split("."), obj)
 
     def change_session(self, products_cart, product_pk):
         products_cart.pop(product_pk)

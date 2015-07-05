@@ -25,14 +25,16 @@ $(document).ready(function() {
    $('button#buy').on('click', function() {
         var product_pk = this.value;
         quant = $('#'+product_pk).val();
-        cart.set(product_pk, quant, cartTest.getProducts);
+        var test = true;
+        cart.set(product_pk, quant, test, cartTest.getProducts);
    });
 
 
    $('button#add').on('click', function() {
         var product_pk = this.value;
         quant = $('#'+product_pk).val();
-        cart.add(product_pk, quant, cartTest.getProducts);
+        var test = true;
+        cart.add(product_pk, quant, test, cartTest.getProducts);
    });
 
 

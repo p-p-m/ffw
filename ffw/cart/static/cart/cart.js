@@ -29,6 +29,20 @@ Object cart:
         cart.sum - total cost of the cart products
 
         cart.count - total quantity of the cart products
+
+
+Testing apllication cart:
+    url = 'cart/test'
+
+Settings:
+    There is necessary insert in  settings:
+    CART_SETTINGS = {
+        'model_name': model_name,
+        'appl_name': appl_name,
+        'price_field_name': price_field_name,
+        'code_field_name': code_field_name,
+        'name_field_name': name_field_name
+    }
 */
 
 var cart = {
@@ -43,7 +57,7 @@ var cart = {
             cart.products = obj.products_cart;
             callback();
         },
-    'set': function(product_pk, quant, callback) {
+    'set': function(product_pk, quant, test=false, callback) {
         cart.csrf();
 
         $.ajax({
@@ -51,7 +65,8 @@ var cart = {
             type: "POST",
             data:{
                 'product_pk': product_pk,
-                'quant': quant
+                'quant': quant,
+                'test': test
            },
             dataType: 'text'
         })
@@ -59,7 +74,7 @@ var cart = {
              cart.updateCartAndCallback(data, callback);
         });
     },
-    'add': function(product_pk, quant, callback) {
+    'add': function(product_pk, quant, test=false, callback) {
         cart.csrf();
 
         $.ajax({
@@ -67,7 +82,8 @@ var cart = {
             type: "POST",
             data:{
                 'product_pk': product_pk,
-                'quant': quant
+                'quant': quant,
+                'test': test
            },
             dataType: 'text'
         })
@@ -143,4 +159,3 @@ var cart = {
         });
    },
 }
-

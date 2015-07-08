@@ -1,0 +1,17 @@
+{% extends "box_admin/base.html" %}
+{% load static %}
+{% csrf_token %}
+
+{% block content %}
+    <form  action="{% url 'box_admin_product_create' %}" method="POST">
+        {{ form.as_p }}
+        <input type="submit" value={% if product %}"Update"{% else %}"Continue"{% endif %}/>
+    </form>
+{% endblock content %}
+
+{% comment %}
+{% block js %}
+    <script src="{% static "csrf.js" %}"> </script>
+    <script src="{% static "box_admin/product-create.js" %}"> </script>
+{% endblock %}
+{% endcomment %}

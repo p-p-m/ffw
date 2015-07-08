@@ -2,6 +2,7 @@ venv/
 .sublime/
 
 *.mo
+*.db
 *.pyc
 *.log
 *~

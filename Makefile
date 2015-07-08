@@ -24,10 +24,6 @@ test:
 run:
 	$(SCRIPT) runserver $(PORT)
 
-syncdb:
-	$(SCRIPT) syncdb --noinput
-	$(SCRIPT) migrate
-
 migrate:
 	$(SCRIPT) migrate
 
@@ -45,5 +41,10 @@ validate:
 
 reinitdb:
 	$(MANAGESCRIPT) flush --noinput
-	$(MANAGESCRIPT) createproducts
+	$(MANAGESCRIPT) createtestdata
+	$(MANAGESCRIPT) createbanners
+
+initdb:
+	$(SCRIPT) migrate
+	$(MANAGESCRIPT) createtestdata
 	$(MANAGESCRIPT) createbanners

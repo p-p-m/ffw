@@ -9,30 +9,56 @@ from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
 
-import exceptions
-
+from . import exceptions
 
 logger = logging.getLogger(__name__)
 
 
-# XXX: One abstract model for section category and subcategory has to be created.
-#      Maybe they also have to be moved to one separate application.
 @python_2_unicode_compatible
-class Section(models.Model):
+class Characteristic(models.Model):
+    class Meta:
+        verbose_name = _('Characteristic')
+        verbose_name_plural = _('Characteristics')
+
+    name = models.CharField(_('Characteristic name'), max_length=255, unique=True)
+    description = models.TextField(_('Characteristic description'), blank=True)
+    default_value = models.CharField(_('Default value'), max_length=127, blank=True)
+    units = models.CharField(_('Units'), max_length=50, blank=True)
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class AbstractCategory(models.Model):
+    class Meta:
+        abstract = True
+
+    name = models.CharField(_('Name'), max_length=127)
+    slug = models.CharField(
+        _('Slug'), max_length=127, unique=True,
+        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
+    is_active = models.BooleanField(default=True)
+
+
+class SectionCharacteristic(models.Model):
+    section = models.ForeignKey('Section')
+    characteristic = models.ForeignKey(Characteristic)
+
+
+@python_2_unicode_compatible
+class Section(AbstractCategory):
+    characteristics = models.ManyToManyField(Characteristic, related_name='sections', through=SectionCharacteristic)
+
     class Meta:
         verbose_name = _('Section')
         verbose_name_plural = _('Section')
-
-    name = models.CharField(_('Section name'), max_length=127)
-    slug = models.CharField(
-        _('Section slug'), max_length=127, unique=True,
-        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
-    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -44,19 +70,21 @@ class Section(models.Model):
         return self.categories.all()
 
 
+class CategoryCharacteristic(models.Model):
+    category = models.ForeignKey('Category')
+    characteristic = models.ForeignKey(Characteristic)
+
+
 @python_2_unicode_compatible
-class Category(models.Model):
+class Category(AbstractCategory):
+    characteristics = models.ManyToManyField(Characteristic, related_name='categories', through=CategoryCharacteristic)
+
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
 
-    name = models.CharField(_('Subcategory name'), max_length=127)
-    slug = models.CharField(
-        _('Category slug'), max_length=127, unique=True,
-        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     section = models.ForeignKey(Section, verbose_name=_('Section'), related_name='categories')
-    image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
-    is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='categories/', verbose_name=_('Image'), blank=True)
 
     def __str__(self):
         return '{}-{}'.format(self.section, self.name)
@@ -68,19 +96,22 @@ class Category(models.Model):
         return self.subcategories.all()
 
 
+class SubcategoryCharacteristic(models.Model):
+    subcategory = models.ForeignKey('Subcategory')
+    characteristic = models.ForeignKey(Characteristic)
+
+
 @python_2_unicode_compatible
-class Subcategory(models.Model):
+class Subcategory(AbstractCategory):
+    characteristics = models.ManyToManyField(
+        Characteristic, related_name='subcategories', through=SubcategoryCharacteristic)
+
     class Meta:
         verbose_name = _('Subcategory')
         verbose_name_plural = _('Subcategories')
 
-    name = models.CharField(_('Subcategory name'), max_length=127)
-    slug = models.CharField(
-        _('Subcategory slug'), max_length=127, unique=True,
-        help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
-    image = models.ImageField(upload_to='products/', verbose_name=_('Image'), blank=True)
-    is_active = models.BooleanField(default=True)
+    image = models.ImageField(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
 
     def __str__(self):
         return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)
@@ -89,40 +120,75 @@ class Subcategory(models.Model):
         return reverse('products', args=(self.category.section.slug, self.category.slug, self.slug))
 
 
+PRODUCT_CATEGORIES_MODELS = [Subcategory, Category, Section]
+
+
 @python_2_unicode_compatible
 class Product(TimeStampedModel):
     class Meta:
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
-    name = models.CharField(_('Product name'), max_length=255)
+    name = models.CharField(_('Name'), max_length=255, unique=True)
     slug = models.SlugField(
-        _('Product slug'), max_length=255, unique=True,
+        _('Slug'), max_length=255, unique=True,
         help_text=_('This field will be shown in URL address (for SEO). It will be filled automatically.'))
-    code = models.CharField(_('Product code'), max_length=127, unique=True)
-    subcategory = models.ForeignKey(
-        Subcategory, verbose_name=_('Product subcategory'), related_name='products')
-
-    price_uah = models.DecimalField(
-        _('Product price in UAH'), max_digits=12, decimal_places=2, null=True, blank=True)
-    price_usd = models.DecimalField(
-        _('Product price in USD'), max_digits=12, decimal_places=2, null=True, blank=True)
-    price_eur = models.DecimalField(
-        _('Product price in EUR'), max_digits=12, decimal_places=2, null=True, blank=True)
-
     short_description = models.CharField(
         _('Product short description'), max_length=1023, blank=True,
         help_text=_('This description will be shown on page with products list'))
     description = models.TextField(_('Product description'), blank=True)
 
-    is_active = models.BooleanField(_('Is product active'), default=True)
-    rating = models.FloatField(_('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    subcategory = models.ForeignKey(Subcategory, verbose_name=_('Subcategory'), related_name='products')
 
-    def clean(self):
-        if not self.price_uah and not self.price_usd and not self.price_eur:
-            raise ValidationError('At least one price has to be defined')
-        # XXX: I am not sure that this is right place for prices initialization
-        self.init_prices()
+    is_active = models.BooleanField(_('Is product active'), default=True)
+    rating = models.FloatField(
+        _('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)],
+        help_text=_('Number between 0 and 5 that will be used for default sorting on products page. Products with '
+                    'higher numbers will be displayed higher'))
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+    def get_url(self):
+        return reverse('product', args=(self.slug, ))
+
+    def get_images(self):
+        return self.images.all()
+
+    def get_first_image(self):
+        return self.images.first()
+
+    def get_characteristics(self):
+        query = (
+            models.Q(categories=self.subcategory.category) |
+            models.Q(subcategories=self.subcategory) |
+            models.Q(sections=self.subcategory.category.section)
+        )
+        return Characteristic.objects.filter(query)
+
+    def save(self):
+        self.slug = slugify(self.name)
+        return super(Product, self).save()
+
+
+@python_2_unicode_compatible
+class ProductConfiguration(models.Model):
+    class Meta:
+        verbose_name = _('Product configuration')
+        verbose_name_plural = _('Product configurations')
+
+    product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
+    code = models.CharField(_('Code'), max_length=127, unique=True)
+    is_active = models.BooleanField(_('Is configuration active'), default=True)
+
+    def __str__(self):
+        return '{}-{}'.format(self.product)
+
+    # def clean(self):
+    #     if not self.price_uah and not self.price_usd and not self.price_eur:
+    #         raise ValidationError('At least one price has to be defined')
+    #     # XXX: I am not sure that this is right place for prices initialization
+    #     self.init_prices()
 
     def init_prices(self):
         if self.price_uah:
@@ -139,22 +205,6 @@ class Product(TimeStampedModel):
         if not self.price_eur:
             self.price_eur = value / config.EUR_RATE
 
-    def __str__(self):
-        return '{} ({})'.format(self.name, self.code)
-
-    def get_url(self):
-        return reverse('product', args=(self.slug, ))
-
-    def get_images(self):
-        return self.images.all()
-
-    def get_first_image(self):
-        return self.images.all()[0]
-
-    def get_rating(self):
-        rounded_rating = int(self.rating)
-        return rounded_rating
-
 
 @python_2_unicode_compatible
 class ProductAttribute(models.Model):
@@ -162,31 +212,34 @@ class ProductAttribute(models.Model):
         verbose_name = _('Product attribute')
         verbose_name_plural = _('Product attributes')
 
-    product = models.ForeignKey(Product, related_name='attributes')
-    name = models.CharField(_('Attribute name'), max_length=63)
-    value = models.CharField(_('Attribute value'), max_length=31)
+    characteristic = models.ForeignKey(Characteristic, related_name='attributes', null=True)
+    product_configuration = models.ForeignKey(ProductConfiguration, related_name='attributes')
+    name = models.CharField(_('Name'), max_length=63)
+    value = models.CharField(_('Value'), max_length=31)
     value_float = models.FloatField(
-        _('Attribute value as number'), help_text=_('This field will be defined automatically'), blank=True, null=True)
+        _('Attribute value as number'), blank=True, null=True,
+        help_text=_('This field will be defined automatically'))
+    units = models.CharField(_('Units'), max_length=50, blank=True)
 
     def __str__(self):
         return 'Attribute {}'.format(self.name)
 
     def _init_values(self):
-        self.value = str(self.value).lower()
         try:
             self.value_float = float(self.value)
         except ValueError:
             self.value_float = None
 
-    def clean(self):
-        self._init_values()
-        subcategory = self.product.subcategory
-        category = self.product.subcategory.category
-        for f in ProductFilter.objects.filter(Q(subcategory=subcategory) | Q(category=category)):
-            try:
-                f.update([self])
-            except exceptions.ProductFilterUpdateException as e:
-                raise ValidationError(e.message)
+    # # XXX: this function is wrong. We need to check filters in theirs application
+    # def clean(self):
+    #     self._init_values()
+    #     subcategory = self.product.subcategory
+    #     category = self.product.subcategory.category
+    #     for f in ProductFilter.objects.filter(Q(subcategory=subcategory) | Q(category=category)):
+    #         try:
+    #             f.update([self])
+    #         except exceptions.ProductFilterUpdateException as e:
+    #             raise ValidationError(e.message)
 
     def save(self, *args, **kwargs):
         self._init_values()

@@ -68,3 +68,11 @@ class ProductAttributeFactory(factory.DjangoModelFactory):
     product = factory.SubFactory(ProductFactory)
     name = factory.Sequence(lambda n: 'Attribute #%s' % n)
     value = factory.Sequence(lambda n: n)
+
+
+class CharacteristicFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Characteristic
+
+    name = factory.Sequence(lambda n: 'Characteristic #%s' % n)
+    units = factory.Iterator(['mm', 'cm', 'kg', 'g'])

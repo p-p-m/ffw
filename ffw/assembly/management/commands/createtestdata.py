@@ -1,6 +1,11 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import os
+import random
+
+from django.conf import settings
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
@@ -135,6 +140,11 @@ class Command(BaseCommand):
         },
     ]
 
+    def _get_test_image(self):
+        path = os.path.join(settings.BASE_DIR, 'assembly', 'management', 'commands', 'testimages')
+        images = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+        return File(open(os.path.join(path, random.choice(images))))
+
     def handle(self, *args, **options):
         self.stdout.write('Creating characteristics...')
         for characteristic_data in self.CHARACTERISTICS:
@@ -152,11 +162,17 @@ class Command(BaseCommand):
                 for category_data in categories:
                     subcategories = category_data.pop('subcategories')
                     category = products_models.Category.objects.create(
-                        section=section, slug=slugify(category_data['name']), **category_data)
+                        section=section,
+                        slug=slugify(category_data['name']),
+                        image=self._get_test_image(),
+                        **category_data)
                     self.stdout.write('Category {} created'.format(category))
                     for subcategory_data in subcategories:
                         subcategory = products_models.Subcategory.objects.create(
-                            category=category,  slug=slugify(subcategory_data['name']), **subcategory_data)
+                            category=category,
+                            slug=slugify(subcategory_data['name']),
+                            image=self._get_test_image(),
+                            **subcategory_data)
                         self.stdout.write('Subcategory {} created'.format(subcategory))
         self.stdout.write('...Done')
 

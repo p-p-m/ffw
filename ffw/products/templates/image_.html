@@ -1,0 +1,22 @@
+<!--For test only-->
+
+{% load i18n %}
+
+
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+</head>
+<body>
+
+{% for sub in subs %}
+    <img  src="{{sub.image.url}}">
+    <br>
+    <img  src="{{sub.image_thumbnail.url}}">
+{% endfor %}
+
+
+
+</body>
+</html>

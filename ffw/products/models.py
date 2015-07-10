@@ -145,6 +145,8 @@ class Product(TimeStampedModel):
         _('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)],
         help_text=_('Number between 0 and 5 that will be used for default sorting on products page. Products with '
                     'higher numbers will be displayed higher'))
+    price_min = models.FloatField(_('Max price in UAH'), null=True)
+    price_max = models.FloatField(_('Min price in UAH'), null=True)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -166,9 +168,9 @@ class Product(TimeStampedModel):
         )
         return Characteristic.objects.filter(query)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        return super(Product, self).save()
+        return super(Product, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -180,15 +182,38 @@ class ProductConfiguration(models.Model):
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
     code = models.CharField(_('Code'), max_length=127, unique=True)
     is_active = models.BooleanField(_('Is configuration active'), default=True)
+    price_uah = models.FloatField(_('Price in UAH'), null=True)
+    price_eur = models.FloatField(_('Price in EUR'), null=True)
+    price_usd = models.FloatField(_('Price in USD'), null=True)
 
     def __str__(self):
         return '{}-{}'.format(self.product)
 
-    # def clean(self):
-    #     if not self.price_uah and not self.price_usd and not self.price_eur:
-    #         raise ValidationError('At least one price has to be defined')
-    #     # XXX: I am not sure that this is right place for prices initialization
-    #     self.init_prices()
+    def clean(self):
+        if not self.price_uah and not self.price_usd and not self.price_eur:
+            raise ValidationError('At least one price has to be defined')
+        # XXX: I am not sure that this is right place for prices initialization
+        self.init_prices()
+
+    @property
+    def attrs(self):
+        """
+        Shortcut for attributes
+
+        Allow shorter access to attributes.
+        Example: product_configuration.attrs.brand - will return brand attribute value
+                 product_configuration.attrs.brand = 'qwe' - will send brand attribute value
+        """
+        class Attrs(object):
+            def __getattr__(self_, key):
+                return self.attributes.get(name='key').value
+
+            def __setattr__(self_, key, value):
+                attr, _ = self.attributes.get_or_create(name=key)
+                attr.value = value
+                attr.save()
+
+        return Attrs()
 
     def init_prices(self):
         if self.price_uah:
@@ -229,17 +254,6 @@ class ProductAttribute(models.Model):
             self.value_float = float(self.value)
         except ValueError:
             self.value_float = None
-
-    # # XXX: this function is wrong. We need to check filters in theirs application
-    # def clean(self):
-    #     self._init_values()
-    #     subcategory = self.product.subcategory
-    #     category = self.product.subcategory.category
-    #     for f in ProductFilter.objects.filter(Q(subcategory=subcategory) | Q(category=category)):
-    #         try:
-    #             f.update([self])
-    #         except exceptions.ProductFilterUpdateException as e:
-    #             raise ValidationError(e.message)
 
     def save(self, *args, **kwargs):
         self._init_values()

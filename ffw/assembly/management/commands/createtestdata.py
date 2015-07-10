@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 
 from products import models as products_models
-from products.tests import factories as products_factories
 
 
 class Command(BaseCommand):
@@ -145,7 +144,7 @@ class Command(BaseCommand):
         images = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
         return File(open(os.path.join(path, random.choice(images))))
 
-    def handle(self, *args, **options):
+    def _create_characteristics(self):
         self.stdout.write('Creating characteristics...')
         for characteristic_data in self.CHARACTERISTICS:
             if not products_models.Characteristic.objects.filter(name=characteristic_data['name']).exists():
@@ -153,6 +152,7 @@ class Command(BaseCommand):
                 self.stdout.write('Characteristic {} created'.format(characteristic))
         self.stdout.write('...Done')
 
+    def _create_categories(self):
         self.stdout.write('Creating sections, categories and subcategories...')
         for section_data in self.SECTIONS:
             if not products_models.Section.objects.filter(name=section_data['name']).exists():
@@ -176,9 +176,34 @@ class Command(BaseCommand):
                         self.stdout.write('Subcategory {} created'.format(subcategory))
         self.stdout.write('...Done')
 
-        # admin
+    def _create_users(self):
         get_user_model().objects.all().delete()
         get_user_model().objects.create_superuser(username='admin', password='admin', email='admin@i.ua')
         self.stdout.write('Superuser admin/admin created')
 
-        # TODO: add products
+    def _create_products(self):
+        self.stdout.write('Creating products...')
+        for index, subcategory in enumerate(products_models.Subcategory.objects.all()):
+            self.stdout.write('Creating products for subcategory {}'.format(subcategory))
+            for i in range(3):
+                product = products_models.Product.objects.create(
+                    name='product-{}-{}'.format(subcategory.id, i),
+                    short_description='product-short-description-{}-{}'.format(subcategory.id, i),
+                    description='product-description-{}-{}'.format(subcategory.id, i),
+                    subcategory=subcategory,
+                )
+                for j in range(3 if not index else 1):
+                    product_configuration = products_models.ProductConfiguration.objects.create(
+                        product=product,
+                        code='pc-{}-{}-{}'.format(index, i, j),
+                    )
+                    product_configuration.price_uah = 10 * (index + 1) * (i + 1) * (j + 1)
+                    product_configuration.attrs.brand = random.choice(['B1', 'B2', 'B3', 'B4', 'B5'])
+            self.stdout.write('Products created')
+        self.stdout.write('...Done')
+
+    def handle(self, *args, **options):
+        self._create_characteristics()
+        self._create_categories()
+        self._create_users()
+        self._create_products()

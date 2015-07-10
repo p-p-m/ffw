@@ -13,7 +13,7 @@ def add_default_characteristics_to_new_section(sender, instance=None, created=Fa
             instance.characteristics.through.objects.create(characteristic=c, section=instance)
 
 
-def create_default_charachteristics(sender, **kwargs):
-    models.Characteristic.objects.get_or_create(name='price_uah', default_value=0, units='UAH', is_default=True)
-    models.Characteristic.objects.get_or_create(name='price_usd', default_value=0, units='USD', is_default=True)
-    models.Characteristic.objects.get_or_create(name='price_eur', default_value=0, units='EUR', is_default=True)
+def create_price_attributes(sender, instance=None, **kwargs):
+    instance.attributes.create(name='price_uah', value=instance.price_uah)
+    instance.attributes.create(name='price_usd', value=instance.price_usd)
+    instance.attributes.create(name='price_eur', value=instance.price_eur)

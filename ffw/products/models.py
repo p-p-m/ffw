@@ -15,6 +15,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 from . import exceptions
 
 logger = logging.getLogger(__name__)
@@ -112,6 +114,10 @@ class Subcategory(AbstractCategory):
 
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = models.ImageField(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
+    image_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
 
     def __str__(self):
         return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)

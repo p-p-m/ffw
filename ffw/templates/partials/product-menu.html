@@ -26,6 +26,16 @@
                                             {% include 'items/index-category-item.html' %}
                                         {% endwith %}
                                     {% endfor %}
+                                    {% for subcategory in subcategory.get_subcategories %}
+                                        {% with subcategory as item %}
+                                            {% include 'items/index-category-item.html' %}
+                                        {% endwith %}
+                                    {% endfor %}
+                                    {% for subcategory in subcategory.get_subcategories %}
+                                        {% with subcategory as item %}
+                                            {% include 'items/index-category-item.html' %}
+                                        {% endwith %}
+                                    {% endfor %}
                                 </ul>
                             </div>
                             {% endfor %}

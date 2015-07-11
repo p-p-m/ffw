@@ -20,7 +20,7 @@
                         <div class="submenu-container-right">
                             {% for subcategory in category.get_categories %}
                             <div class="subMenuLeft-content catalogue-directories" data-role="sub-tab" sub-tabTrigger="{{ forloop.counter }}">
-                                <ul class="directories-list small">
+                                <ul class="directories-list small-box">
                                     {% for subcategory in subcategory.get_subcategories %}
                                         {% with subcategory as item %}
                                             {% include 'items/index-category-item.html' %}

@@ -87,6 +87,14 @@ class Category(AbstractCategory):
 
     section = models.ForeignKey(Section, verbose_name=_('Section'), related_name='categories')
     image = models.ImageField(upload_to='categories/', verbose_name=_('Image'), blank=True)
+    image_small_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
 
     def __str__(self):
         return '{}-{}'.format(self.section, self.name)
@@ -114,8 +122,12 @@ class Subcategory(AbstractCategory):
 
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = models.ImageField(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
-    image_thumbnail = ImageSpecField(source='image',
+    image_small_thumbnail = ImageSpecField(source='image',
                                       processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
                                       format='JPEG',
                                       options={'quality': 60})
 
@@ -259,8 +271,15 @@ class ProductImage(models.Model):
 
     product = models.ForeignKey(Product, related_name='images')
     image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
+    image_small_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(source='image',
+                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+                                      format='JPEG',
+                                      options={'quality': 60})
     description = models.CharField(_('Image description'), max_length=127, blank=True)
-
 
 # XXX: Filter will be moved to separate application
 @python_2_unicode_compatible

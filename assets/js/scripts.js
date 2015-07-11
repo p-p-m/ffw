@@ -300,8 +300,28 @@
 
     function productSubMenu() {
         var menu = $('[data-role="product-menu"]');
+        var wrap = menu.find('.wrap');
         var subMenu = $('[data-role="product-submenu"]');
-        subMenu.css('top', menu.height());
+        subMenu.css({
+            'top': menu.height(),
+            'width': wrap.width()
+        });
+
+        var subTabCont = $('[data-role="product-submenu"]');
+
+        subTabCont.each(function() {
+            var SubTabContainer = $(this).find('[data-role="sub-tab"]');
+            var SubTabTrigger = $(this).find('[data-role="sub-tab-trigger"]');
+            SubTabContainer.hide().filter(':first').show();
+            SubTabTrigger.filter(':first').addClass('active');
+            SubTabTrigger.hover(function () {
+                var currentLoop = $(this).attr('sub-tabTrigger');
+                SubTabContainer.hide();
+                SubTabContainer.filter('[sub-tabTrigger='+currentLoop+']').show();
+                SubTabTrigger.removeClass('active');
+                $(this).addClass('active');
+            });
+        });
     }
 
     // popup menu

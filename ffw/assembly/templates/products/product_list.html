@@ -45,7 +45,14 @@
 </div>
 <!-- /view-title-box -->
 
+{% for filter in filters %}
+    {{ filter.name }} <hr/>
+    {% include 'filters/filter.html' %}
+{% endfor %}
+
+
 <!-- basic filters -->
+<!-- {% comment %}
 <div class="filter-block" data-role="filters-block">
     <div class="wrap">
         <div class="filters">
@@ -81,6 +88,7 @@
                     </div>
                 </div>
             </div>
+
             {% for group in filter_form.fields_groups %}
                 <div class="producer slider-box stand-alone">
                     <h3 class="filter-title">{{ group.name }}</h3>
@@ -115,6 +123,7 @@
         </div>
     </div>
 </div>
+{% endcomment %} -->
 <!-- /basic filters -->
 
 <div class="products-view">
@@ -150,5 +159,6 @@
 {% endblock content %}
 
 {% block js %}
-  <script src="{{ STATIC_URL }}jsdev/product-list.js"></script>
+    <script src="{% static 'filters/filters.js' %}"> </script>
+    <script src="{% static 'assembly/filters.js' %}"> </script>
 {% endblock js %}

@@ -196,8 +196,8 @@ class Command(BaseCommand):
                     product_configuration = products_models.ProductConfiguration.objects.create(
                         product=product,
                         code='pc-{}-{}-{}'.format(index, i, j),
+                        price_uah=10 * (index + 1) * (i + 1) * (j + 1),
                     )
-                    product_configuration.price_uah = 10 * (index + 1) * (i + 1) * (j + 1)
                     product_configuration.attrs.brand = random.choice(['B1', 'B2', 'B3', 'B4', 'B5'])
             self.stdout.write('Products created')
         self.stdout.write('...Done')

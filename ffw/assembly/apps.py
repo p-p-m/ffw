@@ -37,3 +37,9 @@ class AssemblyConfig(AppConfig):
             sender=products_models.SubcategoryCharacteristic,
             dispatch_uid='assembly.handlers.delete_filters_on_characteristic_disconnection_with_subcategory',
         )
+
+        signals.post_save.connect(
+            handlers.autocreate_price_filter_for_section,
+            sender=products_models.Section,
+            dispatch_uid='assembly.handlers.autocreate_price_filter_for_section'
+        )

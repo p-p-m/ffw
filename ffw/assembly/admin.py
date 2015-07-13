@@ -34,17 +34,17 @@ class BaseFilterInline(admin.TabularInline):
 
 class NumericAttributeFilterInline(BaseFilterInline):
     model = assembly_models.NumericAttributeFilter
-    fields = ('characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
+    fields = ('name', 'characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
 
 
 class ChoicesAttributeFilterInline(BaseFilterInline):
     model = assembly_models.ChoicesAttributeFilter
-    fields = ('characteristic', 'choices', 'is_auto_update', 'priority')
+    fields = ('name', 'characteristic', 'choices', 'is_auto_update', 'priority')
 
 
 class IntervalsAttributeFilterInline(BaseFilterInline):
     model = assembly_models.IntervalsAttributeFilter
-    fields = ('characteristic', 'intervals', 'priority')
+    fields = ('name', 'characteristic', 'intervals', 'priority')
 
 
 class CharacteristicAdmin(admin.ModelAdmin):
@@ -114,10 +114,13 @@ class ProductConfigurationForm(forms.ModelForm):
 
     class Meta:
         model = products_models.ProductConfiguration
-        fields = ['code', 'is_active']
+        fields = ['code', 'price_uah', 'price_usd', 'price_eur', 'is_active']
 
     def __init__(self, *args, **kwargs):
         super(ProductConfigurationForm, self).__init__(*args, **kwargs)
+        if self.instance.id is not None:
+            self.fields['attributes'].initial = '\n'.join('{}: {} ({})'.format(
+                a.name, a.value, a.units) for a in self.instance.attributes.all())
 
 
 class ProductConfigurationInline(admin.TabularInline):
@@ -126,7 +129,7 @@ class ProductConfigurationInline(admin.TabularInline):
     form = ProductConfigurationForm
     fieldsets = (
         (None, {
-            'fields': ('code', 'attributes', 'is_active',),
+            'fields': ('code', 'attributes', 'is_active', 'price_uah', 'price_usd', 'price_eur',),
         }),
     )
 
@@ -147,8 +150,21 @@ class ProductConfigurationInline(admin.TabularInline):
             s = '\n'.join('{}: {} ({})'.format(c.name, c.default_value, c.units) for c in characteristics)
             initial = [{
                 'attributes': s,
-            }] * 20
+            }] * 4
             formset.__init__ = curry(formset.__init__, initial=initial)
+
+            # Brutal hook to add initial values to new configurations
+            def formset_empty_form(self):
+                form = self.form(
+                    auto_id=self.auto_id,
+                    prefix=self.add_prefix('__prefix__'),
+                    empty_permitted=True,
+                    initial={'attributes': s}
+                )
+                self.add_fields(form, None)
+                return form
+            formset.empty_form = property(formset_empty_form)
+
         return formset
 
 

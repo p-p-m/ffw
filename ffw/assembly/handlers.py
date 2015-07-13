@@ -1,3 +1,6 @@
+# coding: utf-8
+from __future__ import unicode_literals
+
 from . import models
 
 FILTER_MODELS = (
@@ -42,3 +45,8 @@ def delete_filters_on_characteristic_disconnection_with_subcategory(sender, inst
 
     for filter_model in FILTER_MODELS:
         filter_model.objects.filter(characteristic=characteristic, subcategory=subcategory).delete()
+
+
+def autocreate_price_filter_for_section(sender, instance, created=False, **kwargs):
+    if created:
+        models.NumericPriceFilter.objects.create(name='Цена', section=instance, is_auto_update=True)

@@ -14,6 +14,11 @@ def add_default_characteristics_to_new_section(sender, instance=None, created=Fa
 
 
 def create_price_attributes(sender, instance=None, **kwargs):
-    instance.attributes.create(name='price_uah', value=instance.price_uah)
-    instance.attributes.create(name='price_usd', value=instance.price_usd)
-    instance.attributes.create(name='price_eur', value=instance.price_eur)
+    product = instance.product
+    if product.price_min > instance.price_uah or product.price_min is None:
+        product.price_min = instance.price_uah
+        product.save()
+
+    if product.price_max < instance.price_uah or product.price_max is None:
+        product.price_max = instance.price_uah
+        product.save()

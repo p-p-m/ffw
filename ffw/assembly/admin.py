@@ -2,9 +2,11 @@
 This file is showing admin model for developers and water filters only.
 All custom admin views have to be located in application 'admin'.
 """
+import re
 
 from django import forms
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.utils.functional import curry
 
@@ -121,6 +123,27 @@ class ProductConfigurationForm(forms.ModelForm):
         if self.instance.id is not None:
             self.fields['attributes'].initial = '\n'.join('{}: {} ({})'.format(
                 a.name, a.value, a.units) for a in self.instance.attributes.all())
+
+    def clean_attributes(self):
+        attributes = self.cleaned_data['attributes']
+        if len(attributes.split('\n')) < len(self.fields['attributes'].initial.split('\n')):
+            raise ValidationError('Not enough attributes provided')
+        result_attribures = []
+        for attr in attributes.split('\n'):
+            parsed_attr = re.findall('(.+):(.*)\((.*)\)', attr)
+            if parsed_attr:
+                name, value, units = [el.strip() for el in parsed_attr[0]]
+                result_attribures.append({'name': name, 'value': value, 'units': units})
+            else:
+                raise ValidationError(
+                    'Attribute "%(attr)s" is not recognized it has to follow patter: <name>: <value> (<units>)',
+                    params={'attr': attr},)
+        return result_attribures
+
+    def save(self, *args, **kwargs):
+        configuration = super(ProductConfigurationForm, self).save(*args, **kwargs)
+        for attribute in self.cleaned_data['attributes']:
+            configuration.attributes.update_or_create(name=attribute.pop('name'), defaults=attribute)
 
 
 class ProductConfigurationInline(admin.TabularInline):

@@ -10,6 +10,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from django.template.defaultfilters import slugify
 
+from ... import models
 from products import models as products_models
 
 
@@ -181,9 +182,12 @@ class Command(BaseCommand):
         get_user_model().objects.create_superuser(username='admin', password='admin', email='admin@i.ua')
         self.stdout.write('Superuser admin/admin created')
 
-    def _create_products(self):
+    def _create_products(self, fast=False):
         self.stdout.write('Creating products...')
-        for index, subcategory in enumerate(products_models.Subcategory.objects.all()):
+        subcategories = products_models.Subcategory.objects.all()
+        if fast:
+            subcategories = subcategories[:2]
+        for index, subcategory in enumerate(subcategories):
             self.stdout.write('Creating products for subcategory {}'.format(subcategory))
             for i in range(3):
                 product = products_models.Product.objects.create(
@@ -199,11 +203,43 @@ class Command(BaseCommand):
                         price_uah=10 * (index + 1) * (i + 1) * (j + 1),
                     )
                     product_configuration.attrs.brand = random.choice(['B1', 'B2', 'B3', 'B4', 'B5'])
+                    product_configuration.attrs.width = random.choice(['10', '20', '30', '40', '50'])
+                    product_configuration.attrs.height = 10
+                    product_configuration.attrs.weight = random.choice(['100', '200', '300', '400', '500'])
             self.stdout.write('Products created')
+        self.stdout.write('...Done')
+
+    def _create_filters(self, fast=False):
+        self.stdout.write('Creating filters...')
+        subcategories = products_models.Subcategory.objects.all()
+        if fast:
+            subcategories = subcategories[:2]
+        for subcategory in subcategories:
+            self.stdout.write('Creating filters for subcategory {}'.format(subcategory))
+            models.NumericAttributeFilter.objects.create(
+                characteristic=products_models.Characteristic.objects.get(name='width'),
+                subcategory=subcategory,
+                max_value=60,
+                min_value=0,
+                name='Width filter'
+            )
+        categories = products_models.Category.objects.all()
+        if fast:
+            categories = categories[:2]
+        for category in categories:
+            self.stdout.write('Creating filters for category {}'.format(category))
+            models.ChoicesAttributeFilter.objects.create(
+                characteristic=products_models.Characteristic.objects.get(name='brand'),
+                category=category,
+                name='Brand filter',
+                is_auto_update=True,
+                choices='B1, B2, B3, B4, B5',
+            )
         self.stdout.write('...Done')
 
     def handle(self, *args, **options):
         self._create_characteristics()
         self._create_categories()
         self._create_users()
-        self._create_products()
+        self._create_products(fast='fast' in args)
+        self._create_filters(fast='fast' in args)

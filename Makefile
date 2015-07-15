@@ -41,10 +41,10 @@ validate:
 
 reinitdb:
 	$(MANAGESCRIPT) flush --noinput
-	$(MANAGESCRIPT) createtestdata
+	$(MANAGESCRIPT) createtestdata fast
 	$(MANAGESCRIPT) createbanners
 
 initdb:
 	$(SCRIPT) migrate
-	$(MANAGESCRIPT) createtestdata
+	$(MANAGESCRIPT) createtestdata fast
 	$(MANAGESCRIPT) createbanners

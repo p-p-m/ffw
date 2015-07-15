@@ -78,9 +78,11 @@ class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
         return selected_min_value, selected_max_value
 
     def filter(self, queryset, request):
+        print 'queryset2', queryset
         attribute_query = self.get_attribute_query()
         selected_min_value, selected_max_value = self._get_min_and_max(request)
         filter_query = self.get_filter_query('attributes__value_float', selected_min_value, selected_max_value)
+        print 'queryset2-2', queryset.filter(attribute_query, filter_query)
         return queryset.filter(attribute_query, filter_query)
 
     def update(self):
@@ -97,10 +99,14 @@ class ChoicesAttributeFilter(ChoicesFilterMixin, BaseCharacteristicFilter):
         return choices
 
     def filter(self, queryset, request):
+        print 'queryset1', queryset
         attribute_query = self.get_attribute_query()
         choices = self._get_choices(request)
-        filter_query = self.get_filter_query('attributes__value', choices)
-        return queryset.filter(attribute_query, filter_query)
+        if choices:
+            filter_query = self.get_filter_query('attributes__value', choices)
+            queryset = queryset.filter(attribute_query, filter_query)
+        print 'queryset1-2', queryset
+        return queryset
 
     def update(self):
         return super(ChoicesAttributeFilter, self).base_update(field='value')

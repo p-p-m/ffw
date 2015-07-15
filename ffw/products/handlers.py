@@ -22,3 +22,14 @@ def create_price_attributes(sender, instance=None, **kwargs):
     if product.price_max < instance.price_uah or product.price_max is None:
         product.price_max = instance.price_uah
         product.save()
+
+
+def connect_attribute_with_characteristic(sender, instance, **kwargs):
+    attribute = instance
+    if not attribute.characteristic:
+        try:
+            c = models.Characteristic.objects.get(name=attribute.name)
+            attribute.characteristic = c
+            attribute.save()
+        except models.Characteristic.DoesNotExist:
+            pass

@@ -5,17 +5,13 @@ import logging
 
 from constance import config
 from django.db import models
-from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
-from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
-
-from . import exceptions
 
 logger = logging.getLogger(__name__)
 

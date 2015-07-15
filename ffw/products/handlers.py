@@ -13,7 +13,23 @@ def add_default_characteristics_to_new_section(sender, instance=None, created=Fa
             instance.characteristics.through.objects.create(characteristic=c, section=instance)
 
 
-def create_default_charachteristics(sender, **kwargs):
-    models.Characteristic.objects.get_or_create(name='price_uah', default_value=0, units='UAH', is_default=True)
-    models.Characteristic.objects.get_or_create(name='price_usd', default_value=0, units='USD', is_default=True)
-    models.Characteristic.objects.get_or_create(name='price_eur', default_value=0, units='EUR', is_default=True)
+def create_price_attributes(sender, instance=None, **kwargs):
+    product = instance.product
+    if product.price_min > instance.price_uah or product.price_min is None:
+        product.price_min = instance.price_uah
+        product.save()
+
+    if product.price_max < instance.price_uah or product.price_max is None:
+        product.price_max = instance.price_uah
+        product.save()
+
+
+def connect_attribute_with_characteristic(sender, instance, **kwargs):
+    attribute = instance
+    if not attribute.characteristic:
+        try:
+            c = models.Characteristic.objects.get(name=attribute.name)
+            attribute.characteristic = c
+            attribute.save()
+        except models.Characteristic.DoesNotExist:
+            pass

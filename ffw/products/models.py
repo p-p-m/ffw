@@ -7,7 +7,6 @@ import os, sys
 
 from constance import config
 from django.db import models
-from django.db.models import Q
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
@@ -17,9 +16,11 @@ from django.utils.encoding import python_2_unicode_compatible
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
 
+
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 from . import exceptions
+
 
 logger = logging.getLogger(__name__)
 
@@ -203,6 +204,8 @@ class Product(TimeStampedModel):
         _('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)],
         help_text=_('Number between 0 and 5 that will be used for default sorting on products page. Products with '
                     'higher numbers will be displayed higher'))
+    price_min = models.FloatField(_('Max price in UAH'), null=True)
+    price_max = models.FloatField(_('Min price in UAH'), null=True)
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -224,9 +227,9 @@ class Product(TimeStampedModel):
         )
         return Characteristic.objects.filter(query)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        return super(Product, self).save()
+        return super(Product, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -238,15 +241,36 @@ class ProductConfiguration(models.Model):
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
     code = models.CharField(_('Code'), max_length=127, unique=True)
     is_active = models.BooleanField(_('Is configuration active'), default=True)
+    price_uah = models.FloatField(_('Price in UAH'), null=True)
+    price_eur = models.FloatField(_('Price in EUR'), null=True)
+    price_usd = models.FloatField(_('Price in USD'), null=True)
 
     def __str__(self):
-        return '{}-{}'.format(self.product)
+        return '{}-{}'.format(self.product, self.code)
 
-    # def clean(self):
-    #     if not self.price_uah and not self.price_usd and not self.price_eur:
-    #         raise ValidationError('At least one price has to be defined')
-    #     # XXX: I am not sure that this is right place for prices initialization
-    #     self.init_prices()
+    def clean(self):
+        if not self.price_uah and not self.price_usd and not self.price_eur:
+            raise ValidationError('At least one price has to be defined')
+
+    @property
+    def attrs(self):
+        """
+        Shortcut for attributes
+
+        Allow shorter access to attributes.
+        Example: product_configuration.attrs.brand - will return brand attribute value
+                 product_configuration.attrs.brand = 'qwe' - will send brand attribute value
+        """
+        class Attrs(object):
+            def __getattr__(self_, key):
+                return self.attributes.get(name='key').value
+
+            def __setattr__(self_, key, value):
+                attr, _ = self.attributes.get_or_create(name=key)
+                attr.value = value
+                attr.save()
+
+        return Attrs()
 
     def init_prices(self):
         if self.price_uah:
@@ -262,6 +286,10 @@ class ProductConfiguration(models.Model):
             self.price_usd = value / config.USD_RATE
         if not self.price_eur:
             self.price_eur = value / config.EUR_RATE
+
+    def save(self, *args, **kwargs):
+        self.init_prices()
+        super(ProductConfiguration, self).save(*args, **kwargs)
 
 
 @python_2_unicode_compatible
@@ -285,19 +313,8 @@ class ProductAttribute(models.Model):
     def _init_values(self):
         try:
             self.value_float = float(self.value)
-        except ValueError:
+        except (ValueError, TypeError):
             self.value_float = None
-
-    # # XXX: this function is wrong. We need to check filters in theirs application
-    # def clean(self):
-    #     self._init_values()
-    #     subcategory = self.product.subcategory
-    #     category = self.product.subcategory.category
-    #     for f in ProductFilter.objects.filter(Q(subcategory=subcategory) | Q(category=category)):
-    #         try:
-    #             f.update([self])
-    #         except exceptions.ProductFilterUpdateException as e:
-    #             raise ValidationError(e.message)
 
     def save(self, *args, **kwargs):
         self._init_values()
@@ -320,6 +337,7 @@ class ProductImage(models.Model):
                                       format='JPEG',
                                       options={'quality': 60})
     description = models.CharField(_('Image description'), max_length=127, blank=True)
+
 
 # XXX: Filter will be moved to separate application
 @python_2_unicode_compatible
@@ -443,3 +461,4 @@ class ProductFilter(models.Model):
         for min_value, max_value in ranges:
             query = query | (Q(value_float__gte=min_value) & Q(value_float__lte=max_value))
         return attributes.filter(query)
+

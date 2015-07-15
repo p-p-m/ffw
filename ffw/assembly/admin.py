@@ -2,9 +2,11 @@
 This file is showing admin model for developers and water filters only.
 All custom admin views have to be located in application 'admin'.
 """
+import re
 
 from django import forms
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.utils.functional import curry
 
@@ -34,17 +36,17 @@ class BaseFilterInline(admin.TabularInline):
 
 class NumericAttributeFilterInline(BaseFilterInline):
     model = assembly_models.NumericAttributeFilter
-    fields = ('characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
+    fields = ('name', 'characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
 
 
 class ChoicesAttributeFilterInline(BaseFilterInline):
     model = assembly_models.ChoicesAttributeFilter
-    fields = ('characteristic', 'choices', 'is_auto_update', 'priority')
+    fields = ('name', 'characteristic', 'choices', 'is_auto_update', 'priority')
 
 
 class IntervalsAttributeFilterInline(BaseFilterInline):
     model = assembly_models.IntervalsAttributeFilter
-    fields = ('characteristic', 'intervals', 'priority')
+    fields = ('name', 'characteristic', 'intervals', 'priority')
 
 
 class CharacteristicAdmin(admin.ModelAdmin):
@@ -114,10 +116,34 @@ class ProductConfigurationForm(forms.ModelForm):
 
     class Meta:
         model = products_models.ProductConfiguration
-        fields = ['code', 'is_active']
+        fields = ['code', 'price_uah', 'price_usd', 'price_eur', 'is_active']
 
     def __init__(self, *args, **kwargs):
         super(ProductConfigurationForm, self).__init__(*args, **kwargs)
+        if self.instance.id is not None:
+            self.fields['attributes'].initial = '\n'.join('{}: {} ({})'.format(
+                a.name, a.value, a.units) for a in self.instance.attributes.all())
+
+    def clean_attributes(self):
+        attributes = self.cleaned_data['attributes']
+        if len(attributes.split('\n')) < len(self.fields['attributes'].initial.split('\n')):
+            raise ValidationError('Not enough attributes provided')
+        result_attribures = []
+        for attr in attributes.split('\n'):
+            parsed_attr = re.findall('(.+):(.*)\((.*)\)', attr)
+            if parsed_attr:
+                name, value, units = [el.strip() for el in parsed_attr[0]]
+                result_attribures.append({'name': name, 'value': value, 'units': units})
+            else:
+                raise ValidationError(
+                    'Attribute "%(attr)s" is not recognized it has to follow patter: <name>: <value> (<units>)',
+                    params={'attr': attr},)
+        return result_attribures
+
+    def save(self, *args, **kwargs):
+        configuration = super(ProductConfigurationForm, self).save(*args, **kwargs)
+        for attribute in self.cleaned_data['attributes']:
+            configuration.attributes.update_or_create(name=attribute.pop('name'), defaults=attribute)
 
 
 class ProductConfigurationInline(admin.TabularInline):
@@ -126,7 +152,7 @@ class ProductConfigurationInline(admin.TabularInline):
     form = ProductConfigurationForm
     fieldsets = (
         (None, {
-            'fields': ('code', 'attributes', 'is_active',),
+            'fields': ('code', 'attributes', 'is_active', 'price_uah', 'price_usd', 'price_eur',),
         }),
     )
 
@@ -147,8 +173,21 @@ class ProductConfigurationInline(admin.TabularInline):
             s = '\n'.join('{}: {} ({})'.format(c.name, c.default_value, c.units) for c in characteristics)
             initial = [{
                 'attributes': s,
-            }] * 20
+            }] * 4
             formset.__init__ = curry(formset.__init__, initial=initial)
+
+            # Brutal hook to add initial values to new configurations
+            def formset_empty_form(self):
+                form = self.form(
+                    auto_id=self.auto_id,
+                    prefix=self.add_prefix('__prefix__'),
+                    empty_permitted=True,
+                    initial={'attributes': s}
+                )
+                self.add_fields(form, None)
+                return form
+            formset.empty_form = property(formset_empty_form)
+
         return formset
 
 

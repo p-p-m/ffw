@@ -57,9 +57,6 @@ class NumericFilterMixin(FilterMixin):
         return FilterTypes.NUMERIC
 
     def get_filter_query(self, field, selected_min_value, selected_max_value):
-        print {
-            '{}__gte'.format(field): selected_min_value,
-            '{}__lte'.format(field): selected_max_value}
         return models.Q(**{
             '{}__gte'.format(field): selected_min_value,
             '{}__lte'.format(field): selected_max_value})

@@ -46,22 +46,38 @@ class ProductListView(ListView):
         return 'products'
 
     def get_queryset(self):
-        queryset = models.Product.objects.all().select_related('attributes', 'images')
+        queryset = products_models.Product.objects.all().select_related('images')
 
+        self.filters = []
         if 'subcategory' in self.kwargs:
-            queryset = queryset.filter(subcategory__slug=self.kwargs['subcategory'])
+            subcategory = get_object_or_404(products_models.Subcategory, slug=self.kwargs['subcategory'])
+            queryset = queryset.filter(subcategory=subcategory)
+            self.filters += models.get_subcategory_filters(subcategory)
+            self.filters += models.get_category_filters(subcategory.category)
+            self.filters += models.get_section_filters(subcategory.category.section)
         elif 'category' in self.kwargs:
-            queryset = queryset.filter(subcategory__category__slug=self.kwargs['category'])
+            category = get_object_or_404(products_models.Category, slug=self.kwargs['category'])
+            queryset = queryset.filter(subcategory__category=category)
+            self.filters += models.get_category_filters(category)
+            self.filters += models.get_section_filters(category.section)
         elif 'section' in self.kwargs:
+            section = get_object_or_404(products_models.Section, slug=self.kwargs['section'])
             queryset = queryset.filter(subcategory__category__section__slug=self.kwargs['section'])
+            self.filters += models.get_section_filters(section)
 
-        sort_form = products_forms.SortForm(self.request.GET)
-        if sort_form.is_valid():
-            queryset = sort_form.sort(queryset)
+        print 'self.filters', self.filters
 
-        filter_form = self._get_filter_form()
-        if filter_form.is_valid():
-            queryset = filter_form.filter_products(queryset)
+        configurations_queryset = products_models.ProductConfiguration.objects.all()
+        for filt in self.filters:
+            configurations_queryset = filt.filter(configurations_queryset, self.request)
+            print 'filt', filt, 'configurations_queryset', configurations_queryset
+
+        print 'configurations_queryset2', configurations_queryset
+        queryset = queryset.filter(configurations=configurations_queryset)
+
+        # sort_form = products_forms.SortForm(self.request.GET)
+        # if sort_form.is_valid():
+        #     queryset = sort_form.sort(queryset)
 
         return queryset
 
@@ -89,36 +105,32 @@ class ProductListView(ListView):
     def _get_selected_section(self):
         if 'section' in self.kwargs:
             try:
-                return models.Section.objects.get(slug=self.kwargs['section'])
+                return products_models.Section.objects.get(slug=self.kwargs['section'])
             except models.Section.DoesNotExist:
                 pass
 
     def _get_selected_category(self):
         if 'category' in self.kwargs:
             try:
-                return models.Category.objects.get(slug=self.kwargs['category'])
+                return products_models.Category.objects.get(slug=self.kwargs['category'])
             except models.Category.DoesNotExist:
                 pass
 
     def _get_selected_subcategory(self):
         if 'subcategory' in self.kwargs:
             try:
-                return models.Subcategory.objects.get(slug=self.kwargs['subcategory'])
+                return products_models.Subcategory.objects.get(slug=self.kwargs['subcategory'])
             except models.Subcategory.DoesNotExist:
                 pass
-
-    def _get_filter_form(self):
-        subcategory = self._get_selected_subcategory()
-        category = self._get_selected_category()
-        return products_forms.FilterForm(category, subcategory, data=self.request.GET)
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
         context['paginate_by'] = self.paginate_by
         context['total_count'] = self.get_queryset().count()
         context['sort_form'] = products_forms.SortForm(self.request.GET)
-        context['filter_form'] = self._get_filter_form()
+        context['filters'] = self.filters
 
+        print self.filters
         if not self.request.is_ajax():
             context['selected_subcategory'] = self._get_selected_subcategory()
             context['selected_category'] = self._get_selected_category()

@@ -28,9 +28,8 @@
                 border-left: none;
             } // &:nth-child(1), &:nth-child(2)
         } // > li
-        li {
+        > li {
             float: left;
-            position: relative;
             @include bp (sm) {
                 display: none;
             } // sm
@@ -77,39 +76,7 @@
                     } // lg
                 } // a
             } // bar-icon
-            &.lens {
-                @include no-select;
-                display: block;
-                width: 60px;
-                position: absolute;
-                right: 0px;
-                top: 0px;
-                background-color: #A0D4E9;
-                text-align: center;
-                border-left: none !important;
-                @include bp (sm) {
-                    display: block;
-                } // sm
-                .lens-trigger {
-                    cursor: pointer;
-                    @include inline-middle;
-                    box-sizing: border-box;
-                    color: #2A609F;
-                    width: 60px;
-                    padding-top: 4px;
-                    &:before {
-                        content: '\f002';
-                        font: normal normal normal 22px/1 FontAwesome;
-                        text-rendering: auto;
-                        -webkit-font-smoothing: antialiased;
-                    } // &:before
-                    &.active {
-                        color: #fff;
-                        background-color: rgb(0, 114, 173);
-                    } // &.active
-                } // lens-trigger
-            } // &.lens
-            a {
+            > a {
                 display: block;
                 text-decoration: none;
                 color: white;
@@ -121,7 +88,7 @@
                 } // &:hover, &:active, &.active
             } // a
             &:hover {
-                a {
+                > a {
                     background-color: rgb(0, 114, 173);
                     &:hover, &:active, &.active {
                         background-color: rgb(0, 114, 173);
@@ -132,37 +99,68 @@
                 } // .submenu
             } // hover
             .submenu {
-                @include clear-list;
+                box-sizing: border-box;
                 border-radius: 0px 0px 5px 5px;
                 display: none;
-                // background-color: #00A2E2;
-                // background-color: #A0D4E9;
-                background-color: rgb(0, 114, 173);
+                background-color: white;
                 position: absolute;
                 top: 46px;
-                left: 50%;
-                width: 180px;
-                margin-left: -90px;
+                left: 0;
                 z-index: 4;
-                > li {
-                    display: block;
+                border: 1px solid rgb(232, 232, 232);
+                border-bottom: 2px solid rgb(232, 232, 232);
+                border-top: none;
+                .submenu-container {
                     width: 100%;
-                    &:nth-last-child(1) {
-                        a {
-                            border-radius: 0px 0px 5px 5px;
-                        } // a
-                    } // &:nth-last-child(1)
-                    > a {
-                        width: 100%;
+                    @include table;
+                    .submenu-container-left {
+                        @include table-cell;
+                        width: 235px;
+                        background-color: #F5F5F5;
+                        ul.subMenuLeft-nav {
+                            @include clear-list;
+                            height: auto;
+                            margin-bottom: 5px;
+                            > li {
+                                display: block;
+                                background-color: #F5F5F5;
+                                + li {
+                                    a {
+                                        border-top: 1px solid rgb(218, 218, 218);
+                                    }
+                                }
+                                &.active {
+                                    a {
+                                        color: white;
+                                        background-color: #57ABFF;
+                                    }
+                                } // &.active
+                                > a {
+                                    transition: none;
+                                    display: block;
+                                    box-sizing: border-box;
+                                    width: 100%;
+                                    background-color: none;
+                                    font-size: rem(16);
+                                    padding: 8px 30px;
+                                    color: #5C5C5C;
+                                    text-decoration: none;
+                                    &:hover, &.active {
+                                        color: white;
+                                        background-color: #57ABFF;
+                                    } // &:hover, &.active
+                                } // a
+                            } // li
+                        } // ul.subMenuLeft-nav
+                    } // .submenu-container-left
+                    .submenu-container-right {
+                        @include table-cell;
+                        width: calc(100% - 235px);
                         box-sizing: border-box;
-                        font-family: arial;
-                        font-size: rem(14);
-                        line-height: 1;
-                        &:hover, &:active, &.active {
-                            background-color: #198DC8;
-                        } // &:hover, &:active, &.active
-                    } // > a
-                } // > li
+                        padding: 8px 20px;
+                        overflow: hidden;
+                    } // .submenu-container-right
+                } // .submenu-container
             } // submenu
         } // li
     } // menu

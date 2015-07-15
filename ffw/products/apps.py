@@ -13,10 +13,10 @@ class ProductsConfig(AppConfig):
     verbose_name = _("Products and Categories")
 
     def ready(self):
-        signals.post_migrate.connect(
-            handlers.create_default_charachteristics,
-            sender=self,
-            dispatch_uid='products.handlers.create_default_charachteristics',
+        signals.post_save.connect(
+            handlers.create_price_attributes,
+            sender=models.ProductConfiguration,
+            dispatch_uid='products.handlers.create_price_attributes',
         )
 
         signals.post_save.connect(

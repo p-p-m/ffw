@@ -15,7 +15,6 @@ urlpatterns = patterns(
     url(r'^gallery/', include('gallery.urls')),
     url(r'^cart/', include('cart.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^image_resize', ImageResizeView.as_view(), name="image_resize"),
 )
 
 

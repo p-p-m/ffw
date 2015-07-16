@@ -23,7 +23,6 @@ def filter_test_view(request):
 class HomeView(View):
 
     def get(self, request):
-        print("IP Address for debug-toolbar: " + request.META['REMOTE_ADDR'])
         main = gallery_models.Banner.objects.get(name='main')
         subcategories = products_models.Subcategory.objects.filter(is_active=True)
         return render(request, 'assembly/home.html', {'main': main, 'subcategories': subcategories})

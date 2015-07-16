@@ -43,6 +43,14 @@ class BaseFilter(models.Model):
     category = models.ForeignKey(products_models.Category, null=True)
     subcategory = models.ForeignKey(products_models.Subcategory, null=True)
 
+    def get_related_products(self):
+        query = (
+            models.Q(subcategory__category__section=self.section) |
+            models.Q(subcategory__category=self.category) |
+            models.Q(subcategory=self.subcategory)
+        )
+        return products_models.Product.objects.filter(query)
+
 
 class NumericPriceFilter(NumericFilterMixin, BaseFilter):
 
@@ -78,15 +86,17 @@ class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
         return selected_min_value, selected_max_value
 
     def filter(self, queryset, request):
-        print 'queryset2', queryset
         attribute_query = self.get_attribute_query()
         selected_min_value, selected_max_value = self._get_min_and_max(request)
         filter_query = self.get_filter_query('attributes__value_float', selected_min_value, selected_max_value)
-        print 'queryset2-2', queryset.filter(attribute_query, filter_query)
         return queryset.filter(attribute_query, filter_query)
 
     def update(self):
         return super(NumericAttributeFilter, self).base_update(field='value_float')
+
+    def get_queryset(self):
+        products = self.get_related_products()
+        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)
 
 
 class ChoicesAttributeFilter(ChoicesFilterMixin, BaseCharacteristicFilter):
@@ -99,17 +109,19 @@ class ChoicesAttributeFilter(ChoicesFilterMixin, BaseCharacteristicFilter):
         return choices
 
     def filter(self, queryset, request):
-        print 'queryset1', queryset
         attribute_query = self.get_attribute_query()
         choices = self._get_choices(request)
         if choices:
             filter_query = self.get_filter_query('attributes__value', choices)
             queryset = queryset.filter(attribute_query, filter_query)
-        print 'queryset1-2', queryset
         return queryset
 
     def update(self):
         return super(ChoicesAttributeFilter, self).base_update(field='value')
+
+    def get_queryset(self):
+        products = self.get_related_products()
+        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)
 
 
 class IntervalsAttributeFilter(IntervalsFilterMixin, BaseCharacteristicFilter):
@@ -128,3 +140,7 @@ class IntervalsAttributeFilter(IntervalsFilterMixin, BaseCharacteristicFilter):
         attribute_query = self.get_attribute_query()
         filter_query = self.get_filter_query('attributes__value', intervals)
         return queryset.filter(attribute_query, filter_query)
+
+    def get_queryset(self):
+        products = self.get_related_products()
+        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)

@@ -143,7 +143,8 @@ class ProductConfigurationForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         configuration = super(ProductConfigurationForm, self).save(*args, **kwargs)
         for attribute in self.cleaned_data['attributes']:
-            configuration.attributes.update_or_create(name=attribute.pop('name'), defaults=attribute)
+            if not configuration.attributes.filter(**attribute).exists():
+                configuration.attributes.update_or_create(name=attribute.pop('name'), defaults=attribute)
 
 
 class ProductConfigurationInline(admin.TabularInline):

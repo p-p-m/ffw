@@ -3,8 +3,9 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from products.views  import ImageResizeView
 admin.autodiscover()
+
+from products.views  import ImageResizeView
 
 
 urlpatterns = patterns(
@@ -15,6 +16,7 @@ urlpatterns = patterns(
     url(r'^gallery/', include('gallery.urls')),
     url(r'^cart/', include('cart.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^image_resize', ImageResizeView.as_view(), name="image_resize"),
 )
 
 

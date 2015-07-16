@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'common_pages',
     'gallery',
     'cart',
+    'core',
 
     'assembly',
     'box_admin',

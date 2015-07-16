@@ -53,14 +53,16 @@ class GalleryPrimImage(models.Model):
         verbose_name_plural = _('Gallery Primary Images')
 
     photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
-    photo_small_thumbnail = ImageSpecField(source='photo',
-                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
-    photo_big_thumbnail = ImageSpecField(source='photo',
-                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+    photo_small_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
+    photo_big_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator])
     description = models.CharField(_('Image description'), max_length=255, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
@@ -77,14 +79,15 @@ class GalleryImage(models.Model):
 
     gallery_prim_image = models.ForeignKey(GalleryPrimImage, related_name='images')
     photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
-    photo_small_thumbnail = ImageSpecField(source='photo',
-                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+    photo_small_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
     photo_big_thumbnail = ImageSpecField(source='photo',
-                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)

@@ -25,6 +25,7 @@ class FilterMixin(models.Model):
 
     # TODO: Add description for this methods
     def get_queryset(self):
+        print self
         raise NotImplemented()
 
     def get_filter_query(self, field, **kwargs):

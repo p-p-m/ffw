@@ -30,3 +30,9 @@ class ProductsConfig(AppConfig):
             sender=models.Characteristic,
             dispatch_uid='products.handlers.add_new_default_characteristics_to_all_categories',
         )
+
+        signals.pre_save.connect(
+            handlers.connect_attribute_with_characteristic,
+            sender=models.ProductAttribute,
+            dispatch_uid='products.handlers.connect_attribute_with_characteristic',
+        )

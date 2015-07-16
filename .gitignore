@@ -11,7 +11,7 @@ db.sqlite3
 assets/css
 mails/
 media/
-static/
+/static/
 collected_static/
 ffw/settings/custom.py
 

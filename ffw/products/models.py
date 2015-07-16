@@ -22,6 +22,7 @@ from core.models import ImageFieldWaterMark
 
 logger = logging.getLogger(__name__)
 
+
 @python_2_unicode_compatible
 class Characteristic(models.Model):
     class Meta:

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import logging
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 import os, sys
 
 from constance import config
@@ -13,17 +12,15 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 from jsonfield import JSONField
 from model_utils.models import TimeStampedModel
 
-
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFit
 from . import exceptions
-
+from core.models import ImageFieldWaterMark
 
 logger = logging.getLogger(__name__)
-
 
 @python_2_unicode_compatible
 class Characteristic(models.Model):
@@ -89,15 +86,17 @@ class Category(AbstractCategory):
         verbose_name_plural = _('Categories')
 
     section = models.ForeignKey(Section, verbose_name=_('Section'), related_name='categories')
-    image = models.ImageField(upload_to='categories/', verbose_name=_('Image'), blank=True)
-    image_small_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
-    image_big_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+    image = ImageFieldWaterMark(upload_to='categories/', verbose_name=_('Image'), blank=True)
+    image_small_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
 
     def __str__(self):
         return '{}-{}'.format(self.section, self.name)
@@ -114,44 +113,6 @@ class SubcategoryCharacteristic(models.Model):
     characteristic = models.ForeignKey(Characteristic)
 
 
-class ImageFieldWaterMark(models.ImageField):
-
-    def __init__(self, verbose_name=None, name=None, width_field=None, height_field=None,
-            mark_text="p-p-m/ffw", font = 'Arial.ttf', angle = 23, opacity = 0.25, **kwargs):
-        self.angle = angle
-        self.opacity = opacity
-        self.mark_text = mark_text
-        self.font = font
-        super(ImageFieldWaterMark, self).__init__(verbose_name, name, width_field=None, height_field=None, **kwargs)
-
-    def pre_save(self, model_instance, add):
-        file = super(ImageFieldWaterMark,self).pre_save( model_instance, add)
-        self.__add_watermark(file.path)
-        return file
-
-    def __add_watermark(self, file_path):
-        img = Image.open(file_path).convert('RGB')
-        watermark = Image.new('RGBA', img.size, (0,0,0,0))
-        size = 2
-        n_font = ImageFont.truetype(self.font, size)
-        n_width, n_height = n_font.getsize(self.mark_text)
-
-        while n_width+n_height < watermark.size[0]:
-            size += 2
-            n_font = ImageFont.truetype(self.font, size)
-            n_width, n_height = n_font.getsize(self.mark_text)
-
-        draw = ImageDraw.Draw(watermark, 'RGBA')
-        draw.text(((watermark.size[0] - n_width) / 2,
-                      (watermark.size[1] - n_height) / 2),
-                      self.mark_text, font=n_font)
-        watermark = watermark.rotate(self.angle,Image.BICUBIC)
-        alpha = watermark.split()[3]
-        alpha = ImageEnhance.Brightness(alpha).enhance(self.opacity)
-        watermark.putalpha(alpha)
-        Image.composite(watermark, img, watermark).save(file_path, 'JPEG')
-
-
 @python_2_unicode_compatible
 class Subcategory(AbstractCategory):
     characteristics = models.ManyToManyField(
@@ -163,14 +124,16 @@ class Subcategory(AbstractCategory):
 
     category = models.ForeignKey(Category, verbose_name=_('Category'), related_name='subcategories')
     image = ImageFieldWaterMark(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
-    image_small_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
-    image_big_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+    image_small_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
 
     def __str__(self):
         return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)
@@ -327,15 +290,17 @@ class ProductImage(models.Model):
         verbose_name_plural = _('Product images')
 
     product = models.ForeignKey(Product, related_name='images')
-    image = models.ImageField(upload_to='products/', verbose_name=_('Image'))
-    image_small_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
-    image_big_thumbnail = ImageSpecField(source='image',
-                                      processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
-                                      format='JPEG',
-                                      options={'quality': 60})
+    image = ImageFieldWaterMark(upload_to='products/', verbose_name=_('Image'))
+    image_small_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
+    image_big_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        format='JPEG',
+        options={'quality': 60})
     description = models.CharField(_('Image description'), max_length=127, blank=True)
 
 

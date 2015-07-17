@@ -25,7 +25,6 @@ class FilterMixin(models.Model):
 
     # TODO: Add description for this methods
     def get_queryset(self):
-        print self
         raise NotImplemented()
 
     def get_filter_query(self, field, **kwargs):
@@ -41,7 +40,7 @@ class FilterMixin(models.Model):
         raise NotImplemented()
 
     def get_item_prefix(self):
-        return '{}-{}'.format(self.get_type(), self.id)
+        return '{}-{}'.format(self.__class__.__name__.lower(), self.id)
 
 
 class NumericFilterMixin(FilterMixin):
@@ -58,9 +57,15 @@ class NumericFilterMixin(FilterMixin):
         return FilterTypes.NUMERIC
 
     def get_filter_query(self, field, selected_min_value, selected_max_value):
-        return models.Q(**{
-            '{}__gte'.format(field): selected_min_value,
-            '{}__lte'.format(field): selected_max_value})
+        try:
+            selected_min_value = float(selected_min_value)
+            selected_max_value = float(selected_max_value)
+        except ValueError:
+            return models.Q()
+        else:
+            return models.Q(**{
+                '{}__gte'.format(field): selected_min_value,
+                '{}__lte'.format(field): selected_max_value})
 
     def base_update(self, field):
         max_and_min = self.get_queryset().aggregate(models.Max(field), models.Min(field))

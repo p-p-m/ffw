@@ -64,19 +64,24 @@ class ProductListView(ListView):
             queryset = queryset.filter(subcategory__category__section__slug=self.kwargs['section'])
             self.filters += models.get_section_filters(section)
 
-        print 'self.filters', self.filters
+        print 'FILTERS', self.filters
+        print '---------'*5
 
         configurations_queryset = products_models.ProductConfiguration.objects.all()
+        print 'QUERYSET BEFORE FILTRATION:', configurations_queryset
         for filt in self.filters:
             configurations_queryset = filt.filter(configurations_queryset, self.request)
-            print 'filt', filt, 'configurations_queryset', configurations_queryset
+            print 'FILTER', filt, filt.name, 'QUERYSET', configurations_queryset
+            print '---------'*5
 
-        print 'configurations_queryset2', configurations_queryset
-        queryset = queryset.filter(configurations=configurations_queryset)
+        print 'QUERYSET AFTER FILTRATION:', configurations_queryset
+        queryset = queryset.filter(configurations=configurations_queryset).distinct()
 
-        # sort_form = products_forms.SortForm(self.request.GET)
-        # if sort_form.is_valid():
-        #     queryset = sort_form.sort(queryset)
+        sort_form = products_forms.SortForm(self.request.GET)
+        if sort_form.is_valid():
+            queryset = sort_form.sort(queryset)
+        else:
+            queryset = queryset.order_by('-rating')
 
         return queryset
 

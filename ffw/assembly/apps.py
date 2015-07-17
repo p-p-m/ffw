@@ -43,3 +43,9 @@ class AssemblyConfig(AppConfig):
             sender=products_models.Section,
             dispatch_uid='assembly.handlers.autocreate_price_filter_for_section'
         )
+
+        signals.post_save.connect(
+            handlers.update_price_filter_on_price_change,
+            sender=products_models.ProductConfiguration,
+            dispatch_uid='assembly.handlers.update_price_filter_on_price_change'
+        )

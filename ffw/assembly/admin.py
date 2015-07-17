@@ -78,6 +78,9 @@ class SectionCharacteristicInline(admin.TabularInline):
     fields = ('characteristic',)
     extra = 1
 
+    def get_max_num(self, request, obj=None, **kwargs):
+        return products_models.Characteristic.objects.count()
+
 
 class SectionAdmin(BaseCategoryAdmin):
     inlines = (SectionCharacteristicInline, ) + FILTER_INLINES
@@ -90,9 +93,13 @@ class CategoryCharacteristicInline(admin.TabularInline):
     fields = ('characteristic',)
     extra = 1
 
+    def get_max_num(self, request, obj=None, **kwargs):
+        return products_models.Characteristic.objects.count()
+
 
 class CategoryAdmin(BaseCategoryAdmin):
-    model = (CategoryCharacteristicInline, ) + FILTER_INLINES
+    model = products_models.Category
+    inlines = (CategoryCharacteristicInline, ) + FILTER_INLINES
     list_display = ('name', 'section')
 
 

@@ -51,7 +51,7 @@
                         <div class="product-rating rating-{{ product.get_rating }}"></div>
                     </div>
                     <div class="price-line">
-                        <span class="price">{{ product.price_uah }}</span>
+                        <span class="price">{{ product.get_display_price_uah }}</span>
                         <span class="currency">грн.</span>
                         <button class="button button-blue add-to-cart" id="buy" data-product_pk={{product.pk}} data-quant='2'>Купить</button>
                     </div>

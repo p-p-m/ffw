@@ -174,6 +174,11 @@ class Command(BaseCommand):
                             slug=slugify(subcategory_data['name']),
                             image=self._get_test_image(),
                             **subcategory_data)
+                        for characteristic in products_models.Characteristic.objects.all():
+                            products_models.SubcategoryCharacteristic.objects.create(
+                                characteristic=characteristic,
+                                subcategory=subcategory
+                            )
                         self.stdout.write('Subcategory {} created'.format(subcategory))
         self.stdout.write('...Done')
 

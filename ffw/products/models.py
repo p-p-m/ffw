@@ -192,6 +192,12 @@ class Product(TimeStampedModel):
         self.slug = slugify(self.name)
         return super(Product, self).save(*args, **kwargs)
 
+    def get_display_price_uah(self):
+        if self.price_min != self.price_max:
+            return '{}-{}'.format(self.price_min, self.price_max)
+        else:
+            return self.price_min
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):

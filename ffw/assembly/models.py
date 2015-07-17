@@ -65,7 +65,11 @@ class NumericPriceFilter(NumericFilterMixin, BaseFilter):
         return queryset.filter(filter_query)
 
     def update(self):
-        return super(NumericAttributeFilter, self).base_update(field='price_uah')
+        return super(NumericPriceFilter, self).base_update(field='price_uah')
+
+    def get_queryset(self):
+        products = self.get_related_products()
+        return products_models.ProductConfiguration.objects.filter(product__in=products)
 
 
 class BaseCharacteristicFilter(BaseFilter):
@@ -89,6 +93,7 @@ class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
         attribute_query = self.get_attribute_query()
         selected_min_value, selected_max_value = self._get_min_and_max(request)
         filter_query = self.get_filter_query('attributes__value_float', selected_min_value, selected_max_value)
+        print 'FITLER QUERY', filter_query
         return queryset.filter(attribute_query, filter_query)
 
     def update(self):

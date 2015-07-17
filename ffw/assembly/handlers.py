@@ -20,10 +20,15 @@ def update_filters_on_product_attribute_change(sender, instance, **kwargs):
         return
 
     for filter_model in ATTRIBUTE_FILTER_MODELS:
-        print 'characteristic', characteristic
         for filt in filter_model.objects.for_product(product).filter(
                 characteristic=characteristic, is_auto_update=True):
             filt.update()
+
+
+def update_price_filter_on_price_change(sender, instance, **kwargs):
+    product_configuration = instance
+    for filt in models.NumericPriceFilter.objects.for_product(product_configuration.product).filter():
+        filt.update()
 
 
 def delete_filters_on_characteristic_disconnection_with_section(sender, instance, **kwargs):

@@ -6,7 +6,7 @@ class ImageFieldWaterMark(models.ImageField):
 
     def __init__(
             self, verbose_name=None, name=None, width_field=None, height_field=None,
-            mark_text="p-p-m/ffw", font='Arial.ttf', angle=23, opacity=0.25, **kwargs):
+            mark_text="p-p-m/ffw", font='DejaVuSerif-Bold.ttf', angle=23, opacity=0.25, **kwargs):
         self.angle = angle
         self.opacity = opacity
         self.mark_text = mark_text

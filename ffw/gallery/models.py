@@ -30,12 +30,12 @@ class BannerImage(models.Model):
     photo = ImageFieldWaterMark(upload_to='gallery', verbose_name=('Photo'))
     photo_small_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     photo_big_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
@@ -55,12 +55,12 @@ class GalleryPrimImage(models.Model):
     photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
     photo_small_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     photo_big_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator])
@@ -81,11 +81,11 @@ class GalleryImage(models.Model):
     photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
     photo_small_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     photo_big_thumbnail = ImageSpecField(source='photo',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)

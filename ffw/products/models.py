@@ -87,12 +87,12 @@ class Category(AbstractCategory):
     image = ImageFieldWaterMark(upload_to='categories/', verbose_name=_('Image'), blank=True)
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     image_big_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
 
@@ -124,12 +124,12 @@ class Subcategory(AbstractCategory):
     image = ImageFieldWaterMark(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     image_big_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
 
@@ -297,12 +297,12 @@ class ProductImage(models.Model):
     image = ImageFieldWaterMark(upload_to='products/', verbose_name=_('Image'))
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=50, height=50, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     image_big_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='green')],
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 60})
     description = models.CharField(_('Image description'), max_length=127, blank=True)

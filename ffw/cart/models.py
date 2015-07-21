@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from . import settings
 
+from get_model(settings.CART_SETTINGS['app_name'] import settings.CART_SETTINGS['model_name'])
+
 
 class TestProduct(models.Model):
     name = models.CharField(max_length=255)
@@ -22,6 +24,7 @@ class Order(models.Model):
     email = models.EmailField(_('E-mail'), max_length=125)
     add_communication = models.CharField(_('Additional communication'), max_length=255)
 
+
 def get_product_model():
         cart_settings = settings.CART_SETTINGS
         app_name = cart_settings['app_name']
@@ -30,6 +33,7 @@ def get_product_model():
         return model_product
 
  
+
 class OrderedProduct(models.Model):
     class Meta:
         verbose_name = _('Ordered products')
@@ -46,5 +50,3 @@ class OrderedProduct(models.Model):
     product = models.ForeignKey(get_product_model(), verbose_name='Product', related_name='ordered_product')
     price = models.FloatField(_('Price'))
  
-
-    

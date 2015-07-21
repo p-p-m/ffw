@@ -14,7 +14,7 @@
             <img src="{% if item.images.exists %}{{ item.get_first_image.image.url }}{% endif %}" alt="">
         </div>
         <div class="price-tag">
-            <span class="price">{{ item.price_uah }}</span>
+            <span class="price">{{ item.get_display_price_uah  }}</span>
             <span class="currency">грн.</span>
         </div>
     </a>

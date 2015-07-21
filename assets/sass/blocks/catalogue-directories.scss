@@ -2,6 +2,29 @@
     .directories-list {
         @include clearfix;
         @include clear-list;
+        &.small-box {
+            .list-item {
+                width: 20%;
+                &:nth-child(5n+1) {
+                    clear: both;
+                } // &:nth-child(5n+1)
+                &:nth-child(6n+1) {
+                    clear: none;
+                } // &:nth-child(6n+1)
+                @include bp(xs) {
+                width: 50%;
+                    &:nth-child(2n+1) {
+                        clear: both;
+                    } // &:nth-child(2n+1)
+                } // xs
+                @include bp(sm) {
+                    width: 50%;
+                    &:nth-child(2n+1) {
+                        clear: both;
+                    } // &:nth-child(2n+1)
+                } // sm
+            } // .list-item
+        } // &.small-box
         .list-item {
             float: left;
             width: 16.6666%;

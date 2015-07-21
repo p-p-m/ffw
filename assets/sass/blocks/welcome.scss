@@ -6,11 +6,11 @@
     margin-top: 20px;
     margin-bottom: 20px;
     @include bp(md) {
-        width: 960px;
+        width: 85%;
         padding: 0;
     } // md
     @include bp(lg) {
-        width: 960px;
+        width: 80%;
         padding: 0;
     } // lg
     .welcome-block {

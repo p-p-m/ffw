@@ -139,6 +139,17 @@
 
 .products-list-box {
     margin-bottom: 20px;
+    @include clearfix;
+    .filters-in-in-view {
+        float: left;
+        width: 220px;
+        box-sizing: border-box;
+        padding-right: 40px;
+    } // filters-in-in-view
+    .products-in-view {
+        float: left;
+        width: calc(100% - 220px);
+    } // products-in-view
     .products-list {
         @include clear-list-inline;
         margin: 0 -10px;
@@ -265,7 +276,7 @@
                         @include inline-middle;
                     } // price, currency
                     .price {
-                        font-size: rem(32);
+                        font-size: rem(22);
                         color: #417505;
                         line-height: 1;
                     } // price

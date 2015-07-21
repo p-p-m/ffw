@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 from django.core.validators import URLValidator
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
+
+from core.models import ImageFieldWaterMark
 
 
 @python_2_unicode_compatible
@@ -23,7 +27,17 @@ class BannerImage(models.Model):
         verbose_name_plural = _('Banner Images')
 
     banner = models.ForeignKey(Banner, related_name='images')
-    photo = models.ImageField(upload_to='gallery', verbose_name=('Photo'))
+    photo = ImageFieldWaterMark(upload_to='gallery', verbose_name=('Photo'))
+    photo_small_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
+    photo_big_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
@@ -38,7 +52,17 @@ class GalleryPrimImage(models.Model):
         verbose_name = _('Gallery Primary Image ')
         verbose_name_plural = _('Gallery Primary Images')
 
-    photo = models.ImageField(upload_to='gallery/gallery', verbose_name=('Photo'))
+    photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
+    photo_small_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
+    photo_big_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator])
     description = models.CharField(_('Image description'), max_length=255, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
@@ -54,7 +78,16 @@ class GalleryImage(models.Model):
         verbose_name_plural = _('Gallery Images')
 
     gallery_prim_image = models.ForeignKey(GalleryPrimImage, related_name='images')
-    photo = models.ImageField(upload_to='gallery/gallery', verbose_name=('Photo'))
+    photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
+    photo_small_thumbnail = ImageSpecField(
+        source='photo',
+        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
+    photo_big_thumbnail = ImageSpecField(source='photo',
+        processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
+        format='JPEG',
+        options={'quality': 60})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)

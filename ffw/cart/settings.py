@@ -1,8 +1,11 @@
 from django.conf import settings
 
-USER_CART_SETTINGS = getattr(settings, 'CART_SETTINGS')
-print(USER_CART_SETTINGS)
+USER_CART_SETTINGS = getattr(settings, 'CART_SETTINGS',{})
+
 CART_SETTINGS = {
-     'product_model': USER_CART_SETTINGS.get('product_model', 'products.Product')
-     'price_field':  USER_CART_SETTINGS.get('price_field', 'price_uah')
- }
+    'model_name': USER_CART_SETTINGS.get('model_name', 'Product'),
+    'appl_name': USER_CART_SETTINGS.get('appl_name', 'products'),
+    'price_field_name': USER_CART_SETTINGS.get('price_field_name', 'price_uah'),
+    'code_field_name': USER_CART_SETTINGS.get('code_field_name', 'code'),
+    'name_field_name': USER_CART_SETTINGS.get('name_field_name', 'name')
+}

@@ -1,0 +1,3 @@
+<form  action="{% url 'box_admin_product_form' %}" method="POST" data-role="product-form" data-product-id="{{ product.id }}" {% if form.instance.id %} data-product-configuration-form-url="{% url 'box_admin_product_configuration_form' product_id=form.instance.id %}" {% endif %}>
+        {{ form.as_p }}
+</form>

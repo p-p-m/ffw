@@ -9,5 +9,6 @@ urlpatterns = patterns(
     url(r'^set/$', CartSetView.as_view(), name='cart_set'),
     url(r'^add/$', CartAddView.as_view(), name='cart_add'),
     url(r'^remove/$', CartRemoveView.as_view(), name='cart_remove'),
-    url(r'^order/$', OrderView.as_view(), name='cart_order'),
+
+    url(r'^order/$', OrderView.as_view(), name='order'),
 )

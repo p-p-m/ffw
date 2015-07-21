@@ -8,7 +8,7 @@ from django.db.models import get_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, FormView
 from django.utils.decorators import method_decorator
 
 from models import TestProduct
@@ -185,3 +185,8 @@ class CartAddView(CartSetView):
         if product_pk in session["products_cart"]:
             quant += session["products_cart"][product_pk]['quant']
         return quant
+
+
+class OrderView(FormView):
+
+    pass

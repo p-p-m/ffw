@@ -60,8 +60,8 @@
     }
 
     function filtersItems() {
-        var filterItem = $('[data-role="filter-item"]');
-        var filterItemToggle = $('[data-role="filter-item-toggle"]');
+        var filterItem = $('[front-role="filter-item"]');
+        var filterItemToggle = $('[front-role="filter-item-toggle"]');
         filterItem.click(function() {
             filterItem.removeClass('active');
             $(this).addClass('active');
@@ -541,7 +541,7 @@
     }
 
     function reloadState() {
-        $('[data-state="reload-state"]').click(function() {
+        $('[fron-state="reload-state"]').click(function() {
             location.reload();
         });
     }

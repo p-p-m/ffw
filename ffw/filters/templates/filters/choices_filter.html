@@ -2,7 +2,7 @@
     <ul data-filter-type="{{ filter.get_type }}">
         {% for choice in filter.get_formatted_choices %}
             <li>
-                <span class="filter-item" data-role="filter-item" data-filter-field-name="{{ filter.get_item_prefix }}-{{ forloop.counter0 }}">{{ choice }}</span>
+                <span class="filter-item" data-role="filter-item-toggle" data-filter-field-name="{{ filter.get_item_prefix }}-{{ forloop.counter0 }}">{{ choice }}</span>
             </li>
         {% endfor %}
     </ul>

@@ -540,6 +540,12 @@
         });
     }
 
+    function reloadState() {
+        $('[data-state="reload-state"]').click(function() {
+            location.reload();
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -561,6 +567,7 @@
         disabledElement();
         galleryDisplay();
         addToCart();
+        reloadState();
     });
 
     // all initial on window resize

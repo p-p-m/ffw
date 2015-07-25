@@ -9,9 +9,17 @@ function sort() {
     window.location.href = url;
 }
 
+function activateSortItem() {
+    var urlVars = getUrlVars();
+    if ("sort_by" in urlVars) {
+        $('[data-role="sort-item"][data-sort="' + urlVars.sort_by + '"]').addClass('active');
+    }
+}
+
 $(document).ready(function() {
     filters.activate(setProductsCount);
     $('[data-role="sort-item"]').click(sort);
+    activateSortItem();
 });
 
 
@@ -35,4 +43,21 @@ function setGetParameter(paramName, paramValue, url) {
         }
     }
     return url;
+}
+
+// XXX: Duplicate: has to be moved to core
+// Read a page's GET URL variables and return them as an associative array.
+function getUrlVars()
+{
+    if (window.location.href.indexOf('?') == -1) {
+        return {};
+    }
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
 }

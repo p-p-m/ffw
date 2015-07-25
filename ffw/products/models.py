@@ -87,14 +87,14 @@ class Category(AbstractCategory):
     image = ImageFieldWaterMark(upload_to='categories/', verbose_name=_('Image'), blank=True)
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        processors=[ResizeToFit(width=150, height=150, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     image_big_thumbnail = ImageSpecField(
         source='image',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
 
     def __str__(self):
         return '{}-{}'.format(self.section, self.name)
@@ -124,14 +124,16 @@ class Subcategory(AbstractCategory):
     image = ImageFieldWaterMark(upload_to='subcategories/', verbose_name=_('Image'), blank=True)
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        processors=[ResizeToFit(width=120, height=120, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     image_big_thumbnail = ImageSpecField(
         source='image',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
+
+    is_on_main_page = models.BooleanField(_('Is on main page'), default=True)
 
     def __str__(self):
         return '{}-{}-{}'.format(self.category.section.name, self.category.name, self.name)
@@ -297,12 +299,12 @@ class ProductImage(models.Model):
     image = ImageFieldWaterMark(upload_to='products/', verbose_name=_('Image'))
     image_small_thumbnail = ImageSpecField(
         source='image',
-        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        processors=[ResizeToFit(width=200, height=200, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     image_big_thumbnail = ImageSpecField(
         source='image',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     description = models.CharField(_('Image description'), max_length=127, blank=True)

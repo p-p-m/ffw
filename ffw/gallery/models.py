@@ -32,12 +32,12 @@ class BannerImage(models.Model):
         source='photo',
         processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     photo_big_thumbnail = ImageSpecField(
         source='photo',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
@@ -57,12 +57,12 @@ class GalleryPrimImage(models.Model):
         source='photo',
         processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     photo_big_thumbnail = ImageSpecField(
         source='photo',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator])
     description = models.CharField(_('Image description'), max_length=255, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
@@ -83,14 +83,14 @@ class GalleryImage(models.Model):
         source='photo',
         processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     photo_big_thumbnail = ImageSpecField(source='photo',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
-        options={'quality': 60})
+        options={'quality': 100})
     link = models.URLField(_('Link'), max_length=127, default='', validators=[URLValidator], blank=True)
     description = models.CharField(_('Image description'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is image active'), default=True)
-    
+
     def __str__(self):
         return self.description

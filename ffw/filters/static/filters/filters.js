@@ -6,11 +6,21 @@ var filters = {
         $('[data-role="filter-item"]').click(function() {
             executeFilterToggle(this, callback);
         });
+        $('[data-role="filter-item"]').each(function() {
+            activateFilterToggle(this);
+        });
         $("[data-role='filter-slider']").each(function() {
             activateSliderFilter($(this), callback);
         });
     }
 };
+
+function activateFilterToggle(item) {
+    var name = $(item).attr("data-filter-field-name");
+    if (name in getUrlVars()) {
+        $(item).addClass('active');
+    }
+}
 
 function executeFilterToggle(item, callback) {
     var name = $(item).attr("data-filter-field-name"),

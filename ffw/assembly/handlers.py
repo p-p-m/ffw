@@ -57,4 +57,4 @@ def delete_filters_on_characteristic_disconnection_with_subcategory(sender, inst
 
 def autocreate_price_filter_for_section(sender, instance, created=False, **kwargs):
     if created:
-        models.NumericPriceFilter.objects.create(name='Цена', section=instance, is_auto_update=True)
+        models.NumericPriceFilter.objects.create(name='Цена', section=instance, is_auto_update=True, priority=100)

@@ -74,6 +74,7 @@ class ProductListView(ListView):
             configurations_queryset = filt.filter(configurations_queryset, self.request)
             # print 'FILTER', filt, filt.name, 'QUERYSET', configurations_queryset
             # print '---------'*5
+        self.filters = sorted(self.filters, key=lambda f: f.priority, reverse=True)
 
         # print 'QUERYSET AFTER FILTRATION:', configurations_queryset
         queryset = queryset.filter(configurations=configurations_queryset).distinct()

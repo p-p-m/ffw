@@ -201,6 +201,16 @@ class Command(BaseCommand):
                     description='product-description-{}-{}'.format(subcategory.id, i),
                     subcategory=subcategory,
                 )
+                products_models.ProductImage.objects.create(
+                    product=product,
+                    image=self._get_test_image(),
+                    description='Image for product {}'.format(product.name)
+                )
+                products_models.ProductImage.objects.create(
+                    product=product,
+                    image=self._get_test_image(),
+                    description='Second image for product {}'.format(product.name)
+                )
                 for j in range(3 if not index else 1):
                     product_configuration = products_models.ProductConfiguration.objects.create(
                         product=product,

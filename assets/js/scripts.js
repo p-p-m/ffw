@@ -60,8 +60,8 @@
     }
 
     function filtersItems() {
-        var filterItem = $('[data-role="filter-item"]');
-        var filterItemToggle = $('[data-role="filter-item-toggle"]');
+        var filterItem = $('[front-role="filter-item"]');
+        var filterItemToggle = $('[front-role="filter-item-toggle"]');
         filterItem.click(function() {
             filterItem.removeClass('active');
             $(this).addClass('active');
@@ -540,6 +540,12 @@
         });
     }
 
+    function reloadState() {
+        $('[fron-state="reload-state"]').click(function() {
+            location.reload();
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -561,6 +567,7 @@
         disabledElement();
         galleryDisplay();
         addToCart();
+        reloadState();
     });
 
     // all initial on window resize

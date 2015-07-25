@@ -15,7 +15,8 @@ class ImageFieldWaterMark(models.ImageField):
 
     def pre_save(self, model_instance, add):
         file = super(ImageFieldWaterMark, self).pre_save(model_instance, add)
-        self.__add_watermark(file.path)
+        if file:
+            self.__add_watermark(file.path)
         return file
 
     def __add_watermark(self, file_path):

@@ -3,35 +3,25 @@
     <div class="wrap">
         <ul class="menu">
             <li class="bar-icon"><span data-role="popup-menu-trigger">Категории</span></li>
-            {% for category in sections %}
+            {% for section in sections %}
             <li>
-                <a href="{{ category.get_url }}" class="{% if selected_category.id == category.id %}active{% endif %}">{{ category.name }}</a>
+                <a href="{{ section.get_url }}" class="{% if selected_section.id == section.id %}active{% endif %}">{{ section.name }}</a>
                 <div class="submenu" data-role="product-submenu">
                     <div class="submenu-container">
                         <div class="submenu-container-left">
                             <ul class="subMenuLeft-nav">
-                                {% for subcategory in category.get_categories %}
+                                {% for category in section.get_categories %}
                                 <li data-role="sub-tab-trigger" sub-tabTrigger="{{ forloop.counter }}">
-                                    <a href="{{ subcategory.get_url }}" class="{% if selected_subcategory.id == subcategory.id %}active{% endif %}">{{ subcategory.name }}</a>
+                                    <a href="{{ category.get_url }}" class="{% if selected_category.id == category.id %}active{% endif %}">{{ category.name }}</a>
                                 </li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="submenu-container-right">
-                            {% for subcategory in category.get_categories %}
+                            {% for category in section.get_categories %}
                             <div class="subMenuLeft-content catalogue-directories" data-role="sub-tab" sub-tabTrigger="{{ forloop.counter }}">
                                 <ul class="directories-list small-box">
-                                    {% for subcategory in subcategory.get_subcategories %}
-                                        {% with subcategory as item %}
-                                            {% include 'items/index-category-item.html' %}
-                                        {% endwith %}
-                                    {% endfor %}
-                                    {% for subcategory in subcategory.get_subcategories %}
-                                        {% with subcategory as item %}
-                                            {% include 'items/index-category-item.html' %}
-                                        {% endwith %}
-                                    {% endfor %}
-                                    {% for subcategory in subcategory.get_subcategories %}
+                                    {% for subcategory in category.get_subcategories %}
                                         {% with subcategory as item %}
                                             {% include 'items/index-category-item.html' %}
                                         {% endwith %}

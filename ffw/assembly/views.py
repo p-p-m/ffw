@@ -135,10 +135,10 @@ class ProductListView(ListView):
         context['sort_form'] = products_forms.SortForm(self.request.GET)
         context['filters'] = self.filters
 
-        print self.filters
         if not self.request.is_ajax():
             context['selected_subcategory'] = self._get_selected_subcategory()
             context['selected_category'] = self._get_selected_category()
+            context['selected_section'] = self._get_selected_section()
         return context
 
 

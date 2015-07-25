@@ -103,7 +103,7 @@ class Category(AbstractCategory):
         return reverse('products', args=(self.section.slug, self.slug))
 
     def get_subcategories(self):
-        return self.subcategories.all()
+        return self.subcategories.all().distinct()
 
 
 class SubcategoryCharacteristic(models.Model):

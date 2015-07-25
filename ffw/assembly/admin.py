@@ -170,7 +170,7 @@ class ProductConfigurationInline(admin.TabularInline):
         return super(ProductConfigurationInline, self).get_max_num(request, obj, **kwargs)
 
     def get_extra(self, request, obj=None, **kwargs):
-        if obj is None:
+        if obj is None or obj.configurations.exists():
             return 0
         return 1
 
@@ -199,8 +199,13 @@ class ProductConfigurationInline(admin.TabularInline):
         return formset
 
 
+class ProductImageInline(admin.TabularInline):
+    model = products_models.ProductImage
+    extra = 0
+
+
 class ProductAdmin(admin.ModelAdmin):
-    inlines = (ProductConfigurationInline, )
+    inlines = (ProductConfigurationInline, ProductImageInline)
     model = products_models.Product
     list_display = ('name', 'is_active', 'modified', 'created')
     ordering = ('modified', 'name')
@@ -217,7 +222,6 @@ class ProductAdmin(admin.ModelAdmin):
     def preview(self, obj):
         if obj is None:
             return
-        return 'qqw'
         return '<strong><a href="' + obj.get_url() + '" target="_blank"> Project on site </a></strong>'
 
 

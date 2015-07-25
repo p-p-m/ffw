@@ -534,6 +534,12 @@
         });
     }
 
+    function addToCart() {
+        $('.add-to-cart').click(function(event){
+            return false;
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -554,6 +560,7 @@
         popupMobileMenu();
         disabledElement();
         galleryDisplay();
+        addToCart();
     });
 
     // all initial on window resize

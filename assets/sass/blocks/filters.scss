@@ -1,3 +1,55 @@
+.single-filter-box {
+    + .single-filter-box {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #C5C5C5;
+    } // + .single-filter-box
+    .filter-title {
+        margin-bottom: 10px;
+        font-size: rem(22);
+        font-style: 700;
+    } // filter-title
+    .filter-body {
+        .filter-type {
+            &.choices {
+                ul {
+                    @include clear-list;
+                }
+                .filter-item {
+                    display: block;
+                    font-size: rem(18);
+                    cursor: pointer;
+                    padding: 0 0px 0 10px;
+                    color: rgb(57, 154, 218);
+                    position: relative;
+                    &.active {
+                        &:after {
+                            position: absolute;
+                            top: 8px;
+                            right: 10px;
+                            content: '\f00c';
+                            font: normal normal normal 14px/1 FontAwesome;
+                            text-rendering: auto;
+                            -webkit-font-smoothing: antialiased;
+                            -moz-osx-font-smoothing: grayscale;
+                            color: #3D9EFF;
+                            text-shadow: 1px 1px 2px rgba(164, 190, 207, .45);
+                            margin-right: 10px;
+                        }
+                    } // active
+                    &:hover {
+                        background-color: rgb(224, 224, 224);
+                    } // &:hover
+                } // filter-item
+            } // choices
+            &.numeric {
+                padding-top: 40px;
+            } // numeric
+            &.intervals {} // intervals
+        } // filter-type
+    } // filter-body
+} // single-filter-box
+
 .filter-block {
     margin-bottom: 40px;
     display: none;
@@ -138,16 +190,16 @@
 
 .slider-box {
     position: relative;
-    padding-bottom: 22px;
+    padding-bottom: 40px;
     &.stand-alone {
         padding-top: 20px !important;
     } // &.stand-alone
     .values-fields {
         @include clearfix;
-        width: 60%;
+        width: 100%;
         margin: auto;
         position: relative;
-        top: 22px;
+        top: 40px;
         .values-item {
             float: left;
             &:nth-child(1) {

@@ -144,11 +144,14 @@
         float: left;
         width: 220px;
         box-sizing: border-box;
-        padding-right: 40px;
+        padding: 20px;
+        background-color: #F1F1F1;
     } // filters-in-in-view
     .products-in-view {
         float: right;
         width: calc(100% - 220px);
+        box-sizing: border-box;
+        padding-left: 20px;
     } // products-in-view
     .products-list {
         @include clear-list-inline;

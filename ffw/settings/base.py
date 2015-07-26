@@ -117,3 +117,10 @@ CONSTANCE_CONFIG = {
     'USD_RATE': (24, 'UAH/USD rate'),
     'EUR_RATE': (26, 'UAH/EUR rate'),
 }
+CART_SETTINGS = {
+    'model_name':  'TestProduct',
+    'app_name':  'products',
+    'price_field_name': 'price_uah',
+    'code_field_name': 'code',
+    'name_field_name': 'name'
+}

@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView, FormView
 from django.utils.decorators import method_decorator
 
-from models import TestProduct
+from models import TestProduct, OrderForm, OrderedProduct
 from products.models import Product
 import settings
 
@@ -186,7 +186,34 @@ class CartAddView(CartSetView):
             quant += session["products_cart"][product_pk]['quant']
         return quant
 
+from models import Order
+class OrderView(CSRFProtectMixin, FormView):
+    template_name = 'order.html'
+    form_class = OrderForm
+    success_url = 'thank/'
 
-class OrderView(FormView):
-
-    pass
+    def get_form_kwargs(self):
+        kwargs = super(OrderView, self).get_form_kwargs()
+        kwargs['products_cart'] = self.request.session['products_cart']
+        kwargs['count_cart'] = self.request.session['count_cart']
+        kwargs['sum_cart'] = self.request.session['sum_cart']
+        return kwargs
+        
+    '''
+    def form_valid(self, form):
+        order_obj = form.save()
+        for key, value in self.request.session['products_cart'].items():
+            product_obj = TestProduct.objects.get(id=int(key))
+            print (product_obj, 1111)
+            ordered_product = OrderedProduct(
+                order=order_obj,
+                product=product_obj)
+                #price=value.price,
+                #quantity=value.quant,
+                #sum=value.sum)
+            #print(order_obj)
+   
+        return super(OrderView, self).form_valid(form)
+   ''' 
+class ThankView(TemplateView):
+    template_name = 'thank.html'

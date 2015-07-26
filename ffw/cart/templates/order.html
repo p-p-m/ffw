@@ -1,0 +1,61 @@
+<!--For test only-->
+
+{% load staticfiles %}
+{% load i18n %}
+
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Корзина</title>
+    </head>
+
+    <body>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <div id='cart'   data-url="{% url 'cart' %}"></div>
+
+        <table border="1">
+            <caption>Корзина</caption>
+            <tr>
+                <th>Товар</th>
+                <th>Кол-во</th>
+                <th>Код</th>
+                <th>Цена</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+   
+            {% for key,value in form.products_cart.items %} <br>
+                <tr id={{key}}>
+                    <td id={{key}}>{{value.name}}</td>
+                    <td><input class="quant" id={{key}} value={{value.quant}}></td>
+                    <td>{{value.product_code}}</td>
+                    <td >{{value.price}}</td>
+                    <td id={{key}}_sum>{{value.sum_}}</td>
+                    <td><button id='remove' value={{key}}> Удалить</button></td>
+                </tr> 
+            {% endfor %}
+  
+        </table> <br/>
+  
+        <span id = total> Всего товаров {{form.count_cart}} на сумму {{form.sum_cart}}</span>
+  
+        <form action="" method="post">{% csrf_token %}
+            {{ form.as_p }} 
+            <input type="submit" value="Оформить заказ" ><br>
+        </form>
+    
+    </body>
+</html>
+
+{% block basejs %}
+    <script src="{% static 'cart/cart.js' %}"> </script>
+    <script src="{% static 'cart/order.js' %}"> </script>
+{% endblock basejs %}
+
+
+</body>
+</html>

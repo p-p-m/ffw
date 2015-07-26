@@ -2,8 +2,6 @@
 
 import json
 
-from django.core.context_processors import csrf
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import get_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -17,19 +15,20 @@ import settings
 
 
 class CSRFProtectMixin():
+
     @method_decorator(csrf_protect)
     def dispatch(self, *args, **kwargs):
-         return super(CSRFProtectMixin, self).dispatch(*args, **kwargs)
+        return super(CSRFProtectMixin, self).dispatch(*args, **kwargs)
 
 
 class CartClearMixin():
 
     def cart_clear(self, session):
-        if 'products_cart' in session :
+        if 'products_cart' in session:
             del session['products_cart']
-        if 'sum_cart' in session :
+        if 'sum_cart' in session:
             del session['sum_cart']
-        if 'count_cart' in session :
+        if 'count_cart' in session:
             del session['count_cart']
 
 
@@ -57,9 +56,8 @@ class CartResultView(View, CSRFProtectMixin, CartClearMixin):
             count_cart = 0
             products_cart = {}
 
-
-        return HttpResponse(json.dumps({'sum_cart': sum_cart, 'count_cart':
-                count_cart, 'products_cart': products_cart}))
+        return HttpResponse(
+            json.dumps({'sum_cart': sum_cart, 'count_cart': count_cart, 'products_cart': products_cart}))
 
 
 class CartRemoveView(CartResultView):
@@ -79,7 +77,6 @@ class CartView(CartResultView, CartClearMixin):
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
             return self.format_response(request.session)
-
 
     def post(self, request, *args, **kwargs):
         """
@@ -106,8 +103,8 @@ class CartTestView(TemplateView):
 
         k = 1
         while k <= 5:
-            t_pr = TestProduct.objects.create(pk=k, name = name_list[k-1], price_uah = price_list[k-1], code = code_list[k-1])
-            k+=1
+            TestProduct.objects.create(pk=k, name=name_list[k-1], price_uah=price_list[k-1], code=code_list[k-1])
+            k += 1
 
         context = super(CartTestView, self).get_context_data(**kwargs)
         context['products'] = TestProduct.objects.all()
@@ -133,14 +130,14 @@ class CartSetView(CartResultView):
             if test:
                 app_name = 'cart'
                 model_name = 'TestProduct'
-                price_field_name =  'price_uah'
+                price_field_name = 'price_uah'
                 code_field_name = 'code'
                 name_field_name = 'name'
             else:
                 cart_settings = settings.CART_SETTINGS
                 app_name = cart_settings['app_name']
                 model_name = cart_settings['model_name']
-                price_field_name =  cart_settings['price_field_name']
+                price_field_name = cart_settings['price_field_name']
                 code_field_name = cart_settings['code_field_name']
                 name_field_name = cart_settings['name_field_name']
 
@@ -155,7 +152,7 @@ class CartSetView(CartResultView):
                 product_code = self.get_object_attribute(code_field_name, product)
 
                 quant = self.calc_quant(session, product_pk, quant)
-                sum_ = round( quant * price, 2)
+                sum_ = round(quant * price, 2)
 
                 session['products_cart'][product_pk] = {
                     'product_code': product_code,

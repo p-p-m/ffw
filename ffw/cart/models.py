@@ -8,8 +8,9 @@ from model_utils.models import TimeStampedModel
 
 from . import settings
 
-print(getattr('ffw', 'cart' ))
-#from get_model(settings.CART_SETTINGS['app_name'] import settings.CART_SETTINGS['model_name'])
+
+
+from get_model(settings.CART_SETTINGS['app_name'] import settings.CART_SETTINGS['model_name'])
 
 
 class TestProduct(models.Model):
@@ -29,6 +30,7 @@ class Order(TimeStampedModel):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
 
+
 def get_product_model_str():
         cart_settings = settings.CART_SETTINGS
         app_name = cart_settings['app_name']
@@ -41,6 +43,7 @@ class OrderedProduct(models.Model):
     class Meta:
         verbose_name = _('Ordered products')
         verbose_name_plural = _('Ordered products')
+
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
     product = models.ForeignKey(get_model(settings.CART_SETTINGS['app_name'], settings.CART_SETTINGS['model_name']), 
@@ -58,10 +61,8 @@ class OrderForm(ModelForm):
             'email',
             'add_communication',
             'total']
-    '''
-    def __init__(self, *args, **kwargs):
-        self.products_cart = kwargs.pop('products_cart')
-        self.count_cart = kwargs.pop('count_cart')
-        self.sum_cart = kwargs.pop('sum_cart')
-        super(OrderForm, self).__init__(*args, **kwargs)
-    '''
+        
+    order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
+    product = models.ForeignKey(get_product_model(), verbose_name='Product', related_name='ordered_product')
+    price = models.FloatField(_('Price'))
+

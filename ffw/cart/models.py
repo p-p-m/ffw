@@ -8,7 +8,7 @@ from model_utils.models import TimeStampedModel
 
 from . import settings
 
-
+print(getattr('ffw', 'cart' ))
 #from get_model(settings.CART_SETTINGS['app_name'] import settings.CART_SETTINGS['model_name'])
 
 
@@ -29,7 +29,7 @@ class Order(TimeStampedModel):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
 
-def get_product_model():
+def get_product_model_str():
         cart_settings = settings.CART_SETTINGS
         app_name = cart_settings['app_name']
         model_name = cart_settings['model_name']
@@ -43,7 +43,8 @@ class OrderedProduct(models.Model):
         verbose_name_plural = _('Ordered products')
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
-    testproduct = models.ForeignKey(get_product_model(), verbose_name='Product', related_name='ordered_product')
+    product = models.ForeignKey(get_model(settings.CART_SETTINGS['app_name'], settings.CART_SETTINGS['model_name']), 
+        verbose_name='Product', related_name='ordered_product')
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quantity = models.IntegerField(_('Quantity'))
     sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
@@ -57,8 +58,10 @@ class OrderForm(ModelForm):
             'email',
             'add_communication',
             'total']
+    '''
     def __init__(self, *args, **kwargs):
         self.products_cart = kwargs.pop('products_cart')
         self.count_cart = kwargs.pop('count_cart')
         self.sum_cart = kwargs.pop('sum_cart')
         super(OrderForm, self).__init__(*args, **kwargs)
+    '''

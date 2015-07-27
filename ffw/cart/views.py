@@ -11,8 +11,8 @@ from django.utils.decorators import method_decorator
 
 from models import TestProduct, OrderForm, OrderedProduct
 from products.models import Product
+from models import get_product_model
 import settings
-
 
 class CSRFProtectMixin():
 
@@ -184,33 +184,37 @@ class CartAddView(CartSetView):
         return quant
 
 from models import Order
-class OrderView(CSRFProtectMixin, FormView):
+
+
+class OrderView(FormView, CSRFProtectMixin):
     template_name = 'order.html'
     form_class = OrderForm
     success_url = 'thank/'
 
-    def get_form_kwargs(self):
-        kwargs = super(OrderView, self).get_form_kwargs()
-        kwargs['products_cart'] = self.request.session['products_cart']
-        kwargs['count_cart'] = self.request.session['count_cart']
-        kwargs['sum_cart'] = self.request.session['sum_cart']
-        return kwargs
-        
-    '''
+    
+    def get_context_data(self, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['products_cart'] = self.request.session['products_cart']
+        context['count_cart'] = self.request.session['count_cart']
+        context['sum_cart'] = self.request.session['sum_cart']
+        return context
+    
     def form_valid(self, form):
         order_obj = form.save()
+        print(get_product_model())
+        '''
         for key, value in self.request.session['products_cart'].items():
-            product_obj = TestProduct.objects.get(id=int(key))
+            product_obj = get_product_model().objects.get(id=int(key))
             print (product_obj, 1111)
             ordered_product = OrderedProduct(
                 order=order_obj,
                 product=product_obj)
-                #price=value.price,
+          '''      #price=value.price,
                 #quantity=value.quant,
                 #sum=value.sum)
             #print(order_obj)
-   
+        
         return super(OrderView, self).form_valid(form)
-   ''' 
+ 
 class ThankView(TemplateView):
     template_name = 'thank.html'

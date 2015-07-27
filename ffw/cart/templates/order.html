@@ -28,7 +28,7 @@
                 <th></th>
             </tr>
    
-            {% for key,value in form.products_cart.items %} <br>
+            {% for key,value in products_cart.items %} <br>
                 <tr id={{key}}>
                     <td id={{key}}>{{value.name}}</td>
                     <td><input class="quant" id={{key}} value={{value.quant}}></td>

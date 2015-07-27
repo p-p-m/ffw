@@ -220,7 +220,7 @@ class ProductAdmin(admin.ModelAdmin):
         return super(ProductAdmin, self).get_form(request, obj, **kwargs)
 
     def preview(self, obj):
-        if obj is None:
+        if obj.id is None:
             return
         return '<strong><a href="' + obj.get_url() + '" target="_blank"> Project on site </a></strong>'
 

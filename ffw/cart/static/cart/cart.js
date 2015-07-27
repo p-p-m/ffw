@@ -50,16 +50,15 @@ var cart = {
     'sum': 0,
     'count': 0,
     'url': '',
-    'updateCartAndCallback': function(data,callback) {
+    'updateCartAndCallback': function(data,callback, callbackData) {
             var obj = $.parseJSON(data);
             cart.count = obj.count_cart;
             cart.sum = obj.sum_cart;
             cart.products = obj.products_cart;
-            callback();
+            callback(callbackData);
         },
-    'set': function(product_pk, quant, test=false, callback) {
+    'set': function(product_pk, quant, test=false, callback, callbackData=null) {
         cart.csrf();
-
         $.ajax({
             url: cart.url + 'set/',
             type: "POST",
@@ -70,8 +69,8 @@ var cart = {
            },
             dataType: 'text'
         })
-        .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+        .done(function(responseData) {
+             cart.updateCartAndCallback(responseData, callback, callbackData);
         });
     },
     'add': function(product_pk, quant, test=false, callback) {

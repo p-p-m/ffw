@@ -6,12 +6,13 @@ from django.db.models import get_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import View, TemplateView
+from django.views.generic import View, TemplateView, FormView
 from django.utils.decorators import method_decorator
 
-from .models import TestProduct
+from models import TestProduct, OrderForm, OrderedProduct
+from products.models import Product
+from models import get_product_model
 import settings
-
 
 class CSRFProtectMixin():
 
@@ -181,3 +182,39 @@ class CartAddView(CartSetView):
         if product_pk in session["products_cart"]:
             quant += session["products_cart"][product_pk]['quant']
         return quant
+
+from models import Order
+
+
+class OrderView(FormView, CSRFProtectMixin):
+    template_name = 'order.html'
+    form_class = OrderForm
+    success_url = 'thank/'
+
+    
+    def get_context_data(self, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['products_cart'] = self.request.session['products_cart']
+        context['count_cart'] = self.request.session['count_cart']
+        context['sum_cart'] = self.request.session['sum_cart']
+        return context
+    
+    def form_valid(self, form):
+        order_obj = form.save()
+        print(get_product_model())
+        '''
+        for key, value in self.request.session['products_cart'].items():
+            product_obj = get_product_model().objects.get(id=int(key))
+            print (product_obj, 1111)
+            ordered_product = OrderedProduct(
+                order=order_obj,
+                product=product_obj)
+          '''      #price=value.price,
+                #quantity=value.quant,
+                #sum=value.sum)
+            #print(order_obj)
+        
+        return super(OrderView, self).form_valid(form)
+ 
+class ThankView(TemplateView):
+    template_name = 'thank.html'

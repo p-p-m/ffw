@@ -133,8 +133,16 @@ class ProductConfigurationForm(forms.ModelForm):
 
     def clean_attributes(self):
         attributes = self.cleaned_data['attributes']
+        if not attributes and not self.fields['attributes'].initial:
+            return []
+        if not attributes and self.fields['attributes'].initial:
+            raise ValidationError(
+                'Not enough attributes provided. '
+                'Product should have attribute for each characteristic if his subcategory.')
         if len(attributes.split('\n')) < len(self.fields['attributes'].initial.split('\n')):
-            raise ValidationError('Not enough attributes provided')
+            raise ValidationError(
+                'Not enough attributes provided. '
+                'Product should have attribute for each characteristic if his subcategory.')
         result_attribures = []
         for attr in attributes.split('\n'):
             parsed_attr = re.findall('(.+):(.*)\((.*)\)', attr)
@@ -143,7 +151,7 @@ class ProductConfigurationForm(forms.ModelForm):
                 result_attribures.append({'name': name, 'value': value, 'units': units})
             else:
                 raise ValidationError(
-                    'Attribute "%(attr)s" is not recognized it has to follow patter: <name>: <value> (<units>)',
+                    'Attribute "%(attr)s" is not recognized it has to follow patter: <name>: <value> (<units>).',
                     params={'attr': attr},)
         return result_attribures
 
@@ -212,7 +220,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', )
     list_filter = ('is_active',)
     prepopulated_fields = {"slug": ("name",)}
-    readonly_fields = ('preview', )
+    readonly_fields = ('preview', 'price_max', 'price_min')
 
     def get_form(self, request, obj=None, **kwargs):
         # just save obj reference for future processing in Inline

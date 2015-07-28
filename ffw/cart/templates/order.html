@@ -16,7 +16,7 @@
     <body>
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <div id='cart'   data-url="{% url 'cart' %}"></div>
-
+        <button id='cart_create'> Наполнить корзину</button>
         <table border="1">
             <caption>Корзина</caption>
             <tr>
@@ -40,9 +40,7 @@
             {% endfor %}
   
         </table> <br/>
-  
-        <span id = total> Всего товаров {{form.count_cart}} на сумму {{form.sum_cart}}</span>
-  
+
         <form action="" method="post">{% csrf_token %}
             {{ form.as_p }} 
             <input type="submit" value="Оформить заказ" ><br>

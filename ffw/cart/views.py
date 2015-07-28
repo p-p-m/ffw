@@ -2,16 +2,14 @@
 
 import json
 
-from django.db.models import get_model
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView, FormView
 from django.utils.decorators import method_decorator
 
-from models import TestProduct, OrderForm, OrderedProduct
+from models import OrderForm, OrderedProduct
 from products.models import Product
-from models import get_product_model
 import settings
 
 class CSRFProtectMixin():
@@ -88,29 +86,6 @@ class CartView(CartResultView, CartClearMixin):
             return self.format_response(request.session)
 
 
-class CartTestView(TemplateView):
-    """
-    For test
-    """
-
-    template_name = 'cart_test.html'
-
-    def get_context_data(self, **kwargs):
-        name_list = ('Утюг', 'Самовар', 'Холодильник', 'Пылесос', 'Фонарь')
-        code_list = ('УлшН7', 'Сбор3ю4', 'Х99г7', 'ПкеН6', 'Ф342ц')
-        price_list = (100.50, 300.00, 1000.00, 700.00, 93.00)
-        TestProduct.objects.all().delete()
-
-        k = 1
-        while k <= 5:
-            TestProduct.objects.create(pk=k, name=name_list[k-1], price_uah=price_list[k-1], code=code_list[k-1])
-            k += 1
-
-        context = super(CartTestView, self).get_context_data(**kwargs)
-        context['products'] = TestProduct.objects.all()
-        return context
-
-
 class CartSetView(CartResultView):
     """
     Super for CartAddView
@@ -121,35 +96,21 @@ class CartSetView(CartResultView):
             session['products_cart'] = session.get('products_cart', {})
 
             product_pk = request.POST.get('product_pk', '')
-            test = request.POST.get("test", False)
+
             try:
                 quant = int(request.POST.get('quant', '0'))
             except ValueError:
                 quant = 0
 
-            if test:
-                app_name = 'cart'
-                model_name = 'TestProduct'
-                price_field_name = 'price_uah'
-                code_field_name = 'code'
-                name_field_name = 'name'
-            else:
-                cart_settings = settings.CART_SETTINGS
-                app_name = cart_settings['app_name']
-                model_name = cart_settings['model_name']
-                price_field_name = cart_settings['price_field_name']
-                code_field_name = cart_settings['code_field_name']
-                name_field_name = cart_settings['name_field_name']
 
             if quant <= 0:
                 if product_pk in session["products_cart"]:
                     self.change_session(session["products_cart"], product_pk)
             else:
-                model_product = get_model(app_name, model_name)
-                product = get_object_or_404(model_product.objects, pk=product_pk)
-                price = float(self.get_object_attribute(price_field_name, product))
-                name = self.get_object_attribute(name_field_name, product)
-                product_code = self.get_object_attribute(code_field_name, product)
+                product = get_object_or_404(Product, pk=product_pk)
+                price = float(product.price_min)
+                name = product.name
+                product_code = 'kjhgf' #product.code
 
                 quant = self.calc_quant(session, product_pk, quant)
                 sum_ = round(quant * price, 2)
@@ -194,26 +155,22 @@ class OrderView(FormView, CSRFProtectMixin):
     
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
-        context['products_cart'] = self.request.session['products_cart']
-        context['count_cart'] = self.request.session['count_cart']
-        context['sum_cart'] = self.request.session['sum_cart']
+        context['products_cart'] = self.request.session.get('products_cart',{})
+        context['count_cart'] = self.request.session.get('count_cart',0)
+        context['sum_cart'] = self.request.session.get('sum_cart',0)
         return context
     
     def form_valid(self, form):
         order_obj = form.save()
-        print(get_product_model())
-        '''
+        
         for key, value in self.request.session['products_cart'].items():
-            product_obj = get_product_model().objects.get(id=int(key))
-            print (product_obj, 1111)
+            product_obj = Product.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order_obj,
-                product=product_obj)
-          '''      #price=value.price,
-                #quantity=value.quant,
-                #sum=value.sum)
-            #print(order_obj)
-        
+                product=product_obj,
+                price=value['price'],
+                quant=value['quant'],
+                sum=value['sum_'])
         return super(OrderView, self).form_valid(form)
  
 class ThankView(TemplateView):

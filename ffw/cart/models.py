@@ -6,17 +6,8 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
+from products.models import Product
 from . import settings
-
-
-
-from get_model(settings.CART_SETTINGS['app_name'] import settings.CART_SETTINGS['model_name'])
-
-
-class TestProduct(models.Model):
-    name = models.CharField(max_length=255)
-    code = models.CharField(max_length=127, unique=True)
-    price_uah = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
 
 
 class Order(TimeStampedModel):
@@ -27,16 +18,8 @@ class Order(TimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     email = models.EmailField(_('E-mail'), max_length=125)
     add_communication = models.CharField(_('Additional communication'), max_length=255, blank=True)
-    total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
-
-
-
-def get_product_model_str():
-        cart_settings = settings.CART_SETTINGS
-        app_name = cart_settings['app_name']
-        model_name = cart_settings['model_name']
-        model_product =app_name + '.' + model_name
-        return model_product
+    sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9, default=0)
+    quant = models.IntegerField(_('Quantity'),default=0)
 
 
 class OrderedProduct(models.Model):
@@ -46,10 +29,9 @@ class OrderedProduct(models.Model):
 
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
-    product = models.ForeignKey(get_model(settings.CART_SETTINGS['app_name'], settings.CART_SETTINGS['model_name']), 
-        verbose_name='Product', related_name='ordered_product')
+    product = models.ForeignKey(Product, verbose_name='Product', related_name='ordered_product')
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
-    quantity = models.IntegerField(_('Quantity'))
+    quant = models.IntegerField(_('Quantity'), default=0)
     sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
 
 
@@ -60,9 +42,5 @@ class OrderForm(ModelForm):
             'name',
             'email',
             'add_communication',
-            'total']
-        
-    order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
-    product = models.ForeignKey(get_product_model(), verbose_name='Product', related_name='ordered_product')
-    price = models.FloatField(_('Price'))
-
+            'quant',
+            'sum']

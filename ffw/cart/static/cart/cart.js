@@ -57,15 +57,15 @@ var cart = {
             cart.products = obj.products_cart;
             callback(callbackData);
         },
-    'set': function(product_pk, quant, test=false, callback, callbackData=null) {
+    'set': function(product_pk, quant, callback, callbackData=null) {
         cart.csrf();
+        console.log(product_pk, quant, callback, callbackData)
         $.ajax({
             url: cart.url + 'set/',
             type: "POST",
             data:{
                 'product_pk': product_pk,
                 'quant': quant,
-                'test': test
            },
             dataType: 'text'
         })
@@ -73,7 +73,7 @@ var cart = {
              cart.updateCartAndCallback(responseData, callback, callbackData);
         });
     },
-    'add': function(product_pk, quant, test=false, callback) {
+    'add': function(product_pk, quant, callback) {
         cart.csrf();
 
         $.ajax({

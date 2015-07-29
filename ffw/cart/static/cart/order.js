@@ -15,18 +15,25 @@ $(document).ready(function() {
             $('input#id_sum').val(cart.sum)
         },
      };
-    order.setTotalData()
+    
+    
+    
     $('button#cart_create').on('click', function() {
+        cart.clear()
         var i = 1;
-        while (i <= 5) {alert(i)
-            cart.set(i,1, alert, callbackData=i + " - pk");   
+        while (i <= 5) {
+            cart.set(i,1);   
             i++;
-        }       
+        }   
     });
     
     $('button#remove').on('click', function() {
         var product_pk = this.value;
-        cart.remove(product_pk, getProducts);
+        if (confirm("Удалить товар из корзины?")) {
+            $('tr#' + product_pk).remove();
+            cart.remove(product_pk, callback=order.setTotalData);
+           
+        }
    });
 
 
@@ -34,9 +41,7 @@ $(document).ready(function() {
         var product_pk = this.id;
         var quant = this.value;
         order.product_pk = product_pk
-        callback = order.setProduct
-        callbackData = {'product_pk': product_pk}
-        cart.set(product_pk, quant, callback, callbackData);
+        cart.set(product_pk, quant, callback=order.setProduct, callbackData={'product_pk': product_pk});
    });
 
 });

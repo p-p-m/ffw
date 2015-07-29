@@ -53,7 +53,7 @@ class CartResultView(View, CSRFProtectMixin, CartClearMixin):
             sum_cart = 0
             count_cart = 0
             products_cart = {}
-
+        print(len(products_cart))
         return HttpResponse(
             json.dumps({'sum_cart': sum_cart, 'count_cart': count_cart, 'products_cart': products_cart}))
 
@@ -168,6 +168,7 @@ class OrderView(FormView, CSRFProtectMixin):
             ordered_product = OrderedProduct(
                 order=order_obj,
                 product=product_obj,
+                name=value['name'],
                 price=value['price'],
                 quant=value['quant'],
                 sum=value['sum_'])

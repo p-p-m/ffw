@@ -30,6 +30,8 @@ class OrderedProduct(models.Model):
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
     product = models.ForeignKey(Product, verbose_name='Product', related_name='ordered_product')
+    name = models.CharField(_('Name'), max_length=127)
+    code = models.CharField(_('Code'), max_length=127, unique=True) 
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quant = models.IntegerField(_('Quantity'), default=0)
     sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)

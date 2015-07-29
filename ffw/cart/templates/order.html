@@ -16,7 +16,10 @@
     <body>
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <div id='cart'   data-url="{% url 'cart' %}"></div>
-        <button id='cart_create'> Наполнить корзину</button>
+        <button id='cart_create'> Наполнить корзину</button><br>
+        {% for key,value in products_cart.items %} 
+            {{key}}---{{value}}<br>
+         {% endfor %}
         <table border="1">
             <caption>Корзина</caption>
             <tr>
@@ -28,7 +31,7 @@
                 <th></th>
             </tr>
    
-            {% for key,value in products_cart.items %} <br>
+            {% for key,value in products_cart.items %} 
                 <tr id={{key}}>
                     <td id={{key}}>{{value.name}}</td>
                     <td><input class="quant" id={{key}} value={{value.quant}}></td>

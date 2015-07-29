@@ -50,14 +50,21 @@ var cart = {
     'sum': 0,
     'count': 0,
     'url': '',
-    'updateCartAndCallback': function(data,callback, callbackData) {
+    'updateCartAndCallback': function(data, callback=null, callbackData=null) {
             var obj = $.parseJSON(data);
             cart.count = obj.count_cart;
             cart.sum = obj.sum_cart;
             cart.products = obj.products_cart;
-            callback(callbackData);
-        },
-    'set': function(product_pk, quant, callback, callbackData=null) {
+            if (callback) {
+                if (callbackData) {
+                     callback(callbackData);
+                }
+                 else {
+                     callback();
+                 };
+            };
+    },
+    'set': function(product_pk, quant, callback=null, callbackData=null) {
         cart.csrf();
         console.log(product_pk, quant, callback, callbackData)
         $.ajax({
@@ -71,9 +78,10 @@ var cart = {
         })
         .done(function(responseData) {
              cart.updateCartAndCallback(responseData, callback, callbackData);
+              console.log('cart - ', cart.products, cart.sum, cart.count)
         });
     },
-    'add': function(product_pk, quant, callback) {
+    'add': function(product_pk, quant, callback=null, callbackData=null) {
         cart.csrf();
 
         $.ajax({
@@ -87,10 +95,10 @@ var cart = {
             dataType: 'text'
         })
         .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+             cart.updateCartAndCallback(data, callback, callbackData);
         });
     },
-    'remove': function(product_pk, callback) {
+    'remove': function(product_pk, callback=null, callbackData=null) {
         cart.csrf();
 
         $.ajax({
@@ -102,10 +110,10 @@ var cart = {
             dataType: 'text'
        })
         .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+             cart.updateCartAndCallback(data, callback, callbackData);
         });
     },
-    'clear': function(callback) {
+    'clear': function(callback=null, callbackData=null) {
         cart.csrf();
 
         $.ajax({
@@ -114,17 +122,17 @@ var cart = {
             dataType: 'text'
        })
         .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+             cart.updateCartAndCallback(data, callback, callbackData);
         });
    },
-    'get': function(callback) {
+    'get': function(callback=null, callbackData=null) {
         $.ajax({
             url: cart.url,
             type: "GET",
             dataType: 'text'
        })
        .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+             cart.updateCartAndCallback(data, callback, callbackData);
         });
     },
     'csrf': function() {

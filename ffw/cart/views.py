@@ -161,6 +161,7 @@ class OrderView(FormView, CSRFProtectMixin):
 
     def form_valid(self, form):
         order_obj = form.save()
+
         '''
         replace Product.objects on confirations
         '''

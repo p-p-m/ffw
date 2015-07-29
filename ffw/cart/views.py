@@ -161,7 +161,9 @@ class OrderView(FormView, CSRFProtectMixin):
 
     def form_valid(self, form):
         order_obj = form.save()
-
+        '''
+        replace Product.objects on confirations
+        '''
         for key, value in self.request.session['products_cart'].items():
             product_obj = Product.objects.get(id=int(key))
             ordered_product = OrderedProduct(

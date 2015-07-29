@@ -26,7 +26,9 @@ class OrderedProduct(models.Model):
     class Meta:
         verbose_name = _('Ordered products')
         verbose_name_plural = _('Ordered products')
-
+    '''
+    replace field  product on configurations
+    '''
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
     product = models.ForeignKey(Product, verbose_name='Product', related_name='ordered_product')
@@ -36,7 +38,9 @@ class OrderedProduct(models.Model):
     quant = models.IntegerField(_('Quantity'), default=0)
     summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
 
-
+'''
+initial fields quant, summ from  session(sum_cart, quant_cart) or cart(sum, quant) from cart.js
+'''
 class OrderForm(ModelForm):
     class Meta:
         model = Order

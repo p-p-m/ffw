@@ -16,10 +16,7 @@
     <body>
         <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <div id='cart'   data-url="{% url 'cart' %}"></div>
-        <button id='cart_create'> Наполнить корзину</button><br>
-        {% for key,value in products_cart.items %} 
-            {{key}}---{{value}}<br>
-         {% endfor %}
+
         <table border="1">
             <caption>Корзина</caption>
             <tr>
@@ -30,8 +27,8 @@
                 <th>Сумма</th>
                 <th></th>
             </tr>
-   
-            {% for key,value in products_cart.items %} 
+
+            {% for key,value in products_cart.items %}
                 <tr id={{key}}>
                     <td id={{key}}>{{value.name}}</td>
                     <td><input class="quant" id={{key}} value={{value.quant}}></td>
@@ -39,16 +36,16 @@
                     <td >{{value.price}}</td>
                     <td id={{key}}_sum>{{value.sum_}}</td>
                     <td><button id='remove' value={{key}}> Удалить</button></td>
-                </tr> 
+                </tr>
             {% endfor %}
-  
+
         </table> <br/>
 
         <form action="" method="post">{% csrf_token %}
-            {{ form.as_p }} 
+            {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>
         </form>
-    
+
     </body>
 </html>
 
@@ -58,5 +55,3 @@
 {% endblock basejs %}
 
 
-</body>
-</html>

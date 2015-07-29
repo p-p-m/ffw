@@ -66,7 +66,7 @@ var cart = {
     },
     'set': function(product_pk, quant, callback=null, callbackData=null) {
         cart.csrf();
-        console.log(product_pk, quant, callback, callbackData)
+
         $.ajax({
             url: cart.url + 'set/',
             type: "POST",
@@ -78,7 +78,6 @@ var cart = {
         })
         .done(function(responseData) {
              cart.updateCartAndCallback(responseData, callback, callbackData);
-              console.log('cart - ', cart.products, cart.sum, cart.count)
         });
     },
     'add': function(product_pk, quant, callback=null, callbackData=null) {

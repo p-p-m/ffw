@@ -53,7 +53,6 @@ class CartResultView(View, CSRFProtectMixin, CartClearMixin):
             sum_cart = 0
             count_cart = 0
             products_cart = {}
-        print(len(products_cart))
         return HttpResponse(
             json.dumps({'sum_cart': sum_cart, 'count_cart': count_cart, 'products_cart': products_cart}))
 
@@ -152,17 +151,17 @@ class OrderView(FormView, CSRFProtectMixin):
     form_class = OrderForm
     success_url = 'thank/'
 
-    
+
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
         context['products_cart'] = self.request.session.get('products_cart',{})
         context['count_cart'] = self.request.session.get('count_cart',0)
         context['sum_cart'] = self.request.session.get('sum_cart',0)
         return context
-    
+
     def form_valid(self, form):
         order_obj = form.save()
-        
+
         for key, value in self.request.session['products_cart'].items():
             product_obj = Product.objects.get(id=int(key))
             ordered_product = OrderedProduct(
@@ -173,6 +172,6 @@ class OrderView(FormView, CSRFProtectMixin):
                 quant=value['quant'],
                 sum=value['sum_'])
         return super(OrderView, self).form_valid(form)
- 
+
 class ThankView(TemplateView):
     template_name = 'thank.html'

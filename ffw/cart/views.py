@@ -170,7 +170,7 @@ class OrderView(FormView, CSRFProtectMixin):
                 name=value['name'],
                 price=value['price'],
                 quant=value['quant'],
-                sum=value['sum_'])
+                summ=value['sum_'])
         return super(OrderView, self).form_valid(form)
 
 class ThankView(TemplateView):

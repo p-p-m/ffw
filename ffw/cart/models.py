@@ -18,7 +18,7 @@ class Order(TimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     email = models.EmailField(_('E-mail'), max_length=125)
     add_communication = models.CharField(_('Additional communication'), max_length=255, blank=True)
-    sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9, default=0)
+    summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9, default=0)
     quant = models.IntegerField(_('Quantity'),default=0)
 
 
@@ -34,7 +34,7 @@ class OrderedProduct(models.Model):
     code = models.CharField(_('Code'), max_length=127, unique=True)
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quant = models.IntegerField(_('Quantity'), default=0)
-    sum = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
+    summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
 
 
 class OrderForm(ModelForm):
@@ -45,4 +45,4 @@ class OrderForm(ModelForm):
             'email',
             'add_communication',
             'quant',
-            'sum']
+            'summ']

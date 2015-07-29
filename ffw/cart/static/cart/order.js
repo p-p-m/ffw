@@ -11,7 +11,7 @@ $(document).ready(function() {
         },
         'setTotalData': function() {
             $('input#id_quant').val(cart.count);
-            $('input#id_sum').val(cart.sum)
+            $('input#id_summ').val(cart.sum)
         },
      };
 

@@ -31,7 +31,7 @@ class HomeView(View):
 
 class ProductListView(ListView):
 
-    paginate_by = 10
+    paginate_by = 12
     allow_empty = True
 
     def get(self, request, *args, **kwargs):

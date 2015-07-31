@@ -30,15 +30,16 @@
     }
 
     // ProductsViewType
-    function ProductsViewType() {
+    function ProductsViewType(viewIndex) {
         var viewContainer = $('[data-role="products-view"]');
         var viewTrigger = $('[data-role="products-view-trigger"]');
 
         viewContainer.hide();
-        viewContainer.filter(':first').show();
+        viewContainer.filter(function(index) { return index === viewIndex; }).show();
 
         viewTrigger.click(function() {
             typeView = $(this).data('view');
+            console.log(typeView);
             viewContainer.hide();
             viewContainer.filter(function() {
                 return $(this).data('view') === typeView;
@@ -46,7 +47,7 @@
             viewTrigger.find('.filter').removeClass('active');
             $(this).find('.filter').addClass('active');
             return false;
-        }).filter(':first').click();
+        }).filter(function(index) { return index === viewIndex; }).click();
     }
 
     function productFiltersShow() {
@@ -549,7 +550,7 @@
     // document ready
     $(window).on('load', function() {
         topBanners();
-        ProductsViewType();
+        ProductsViewType(1);
         OrderSteps();
         ProductChars();
         ProductImage();

@@ -16,10 +16,22 @@ function activateSortItem() {
     }
 }
 
+function activateProductsView() {
+    var urlVars = getUrlVars();
+    if ("view" in urlVars) {
+        console.log('QQQ' + urlVars.view);
+        $('[data-role="products-view-trigger"]').filter(':first').click();
+        var viewContainer = $('[data-role="products-view"]');
+        viewContainer.filter(function(index) { return index === 1; }).show();
+        ProductsViewType(1);
+    }
+}
+
 $(document).ready(function() {
     filters.activate(setProductsCount);
     $('[data-role="sort-item"]').click(sort);
     activateSortItem();
+    activateProductsView();
 });
 
 

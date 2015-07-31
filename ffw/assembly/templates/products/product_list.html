@@ -42,80 +42,9 @@
     <!-- /view-title-box -->
 </div>
 
-
-<!-- basic filters -->
-<div class="filter-block" data-role="filters-block">
-    <div class="wrap">
-        <div class="filters">
-            <div class="basic-filters">
-                <h3 class="filter-title">Основные фильтры</h3>
-                <div class="first-container">
-                    <ul class="main-filters">
-                        <li>
-                            <span class="item" data-role="filter-item-toggle">новинка</span>
-                        </li>
-                        <li>
-                            <span class="item" data-role="filter-item-toggle">акция</span>
-                        </li>
-                        <li>
-                            <span class="item" data-role="filter-item-toggle">скидка</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="second-container slider-box" data-role='filter-slider'>
-                    <div id="slider" data-min="{{ filter_form.price_fields.price_min.field.min_value }}" data-max="{{ filter_form.price_fields.price_min.field.max_value }}"></div>
-                    <div class="values-fields">
-                        <div class="values-item">
-                            <input type="text" data-role="field-min" name="{{ filter_form.price_fields.price_min.name }}">
-                            <span class="currency">грн</span>
-                        </div>
-                        <div class="values-item">
-                            <span>–</span>
-                        </div>
-                        <div class="values-item">
-                            <input type="text" data-role="field-max" name="{{ filter_form.price_fields.price_max.name }}">
-                            <span class="currency">грн</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {% for group in filter_form.fields_groups %}
-                <div class="producer slider-box stand-alone">
-                    <h3 class="filter-title">{{ group.name }}</h3>
-                    {% if group.type == 'numeric' %}
-                        <div id="price2" data-role="filter-slider" min="{{ group.fields.0.field.min_value }}" max="{{ group.fields.0.field.max_value }}"></div>
-                        <div class="slider-box" data-role='filter-slider'>
-                            <div id="slider" data-min="{{ group.fields.0.field.min_value }}" data-max="{{ group.fields.1.field.max_value }}"></div>
-                            <div class="values-fields">
-                                <div class="values-item">
-                                    <input type="text" data-role="field-min" name="{{ group.fields.0.name }}">
-                                </div>
-                                <div class="values-item">
-                                    <span>–</span>
-                                </div>
-                                <div class="values-item">
-                                    <input type="text" data-role="field-max" name="{{ group.fields.1.name }}">
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        <ul class="main-filters">
-                            {% for field in group.fields %}
-                            <li><span class="item" data-role="filter-item-toggle" name="{{ field.name }}">{{ field.label }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <div class="apply-box">
-                <a id='show-button' class="button button-blue apply">{% trans 'Show products' %}</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /basic filters -->
-
+{% comment %}
+This code duplicates filters creation that slows page rendering. It should be rewritten in more efficient way
+{% endcomment %}
 <div class="products-view">
     <!-- products-list-box -->
     <div class="products-list-box" data-role="products-view" data-view="grid">
@@ -152,7 +81,7 @@
                         <div class="filter-body">{% include 'filters/filter.html' %}</div>
                     </div>
                 {% endfor %}
-                <button class="button button-blue filter-submit" data-state="reload-state">Show products</button>
+                <button class="button button-blue filter-submit" fron-state="reload-state">Show products</button>
             </div>
             <div class="products-in-view">
                 <ul class="products-list">
@@ -167,10 +96,12 @@
     </div>
     <!-- /products-list-box -->
 </div>
+<!-- TODO add button "show more" here -->
+
 {% include 'partials/pagination.html' %}
 {% endblock content %}
 
 {% block js %}
     <script src="{% static 'filters/filters.js' %}"> </script>
-    <script src="{% static 'assembly/filters.js' %}"> </script>
+    <script src="{% static 'assembly/product-list.js' %}"> </script>
 {% endblock js %}

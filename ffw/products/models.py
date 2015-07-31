@@ -180,7 +180,10 @@ class Product(TimeStampedModel):
         return self.images.all()
 
     def get_first_image(self):
-        return self.images.first()
+        image = self.images.filter(is_main=True).first()
+        if image is None:
+            image = self.images.first()
+        return image
 
     def get_characteristics(self):
         query = (
@@ -308,3 +311,6 @@ class ProductImage(models.Model):
         format='JPEG',
         options={'quality': 100})
     description = models.CharField(_('Image description'), max_length=127, blank=True)
+    is_main = models.BooleanField(
+        default=True,
+        help_text=_('If image is main - it will be displayed on product list page'))

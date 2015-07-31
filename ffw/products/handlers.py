@@ -30,5 +30,6 @@ def connect_attribute_with_characteristic(sender, instance, **kwargs):
         try:
             c = models.Characteristic.objects.get(name=attribute.name)
             attribute.characteristic = c
+            attribute.units = c.units
         except models.Characteristic.DoesNotExist:
             pass

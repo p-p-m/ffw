@@ -30,7 +30,8 @@
 } // breadcrumps
 
 .product {
-    .filters-in-in-view {
+    margin-bottom: 20px;
+    .filters-in-view {
         float: left;
         width: 220px;
         box-sizing: border-box;
@@ -43,10 +44,49 @@
         box-sizing: border-box;
         padding: 20px 0 0 20px;
     } // products-in-view
+    .produc-side-block {
+        + .produc-side-block {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #979797;
+        }
+        .product-image {
+            text-align: center;
+        } // product-image
+        .price-line {
+            text-align: center;
+            .price {
+                @include inline-middle;
+                color: #417505;
+            } // price
+            .currency {
+                @include inline-middle;
+            } // currency
+        } // price-line
+        .product-guides {
+            @include clear-list;
+            li {
+                a {
+                    font-size: rem(16);
+                    color: #5C5C5C;
+                    text-decoration: none;
+                } // a
+            } // li
+        } // product-guides
+    } // produc-side-block
     .product-block {
         + .product-block {
             margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #979797;
         } // product-block
+        .product-block-title {
+            margin-top: 0;
+            font-size: rem(22);
+            color: #516D91;
+            line-height: 28px;
+        } // product-block-title
+        .product-block-content {} // product-block-content
     } // product-block
     .info-box {
         .title-line {
@@ -121,14 +161,99 @@
             } // add-to-cart
         } // price-line
     } // info-box
-    .descriptionription {
+    .description {
         font-size: rem(16);
         line-height: 1.2;
         color: #5C5C5C;
         @include bp(xs) {
             display: none;
         } // xs
-    } // descriptionription
+    } // description
+    .combain-product-list {
+        tr {
+            + tr {
+                border-top: 1px solid #DBDBDB;
+            }
+        } // tr
+        th, td {
+            padding: 10px 4px;
+        } // th, td
+        th {
+
+        } // th
+        td {
+            &.buy-button {
+                text-align: right;
+            } // add-to-cart
+            .count {
+                width: 60px;
+            } // count
+            .button-blue {
+                font-size: rem(14);
+                text-transform: none;
+                padding: 4px 8px;
+            } // button-blue
+            .price-line {
+                .price {
+                    @include inline-middle;
+                    color: #417505;
+                } // price
+                .currency {
+                    @include inline-middle;
+                } // currency
+            } // price-line
+        } // td
+    } // combain-product-list
+    .combain-product-summary {
+        padding: 20px;
+        margin-top: 10px;
+        @include clearfix;
+        font-size: rem(18);
+        background-color: #F1F1F1;
+        .button-blue {
+            float: right;
+        } // button-blue
+    } // combain-product-summary
+    .comment-block {
+        + .comment-block {
+            margin-top: 20px;
+        } // comment-block
+        @include table;
+        .comment-author-photo {
+            @include table-cell;
+            width: 70px;
+        } //comment-author-photo
+        .comment-body {
+            @include table-cell;
+        } // comment-body
+        .comment-author-name {
+            font-size: rem(18);
+            color: #516D91;
+        } // comment-author-name
+        article {
+            font-size: rem(16);
+            line-height: 1.2;
+            color: #5C5C5C;
+        } // article
+    } // comment-block
+    .left-commnet {
+        textarea {
+            border: 1px solid #D1D1D1;
+            margin-bottom: 20px;
+        } // textarea
+    } // left-commnet
+    .simple-text {
+        font-size: rem(16);
+        color: #5C5C5C;
+    } // simple-text
+    .login-for-comment {
+        margin-top: 10px;
+    } // login-for-comment
+    .button {
+        text-transform: none;
+        padding: 4px 8px;
+        padding-top: 7px;
+    } // button
 } // product
 
 

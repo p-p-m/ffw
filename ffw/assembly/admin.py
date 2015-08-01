@@ -1,7 +1,10 @@
+# coding: utf-8
 """
 This file is showing admin model for developers and water filters only.
 All custom admin views have to be located in application 'admin'.
 """
+from __future__ import unicode_literals
+
 import re
 
 from django import forms

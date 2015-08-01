@@ -115,9 +115,6 @@
                 } // phones
                 .email {
                     display: block;
-                    @include bp(xs) {
-                        display: none;
-                    } // xs
                     &:before {
                         content: '\f0e0';
                         font: normal normal normal 14px/1 FontAwesome;

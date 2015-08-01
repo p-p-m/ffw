@@ -49,7 +49,7 @@ This code duplicates filters creation that slows page rendering. It should be re
     <!-- products-list-box -->
     <div class="products-list-box" data-role="products-view" data-view="grid">
         <div class="wrap">
-            <div class="filters-in-in-view">
+            <div class="filters-in-view">
                 {% for filter in filters %}
                     <div class="single-filter-box">
                         <h3 class="filter-title">{{ filter.name }}</h3>

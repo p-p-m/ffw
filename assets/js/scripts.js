@@ -29,10 +29,53 @@
         });
     }
 
+    // XXX: Duplicate: has to be moved to core
+    // Read a page's GET URL variables and return them as an associative array.
+    function getUrlVars()
+    {
+        if (window.location.href.indexOf('?') == -1) {
+            return {};
+        }
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    // XXX: Duplicate: has to be moved to core
+    function setGetParameter(paramName, paramValue, url) {
+        // returns current url with additional get parameter
+        url = url || window.location.href;
+        if (url.indexOf(paramName + '=') >= 0)
+        {
+            var prefix = url.substring(0, url.indexOf(paramName)),
+            suffix = url.substring(url.indexOf(paramName));
+
+            suffix = suffix.substring(suffix.indexOf('=') + 1);
+            suffix = (suffix.indexOf('&') >= 0) ? suffix.substring(suffix.indexOf('&')) : '';
+            url = prefix + paramName + '=' + paramValue + suffix;
+        } else {
+            if (url.indexOf('?') < 0) {
+                url += '?' + paramName + '=' + paramValue;
+            } else {
+                url += '&' + paramName + '=' + paramValue;
+            }
+        }
+        return url;
+    }
+
     // ProductsViewType
     function ProductsViewType(viewIndex) {
         var viewContainer = $('[data-role="products-view"]');
         var viewTrigger = $('[data-role="products-view-trigger"]');
+        var urlVars = getUrlVars();
+        if (localStorage.view) {
+            viewIndex = parseInt(localStorage.view, 10);
+        }
 
         viewContainer.hide();
         viewContainer.filter(function(index) { return index === viewIndex; }).show();
@@ -48,6 +91,14 @@
             $(this).find('.filter').addClass('active');
             return false;
         }).filter(function(index) { return index === viewIndex; }).click();
+
+        viewContainer.click(function() {
+            localStorage.view = 'grid';
+        });
+
+        $('[data-view="list"]').click(function() {localStorage.view = 1;});
+        $('[data-view="grid"]').click(function() {localStorage.view = 0;});
+
     }
 
     function productFiltersShow() {

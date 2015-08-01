@@ -31,8 +31,11 @@
                 color: white;
                 text-align: center;
                 position: relative;
-                padding-top: 4px;
+                padding-top: 1px;
                 &:before {
+                    @include bp(xs) {
+                        display: none;
+                    } // xs
                     content: '\f07a';
                     font: normal normal normal 20px/1 FontAwesome;
                     text-rendering: auto;

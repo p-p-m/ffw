@@ -114,6 +114,6 @@ STATICFILES_DIRS = (
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
 CONSTANCE_CONFIG = {
-    'USD_RATE': (24, 'UAH/USD rate'),
-    'EUR_RATE': (26, 'UAH/EUR rate'),
+    'USD_RATE': (24.1, 'UAH/USD rate'),
+    'EUR_RATE': (26.2, 'UAH/EUR rate'),
 }

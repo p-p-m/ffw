@@ -547,6 +547,18 @@
         });
     }
 
+    function sidePanel() {
+        var sidePanel = $('[data-front="side-panel"]');
+        sidePanel.scrollToFixed({
+            limit: function() {
+                var footerHeight = $('.footer').height();
+                var limit = $('.footer').offset().top - (footerHeight + 280);
+                console.log(limit);
+                return limit;
+            }
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -569,6 +581,7 @@
         galleryDisplay();
         addToCart();
         reloadState();
+        sidePanel();
     });
 
     // all initial on window resize

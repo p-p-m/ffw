@@ -33,7 +33,7 @@
     margin-bottom: 20px;
     .filters-in-view {
         float: left;
-        width: 220px;
+        width: 220px !important;
         box-sizing: border-box;
         padding: 20px;
         background-color: #F1F1F1;
@@ -50,6 +50,19 @@
             padding-top: 20px;
             border-top: 1px solid #979797;
         }
+        .by-one-click-side {
+            input[type="text"] {
+                margin-bottom: 10px;
+                border: 1px solid #D1D1D1;
+                border-radius: 2px;
+                text-align: center;
+                font-size: rem(16);
+                padding: 4px 8px;
+            } // input[type="text"]
+            button {
+                width: 100%;
+            } // button
+        } // by-one-click-side
         .product-image {
             text-align: center;
         } // product-image
@@ -296,3 +309,32 @@
         } // rate-5
     } // product-rating
 } // product-rating-box
+
+
+// guides
+.guide-icon {
+    &:before {
+        @include icon-fa;
+        margin-right: 10px;
+    } // &:before
+    &.guide-description {
+        &:before {
+            content: "\f0f6";
+        } // &:before
+    } // guide-description
+    &.charachteristics {
+        &:before {
+            content: "\f022";
+        } // &:before
+    } // &.charachteristics
+    &.choice {
+        &:before {
+            content: "\f05d";
+        } // &:before
+    } // &.choice
+    &.comments {
+        &:before {
+            content: "\f0e6";
+        } // &:before
+    } // &.comments
+} // guide-icon

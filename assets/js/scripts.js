@@ -593,13 +593,11 @@
         scrollToTrigger.click(function() {
             var thisHash = this.hash;
             var scrollTo = null;
-            console.log(thisHash)
             if (thisHash == "#description" || !$(thisHash)) {
                 scrollTo = 0 + "px";
             } else {
                 scrollTo = $(thisHash).offset().top;
             }
-            console.log(scrollTo);
             $('html, body').animate({
                 scrollTop: scrollTo
             }, 300);

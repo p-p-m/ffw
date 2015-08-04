@@ -39,7 +39,6 @@
 
         viewTrigger.click(function() {
             typeView = $(this).data('view');
-            console.log(typeView);
             viewContainer.hide();
             viewContainer.filter(function() {
                 return $(this).data('view') === typeView;
@@ -472,13 +471,11 @@
         if(next != null) {
             next.click(function(e){
                 banerContainer.slick('slickNext');
-                console.log('yay');
             });
         }
         if(prev != null) {
             prev.click(function(e){
                 banerContainer.slick('slickPrev');
-                console.log('fof');
             });
         }
     }

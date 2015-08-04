@@ -9,7 +9,6 @@
     "fontawesome": "~4.3.0",
     "jQuery-Mask-Plugin": "~1.11.3",
     "jquery-ui": "~1.11.3",
-    "slick.js": "~1.4.1",
-    "ScrollToFixed": "~1.0.6"
+    "slick.js": "~1.4.1"
   }
 }

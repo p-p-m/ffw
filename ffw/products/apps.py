@@ -36,3 +36,9 @@ class ProductsConfig(AppConfig):
             sender=models.ProductAttribute,
             dispatch_uid='products.handlers.connect_attribute_with_characteristic',
         )
+
+        signals.pre_save.connect(
+            handlers.disconnect_attributes_from_characteristics_on_subcategory_change,
+            sender=models.Product,
+            dispatch_uid='products.handlers.disconnect_attributes_from_characteristics_on_subcategory_change'
+        )

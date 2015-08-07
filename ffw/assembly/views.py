@@ -46,7 +46,7 @@ class ProductListView(ListView):
         return 'products'
 
     def get_queryset(self):
-        queryset = products_models.Product.objects.all().select_related('images')
+        queryset = products_models.Product.objects.filter(is_active=True).select_related('images')
 
         self.filters = []
         if 'subcategory' in self.kwargs:

@@ -5,14 +5,15 @@ import logging
 
 from constance import config
 from django.db import models
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.encoding import python_2_unicode_compatible
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
+from model_utils import FieldTracker
 from model_utils.models import TimeStampedModel
 
 from core.models import ImageFieldWaterMark
@@ -141,6 +142,14 @@ class Subcategory(AbstractCategory):
     def get_url(self):
         return reverse('products', args=(self.category.section.slug, self.category.slug, self.slug))
 
+    def get_all_related_characteristics(self):
+        query = (
+            models.Q(subcategories=self) |
+            models.Q(categories=self.category) |
+            models.Q(sections=self.category.section)
+        )
+        return Characteristic.objects.filter(query)
+
 
 PRODUCT_CATEGORIES_MODELS = [Subcategory, Category, Section]
 
@@ -170,8 +179,27 @@ class Product(TimeStampedModel):
     price_min = models.FloatField(_('Max price in UAH'), null=True)
     price_max = models.FloatField(_('Min price in UAH'), null=True)
 
+    tracker = FieldTracker()
+
     def __str__(self):
         return '{}'.format(self.name)
+
+    def clean(self):
+        # if subcategory changed
+        if Product.objects.filter(id=self.id).exclude(subcategory=self.subcategory).exists():
+            characteristics_names = set(self.subcategory.get_all_related_characteristics().values_list(
+                'name', flat=True))
+            for configuration in self.configurations.all():
+                attributes_names = set(configuration.attributes.values_list('name', flat=True))
+                missing_attributes = characteristics_names - attributes_names
+                if missing_attributes:
+                    raise ValidationError(
+                        ugettext('Product configuration %(configuration_code)s does not have attributes with '
+                                 'names: %(missing_attributes)s. They are required for new subcategory.') % {
+                            'configuration_code': configuration.code,
+                            'missing_attributes': ', '.join(missing_attributes),
+                            }
+                        )
 
     def get_url(self):
         return reverse('product', args=(self.slug, ))
@@ -287,6 +315,17 @@ class ProductAttribute(models.Model):
             self.value_float = float(self.value)
         except (ValueError, TypeError):
             self.value_float = None
+
+    def connect_with_characteristic(self, subcategory=None):
+        """ Find characteristic that related to this attribute and connect to it """
+        subcategory = self.product_configuration.product.subcategory if subcategory is None else subcategory
+        try:
+            c = subcategory.get_all_related_characteristics().get(name=self.name)
+            self.characteristic = c
+            self.units = c.units
+            self.save()
+        except Characteristic.DoesNotExist:
+            pass
 
     def save(self, *args, **kwargs):
         self._init_values()

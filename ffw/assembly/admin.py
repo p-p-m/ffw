@@ -202,7 +202,6 @@ class ProductConfigurationInline(admin.TabularInline):
                 'attributes': s,
             }] * 4
             formset.__init__ = curry(formset.__init__, initial=initial)
-            print 'qwwww'
 
             # Brutal hook to add initial values to new configurations
             def formset_empty_form(self):

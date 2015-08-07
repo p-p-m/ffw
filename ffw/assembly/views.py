@@ -135,6 +135,7 @@ class ProductListView(ListView):
         context['total_count'] = self.get_queryset().count()
         context['sort_form'] = products_forms.SortForm(self.request.GET)
         context['filters'] = self.filters
+        context['view_type'] = self.request.GET.get('view_type', 'list')
 
         if not self.request.is_ajax():
             context['selected_subcategory'] = self._get_selected_subcategory()

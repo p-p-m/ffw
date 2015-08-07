@@ -42,6 +42,7 @@
     <!-- /view-title-box -->
 </div>
 
+
 {% comment %}
 This code duplicates filters creation that slows page rendering. It should be rewritten in more efficient way
 {% endcomment %}
@@ -59,15 +60,19 @@ This code duplicates filters creation that slows page rendering. It should be re
                 <button class="button button-blue filter-submit" fron-state="reload-state">Show products</button>
             </div>
             <div class="products-in-view">
-                <ul class="products-list">
+                <ul class="products-list" data-role="products-table" data-view-type="grid">
                     {% with products as items %}
                         {% for item in items %}
                             {% include 'items/product-grid.html' %}
                         {% endfor %}
                     {% endwith %}
                 </ul>
+                <div style="text-align: center; width: 100%;" data-role="show-more-block">
+                    <button class="button button-blue filter-submit" data-role="show-more">Show more...</button>
+                </div>
             </div>
         </div>
+
     </div>
     <!-- /products-list-box -->
 
@@ -84,21 +89,23 @@ This code duplicates filters creation that slows page rendering. It should be re
                 <button class="button button-blue filter-submit" fron-state="reload-state">Show products</button>
             </div>
             <div class="products-in-view">
-                <ul class="products-list">
+                <ul class="products-list" data-role="products-table" data-view-type="list">
                     {% with products as items %}
                         {% for item in items %}
                             {% include 'items/product-list.html' %}
                         {% endfor %}
                     {% endwith %}
                 </ul>
+                <div style="text-align: center; width: 100%;" data-role="show-more-block">
+                    <button class="button button-blue filter-submit" data-role="show-more">Show more...</button>
+                </div>
             </div>
         </div>
     </div>
     <!-- /products-list-box -->
-</div>
-<!-- TODO add button "show more" here -->
 
-{% include 'partials/pagination.html' %}
+</div>
+
 {% endblock content %}
 
 {% block js %}

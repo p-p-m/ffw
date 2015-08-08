@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% load static i18n %}
+{% get_media_prefix as MEDIA_PREFIX %}
+
+{% block content %}
+<!-- product -->
+<section class="product">
+    <div class="wrap">
+        <div class="filters-in-view" data-front="side-panel">
+            <div class="produc-side-block">
+                <div class="product-image">
+                    <img src="/static/images/tmp/waterfilter.png" alt="">
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="price-line">
+                    <span class="price">340,00</span>
+                    <span class="currency">грн.</span>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="by-one-click-side">
+                    <input type="text" data-role="phone-mask">
+                    <button class="button button-blue">Купить в один клик</button>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <ul class="product-guides">
+                    <li>
+                        <a href="#description" data-front="scroll-to" class="guide-icon guide-description">Описание</a>
+                    </li>
+                    <li>
+                        <a href="#product-choises" data-front="scroll-to" class="guide-icon choice">Выбор товаров</a>
+                    </li>
+                    <li>
+                        <a href="#comments" data-front="scroll-to" class="guide-icon comments">Отзывы</a>
+                    </li>
+                    <li>
+                        <a href="#comments-add" data-front="scroll-to" class="guide-icon comments">Оставить отзыв</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="products-in-view">
+            <!-- info-box -->
+            <div class="info-box">
+                <div class="title-line">
+                    <h1 class="product-title">Фильтр для питьевой воды XCore 11</h1>
+                    <span class="label new">новинка</span>
+                </div>
+                <div class="price-line">
+                    <span class="in-stock">33 на складе</span>
+                    <button class="button button-blue add-to-cart">Купить</button>
+                </div>
+            </div>
+            <!-- /info-box -->
+            <div class="product-blocks">
+                <!-- product-block -->
+                <div class="product-block">
+                    <h3 class="product-block-title description">
+                        Описание
+                    </h3>
+                    <div class="product-block-content">
+                        <article class="description">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="product-choises">
+                    <h3 class="product-block-title item-choice">
+                        Выбор товаров
+                    </h3>
+                    <div class="product-block-content">
+                        <table class="combain-product-list">
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                                <th></th>
+                            </tr>
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td class="buy-button">
+                                    <button class="button button-blue">Купить</button>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td class="buy-button">
+                                    <button class="button button-blue">Купить</button>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                        </table>
+                        <!-- combain-product-summary -->
+                        <div class="combain-product-summary">
+                            Всего наименований 1 на сумму 37 грн. <button class="button button-blue add-to-cart">Купить</button>
+                        </div>
+                        <!-- /combain-product-summary -->
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments">
+                    <h3 class="product-block-title comments">
+                        Отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="comment-block">
+                            <div class="comment-author-photo">
+                                <img src="/static/images/tmp/avatar.png" alt="">
+                            </div>
+                            <div class="comment-body">
+                                <h3 class="comment-author-name">Michael Yakimenko</h3>
+                                <article>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments-add">
+                    <h3 class="product-block-title comments">
+                        Оставить отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="left-commnet">
+                            <textarea name="" id="" class="left-commnet"></textarea>
+                            <div class="simple-text">
+                                Опубликовать с помощью
+                            </div>
+                            <div class="login-for-comment simple-text">
+                                <button class="button button-blue">Tweeter</button>
+                                <button class="button button-red">Google +</button>
+                                <span>или <a href="#">войти</a> используя свой логин и пароль </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /product -->
+{% endblock %}

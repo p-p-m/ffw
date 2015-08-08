@@ -76,6 +76,16 @@
     text-overflow: ellipsis;
 }
 
+@mixin icon-fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+
 @mixin bp($point) {
     $bp-xs: "(max-width : 480px)";
     $bp-xs-helpdesk: "(min-width : 480px) and (max-width : 768px)";

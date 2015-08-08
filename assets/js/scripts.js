@@ -595,6 +595,63 @@
         });
     }
 
+    function sidePanel() {
+        var win = $(window);
+        var sidePanel = $('[data-front="side-panel"]');
+        var footer = $('.footer');
+        var offset  = sidePanel.offset();
+        var sidePanelHeight = sidePanel.height();
+        var footerPosition = footer.offset().top - sidePanel.height();
+
+
+        if (window.matchMedia('(min-width : 768px)').matches) {
+            win.scroll(function() {
+                if (win.scrollTop() >= footerPosition) {
+                    sidePanel.css({
+                        "position": "absolute",
+                        "top": 'auto',
+                        "bottom": 0
+                    });
+                } else if (win.scrollTop() > offset.top) {
+                    sidePanel.css({
+                        "position": "fixed",
+                        "top": 0,
+                        "bottom": "auto"
+                    });
+                }
+                else {
+                    sidePanel.css({
+                        "position": "static",
+                        "top": 0,
+                        "bottom": "auto"
+                    });
+                }
+            });
+        } else {
+            sidePanel.css({
+                "position": "static",
+                "top": "auto",
+                "bottom": "auto"
+            });
+        }
+    }
+
+    function sideScroll() {
+        var scrollToTrigger = $('[data-front="scroll-to"]');
+        scrollToTrigger.click(function() {
+            var thisHash = this.hash;
+            var scrollTo = null;
+            if (thisHash == "#description" || !$(thisHash)) {
+                scrollTo = 0 + "px";
+            } else {
+                scrollTo = $(thisHash).offset().top;
+            }
+            $('html, body').animate({
+                scrollTop: scrollTo
+            }, 300);
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -617,11 +674,14 @@
         galleryDisplay();
         addToCart();
         reloadState();
+        sidePanel();
+        sideScroll();
     });
 
     // all initial on window resize
     $(window).on('resize', function() {
         CartDisplay();
+        sidePanel();
     });
 
 

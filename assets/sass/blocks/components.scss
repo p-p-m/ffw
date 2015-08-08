@@ -56,6 +56,11 @@
     &.button-transparent {
         background: transparent;
     } // &.button-transparent
+    &.button-red {
+        background: #C0392B;
+        color: white;
+        border-bottom: 2px solid #A02012;
+    } // button-red
     &.button-blue {
         background: #3498DB;
         color: white;

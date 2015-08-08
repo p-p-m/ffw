@@ -6,126 +6,187 @@
 {% block content %}
 <!-- product -->
 <section class="product">
-    <!-- gray-box -->
-    <div class="gray-box">
-        <div class="wrap">
-            <!-- breadcrumps -->
-            <nav class="breadcrumps">
-                <ul>
+    <div class="wrap">
+        <div class="filters-in-view" data-front="side-panel">
+            <div class="produc-side-block">
+                <div class="product-image">
+                    <img src="/static/images/tmp/waterfilter.png" alt="">
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="price-line">
+                    <span class="price">340,00</span>
+                    <span class="currency">грн.</span>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="by-one-click-side">
+                    <input type="text" data-role="phone-mask">
+                    <button class="button button-blue">Купить в один клик</button>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <ul class="product-guides">
                     <li>
-                        <a href="">Главная</a>
+                        <a href="#description" data-front="scroll-to" class="guide-icon guide-description">Описание</a>
                     </li>
                     <li>
-                        <a href="">Фильтры для воды</a>
+                        <a href="#product-choises" data-front="scroll-to" class="guide-icon choice">Выбор товаров</a>
                     </li>
                     <li>
-                        <span>{{ product.name }}</span>
+                        <a href="#comments" data-front="scroll-to" class="guide-icon comments">Отзывы</a>
+                    </li>
+                    <li>
+                        <a href="#comments-add" data-front="scroll-to" class="guide-icon comments">Оставить отзыв</a>
                     </li>
                 </ul>
-            </nav>
-            <!-- /breadcrumps -->
-            <!-- product-main -->
-            <div class="product-main">
-                <!-- images-box -->
-                <figure class="images-box">
-                    <ul class="image-previews">
-                        {% for image in product.get_images %}
-                            <li class="image-preview" data-role="product-image-trigger" data-image="{{ forloop.counter }}">
-                                <img src="{{ image.image.url }}" alt="{{ image.description }}">
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="product-image">
-                        {% for image in product.get_images %}
-                            <img src="{{ image.image.url }}" alt="{{ image.description }}" data-role="product-image" data-image="{{ forloop.counter }}">
-                        {% endfor %}
-                    </div>
-                </figure>
-                <!-- /images-box -->
-                <!-- info-box -->
-                <div class="info-box">
-                    <div class="title-line">
-                        <h1 class="product-title">{{ product.name }}</h1>
-                    </div>
-                    <div class="product-rating-box">
-                        <div class="product-rating rating-{{ product.get_rating }}"></div>
-                    </div>
-                    <div class="price-line">
-                        <span class="price">{{ product.get_display_price_uah }}</span>
-                        <span class="currency">грн.</span>
-                        <button class="button button-blue add-to-cart" id="buy" data-product_pk={{product.pk}} data-quant='2'>Купить</button>
-                    </div>
-                    <!-- images-box-mobile -->
-                    <figure class="images-box-mobile">
-                        <div class="product-image">
-                            {% for image in product.get_images %}
-                                <img src="{{ image.image.url }}" alt="" data-role="product-image" data-image="{{ forloop.counter }}">
-                            {% endfor %}
-                        </div>
-                        <ul class="image-previews">
-                            {% for image in product.get_images %}
-                                <li class="image-preview active" data-role="product-image-trigger" data-image="{{ forloop.counter }}">
-                                    <img src="{{ image.image.url }}" alt="{{ image.description }}">
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </figure>
-                    <!-- /images-box-mobile -->
-                    <article class="descriptionription">
-                        {{ product.description }}
-                    </article>
+            </div>
+        </div>
+        <div class="products-in-view">
+            <!-- info-box -->
+            <div class="info-box">
+                <div class="title-line">
+                    <h1 class="product-title">Фильтр для питьевой воды XCore 11</h1>
+                    <span class="label new">новинка</span>
                 </div>
-                <!-- /info-box -->
+                <div class="price-line">
+                    <span class="in-stock">33 на складе</span>
+                    <button class="button button-blue add-to-cart">Купить</button>
+                </div>
             </div>
-            <!-- /product-main -->
+            <!-- /info-box -->
+            <div class="product-blocks">
+                <!-- product-block -->
+                <div class="product-block">
+                    <h3 class="product-block-title description">
+                        Описание
+                    </h3>
+                    <div class="product-block-content">
+                        <article class="description">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="product-choises">
+                    <h3 class="product-block-title item-choice">
+                        Выбор товаров
+                    </h3>
+                    <div class="product-block-content">
+                        <table class="combain-product-list">
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                                <th></th>
+                            </tr>
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td class="buy-button">
+                                    <button class="button button-blue">Купить</button>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td class="buy-button">
+                                    <button class="button button-blue">Купить</button>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                        </table>
+                        <!-- combain-product-summary -->
+                        <div class="combain-product-summary">
+                            Всего наименований 1 на сумму 37 грн. <button class="button button-blue add-to-cart">Купить</button>
+                        </div>
+                        <!-- /combain-product-summary -->
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments">
+                    <h3 class="product-block-title comments">
+                        Отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="comment-block">
+                            <div class="comment-author-photo">
+                                <img src="/static/images/tmp/avatar.png" alt="">
+                            </div>
+                            <div class="comment-body">
+                                <h3 class="comment-author-name">Michael Yakimenko</h3>
+                                <article>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments-add">
+                    <h3 class="product-block-title comments">
+                        Оставить отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="left-commnet">
+                            <textarea name="" id="" class="left-commnet"></textarea>
+                            <div class="simple-text">
+                                Опубликовать с помощью
+                            </div>
+                            <div class="login-for-comment simple-text">
+                                <button class="button button-blue">Tweeter</button>
+                                <button class="button button-red">Google +</button>
+                                <span>или <a href="#">войти</a> используя свой логин и пароль </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+            </div>
         </div>
     </div>
-    <!-- /gray-box -->
-    <div class="wrap">
-        <!-- descriptionription-mobile -->
-        <article class="descriptionription-mobile">
-            {{ product.short_description }}
-        </article>
-        <!-- /descriptionription-mobile -->
-    </div>
-    <!-- characteristics -->
-    <div class="characteristics">
-        <div class="wrap list">
-            <!-- char-tabs -->
-            <ul class="char-tabs">
-                <li class="active" data-role="products-chars-trigger" data-view="chars">
-                    <span>Характеристики</span>
-                </li>
-                <li data-role="products-chars-trigger" data-view="description">
-                    <span>Полное описание</span>
-                </li>
-            </ul>
-            <!-- /char-tabs -->
-        </div>
-        <div class="wrap">
-            <div class="tab-container" data-role="products-chars" data-view="chars">
-                <article>
-                    <table class="chars">
-                        {% for attribute in product.attributes.all %}
-                        <tr>
-                            <td>{{ attribute.name }}:</td>
-                            <td>{{ attribute.value }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </article>
-            </div>
-            <div class="tab-container" data-role="products-chars" data-view="description">
-                <article class="descriptionription">
-                    {{ product.short_description }}
-                </article>
-            </div>
-        </div>
-    </div>
-    <!-- /characteristics -->
 </section>
 <!-- /product -->
-{% endblock content %}
-
-{% block js %}
-{% endblock js %}
+{% endblock %}

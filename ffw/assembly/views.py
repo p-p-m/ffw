@@ -147,5 +147,5 @@ class ProductListView(ListView):
 class ProductView(View):
 
     def get(self, request, product):
-        product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
+        product = get_object_or_404(products_models.Product.objects.select_related('images'), slug=product)
         return render(request, 'products/product.html', {'product': product})

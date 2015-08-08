@@ -33,9 +33,7 @@ def connect_attribute_with_characteristic(sender, instance, **kwargs):
 def disconnect_attributes_from_characteristics_on_subcategory_change(sender, instance, **kwargs):
     product = instance
     # if subcategory changed
-    print '111'
     if models.Product.objects.filter(id=product.id).exclude(subcategory=product.subcategory).exists():
-        print '222'
         for attribute in models.ProductAttribute.objects.filter(product_configuration__product=product):
             attribute.connect_with_characteristic(subcategory=product.subcategory)
             print attribute

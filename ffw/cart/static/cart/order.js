@@ -36,6 +36,4 @@ $(document).ready(function() {
         cart.set(product_pk, quant, callback=order.setProduct, callbackData={'product_pk': product_pk});
    });
 
-   cart.get(callback=order.setTotalData);
-
 });

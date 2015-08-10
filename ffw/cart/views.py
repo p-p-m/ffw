@@ -146,7 +146,6 @@ class OrderView(FormView):
     form_class = OrderForm
     success_url = 'thank/'
 
-
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
         context['products_cart'] = self.request.session.get('products_cart',{})
@@ -173,6 +172,9 @@ class OrderView(FormView):
             self.request.session['quant'] = 0
 
         return super(OrderView, self).form_valid(form)
+
+    def get_initial(self):
+        return {'summ': self.request.session.get('sum_cart',0), 'quant': self.request.session.get('count_cart',0)}
 
 
 class ThankView(TemplateView):

@@ -127,19 +127,25 @@ class ProductConfigurationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductConfigurationForm, self).__init__(*args, **kwargs)
+        self.initial_attributes = kwargs.get('initial', {}).get('attributes')
         if self.instance.id is not None:
             self.fields['attributes'].initial = '\n'.join('{}: {} ({})'.format(
                 a.name, a.value, a.units) for a in self.instance.attributes.all())
+            self.initial_attributes = self.fields['attributes'].initial
+        self.fields['attributes'].required = False
+        self.fields['price_usd'].required = False
+        self.fields['price_eur'].required = False
+        self.fields['price_uah'].required = False
 
     def clean_attributes(self):
         attributes = self.cleaned_data['attributes']
-        if not attributes and not self.fields['attributes'].initial:
+        if not attributes and not self.initial_attributes:
             return []
-        if not attributes and self.fields['attributes'].initial:
+        if not attributes and self.initial_attributes:
             raise ValidationError(
                 'Not enough attributes provided. '
                 'Product should have attribute for each characteristic if his subcategory.')
-        if len(attributes.split('\n')) < len(self.fields['attributes'].initial.split('\n')):
+        if len(attributes.split('\n')) < len(self.initial_attributes.split('\n')):
             raise ValidationError(
                 'Not enough attributes provided. '
                 'Product should have attribute for each characteristic if his subcategory.')
@@ -156,10 +162,12 @@ class ProductConfigurationForm(forms.ModelForm):
         return result_attribures
 
     def save(self, *args, **kwargs):
+        kwargs['commit'] = True
         configuration = super(ProductConfigurationForm, self).save(*args, **kwargs)
         for attribute in self.cleaned_data['attributes']:
             if not configuration.attributes.filter(**attribute).exists():
                 configuration.attributes.update_or_create(name=attribute.pop('name'), defaults=attribute)
+        return configuration
 
 
 class ProductConfigurationInline(admin.TabularInline):
@@ -191,6 +199,7 @@ class ProductConfigurationInline(admin.TabularInline):
                 'attributes': s,
             }] * 4
             formset.__init__ = curry(formset.__init__, initial=initial)
+            print 'qwwww'
 
             # Brutal hook to add initial values to new configurations
             def formset_empty_form(self):

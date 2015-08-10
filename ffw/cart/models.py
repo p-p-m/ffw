@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
@@ -37,16 +36,3 @@ class OrderedProduct(models.Model):
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quant = models.IntegerField(_('Quantity'), default=0)
     summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
-
-'''
-initial fields quant, summ from  session(sum_cart, quant_cart) or cart(sum, quant) from cart.js
-'''
-class OrderForm(ModelForm):
-    class Meta:
-        model = Order
-        fields = [
-            'name',
-            'email',
-            'add_communication',
-            'quant',
-            'summ']

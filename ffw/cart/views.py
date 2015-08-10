@@ -8,15 +8,10 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView, FormView
 from django.utils.decorators import method_decorator
 
-from models import OrderForm, OrderedProduct
+from forms import OrderForm
+from models import OrderedProduct
 from products.models import Product
-import settings
-
-class CSRFProtectMixin():
-
-    @method_decorator(csrf_protect)
-    def dispatch(self, *args, **kwargs):
-        return super(CSRFProtectMixin, self).dispatch(*args, **kwargs)
+from . import settings
 
 
 class CartClearMixin():
@@ -30,7 +25,7 @@ class CartClearMixin():
             del session['count_cart']
 
 
-class CartResultView(View, CSRFProtectMixin, CartClearMixin):
+class CartResultView(CartClearMixin, View):
 
     def format_response(self, session):
         if 'products_cart' in session:
@@ -146,7 +141,7 @@ class CartAddView(CartSetView):
 from models import Order
 
 
-class OrderView(FormView, CSRFProtectMixin):
+class OrderView(FormView):
     template_name = 'order.html'
     form_class = OrderForm
     success_url = 'thank/'
@@ -162,19 +157,23 @@ class OrderView(FormView, CSRFProtectMixin):
     def form_valid(self, form):
         order_obj = form.save()
 
-        '''
-        replace Product.objects on confirations
-        '''
-        for key, value in self.request.session['products_cart'].items():
-            product_obj = Product.objects.get(id=int(key))
-            ordered_product = OrderedProduct(
-                order=order_obj,
-                product=product_obj,
-                name=value['name'],
-                price=value['price'],
-                quant=value['quant'],
-                summ=value['sum_'])
+        if 'products_cart' in self.request.session:
+            for key, value in self.request.session['products_cart'].items():
+                product_obj = Product.objects.get(id=int(key))
+                ordered_product = OrderedProduct(
+                    order=order_obj,
+                    product=product_obj,
+                    name=value['name'],
+                    price=value['price'],
+                    quant=value['quant'],
+                    summ=value['sum_'])
+        else:
+            self.request.session['products_cart'] = {}
+            self.request.session['sum_'] = 0
+            self.request.session['quant'] = 0
+
         return super(OrderView, self).form_valid(form)
+
 
 class ThankView(TemplateView):
     template_name = 'thank.html'

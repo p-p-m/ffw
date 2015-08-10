@@ -20,15 +20,22 @@ $(document).ready(function() {
         if (confirm("Удалить товар из корзины?")) {
             $('tr#' + product_pk).remove();
             cart.remove(product_pk, callback=order.setTotalData);
-
         }
    });
+
+   $('button#set').on('click', function() {
+        for (product_pk=1; product_pk<6; product_pk++) {
+             cart.set(product_pk, 2, callback=order.setTotalData);
+        }
+   }) ;
 
    $(".quant").change( function() {
         var product_pk = this.id;
         var quant = this.value;
-        order.product_pk = product_pk
+        order.product_pk = product_pk;
         cart.set(product_pk, quant, callback=order.setProduct, callbackData={'product_pk': product_pk});
    });
+
+   cart.get(callback=order.setTotalData);
 
 });

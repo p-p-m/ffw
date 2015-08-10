@@ -3,7 +3,6 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% csrf_token %}
 
 <!DOCTYPE html>
 <html lang="ru-RU">
@@ -40,8 +39,9 @@
             {% endfor %}
 
         </table> <br/>
+        <button id = 'set'> Пополнить корзину</button>
 
-        <form action="" method="post">{% csrf_token %}
+        <form action="." method="post">{% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>
         </form>

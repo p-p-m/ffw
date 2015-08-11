@@ -94,6 +94,22 @@
             .currency {
                 @include inline-middle;
             } // currency
+            .combined-price-count {
+                @include clearfix;
+                margin-top: 4px;
+                input {
+                    width: 34%;
+                    float: left;
+                    box-sizing: border-box;
+                    padding: 4px 8px;
+                    font-size: rem(16);
+                } // input
+                button {
+                    width: 62%;
+                    float: right;
+                    text-align: center;
+                } // button
+            } // combined-price-count
         } // price-line
         .product-guides {
             @include clear-list;

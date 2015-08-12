@@ -267,7 +267,6 @@ class ProductConfiguration(models.Model):
 
             def __setattr__(self_, key, value):
                 attr, created = self.attributes.get_or_create(name=key)
-                print attr, created
                 attr.value = value
                 attr.save()
 

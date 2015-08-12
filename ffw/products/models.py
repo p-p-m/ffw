@@ -266,7 +266,8 @@ class ProductConfiguration(models.Model):
                 return self.attributes.get(name='key').value
 
             def __setattr__(self_, key, value):
-                attr, _ = self.attributes.get_or_create(name=key)
+                attr, created = self.attributes.get_or_create(name=key)
+                print attr, created
                 attr.value = value
                 attr.save()
 
@@ -316,14 +317,15 @@ class ProductAttribute(models.Model):
         except (ValueError, TypeError):
             self.value_float = None
 
-    def connect_with_characteristic(self, subcategory=None):
+    def connect_with_characteristic(self, subcategory=None, save=False):
         """ Find characteristic that related to this attribute and connect to it """
         subcategory = self.product_configuration.product.subcategory if subcategory is None else subcategory
         try:
             c = subcategory.get_all_related_characteristics().get(name=self.name)
             self.characteristic = c
             self.units = c.units
-            self.save()
+            if save:
+                self.save()
         except Characteristic.DoesNotExist:
             pass
 

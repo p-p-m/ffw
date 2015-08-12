@@ -355,6 +355,18 @@
     } // product-rating
 } // product-rating-box
 
+.chars {
+    tr {
+        &:nth-child(even) {
+            // border-top: 1px solid gray;
+            background-color: rgb(241, 241, 241);
+        } // &:nth-child(even)
+        td {
+            padding: 10px 8px;
+            font-size: rem(16);
+        } // td
+    } // tr
+} // chars
 
 // guides
 .guide-icon {
@@ -382,4 +394,9 @@
             content: "\f0e6";
         } // &:before
     } // &.comments
+    &.photos {
+        &:before {
+            content: "\f03e";
+        } // &:before
+    } // &.photos
 } // guide-icon

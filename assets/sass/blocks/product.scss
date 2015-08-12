@@ -368,6 +368,20 @@
     } // tr
 } // chars
 
+.thumbnails-in-product {
+    @include clear-list-inline;
+    @include clearfix;
+    li {
+        float: left;
+        width: 20%;
+        box-sizing: border-box;
+        padding: 10px;
+        &:nth-child(5n+1) {
+            clear: both;
+        } // &:nth-child(5n+1)
+    } // li
+} // thumbnails-in-product
+
 // guides
 .guide-icon {
     &:before {

@@ -1,7 +1,5 @@
 
 def cart_processor(request):
-    
-    print 'processor'
     if not 'cart' in request.session:
             request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
     else:

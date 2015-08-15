@@ -59,7 +59,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'products.processors.sections_processor',
     'products.processors.debug_processor',
-    #'cart.processors.cart_processor',
+    'cart.processors.cart_processor',
 )
 
 

@@ -39,8 +39,9 @@
             {% endfor %}
 
         </table> <br/>
-        <button id = 'set'> Пополнить корзину</button><button id = 'get'> Корзина в сессии - вывод в console.log</button>
-
+        <button id = 'set'> Пополнить корзину</button>
+        <button id = 'add'> Добавить товар pk=1 5 шт</button>
+        <button id = 'clear'>Очистить корзину   </button>
         <form action="." method="post">{% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>

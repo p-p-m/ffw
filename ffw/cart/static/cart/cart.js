@@ -90,7 +90,6 @@ var cart = {
             data:{
                 'product_pk': product_pk,
                 'quant': quant,
-                'test': test
            },
             dataType: 'text'
         })

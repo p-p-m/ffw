@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from cart import views
-from views import CartView, CartRemoveView, CartSetView, CartAddView, OrderView, ThankView
+from views import CartView, OrderView, ThankView, CartSetView, CartRemoveView, CartAddView
 
 
 urlpatterns = patterns(

@@ -47,14 +47,14 @@ Settings:
 
 var cart = {
     'products': {},
-    'sum': 0,
+    'total': 0,
     'count': 0,
     'url': '',
     'updateCartAndCallback': function(data, callback=null, callbackData=null) {
             var obj = $.parseJSON(data);
-            cart.count = obj.count_cart;
-            cart.sum = obj.sum_cart;
-            cart.products = obj.products_cart;
+            cart.count = obj.cart.count;
+            cart.total = obj.cart.total;
+            cart.products = obj.cart.products;
             if (callback) {
                 if (callbackData) {
                      callback(callbackData);
@@ -63,6 +63,7 @@ var cart = {
                      callback();
                  };
             };
+            console.log( 'cart.js.cart.UpdateCart...cart - ', cart)
     },
     'set': function(product_pk, quant, callback=null, callbackData=null) {
         cart.csrf();
@@ -76,7 +77,7 @@ var cart = {
            },
             dataType: 'text'
         })
-        .done(function(responseData) {
+        .done(function(responseData) {console.log('responseData - ', responseData)
              cart.updateCartAndCallback(responseData, callback, callbackData);
         });
     },
@@ -108,7 +109,7 @@ var cart = {
            },
             dataType: 'text'
        })
-        .done(function(data) {
+        .done(function(data) {console.log('cart.js.remove.done - ', data)
              cart.updateCartAndCallback(data, callback, callbackData);
         });
     },

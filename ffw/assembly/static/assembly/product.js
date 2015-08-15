@@ -28,11 +28,11 @@ function initConfigrations() {
 function calculateConfigurationsTotal() {
     totalCount = 0;
     totalPrice = 0;
-    for (var i=0; i<configurations.length; i++) {
+    for (var i = 0; i < configurations.length; i++) {
         configuration = configurations[i];
         if (configuration.activeElement.is(':checked')) {
             totalCount += parseInt(configuration.countElement.val());
-            totalPrice += parseFloat(configuration.priceElement.text());
+            totalPrice += parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
         }
     }
     console.log('ololol!');

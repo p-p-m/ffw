@@ -3,8 +3,8 @@ Connect:
     1. <script src="{{ STATIC_URL }}cart/cart.js"> </script>
     2. Должен быть задан урл в свойстве тега data-cart-url='some/url/'.
 
-cart data in request.session: {"cart_sum": cart_sum, "cart-count":
-        cart_count, "products": {product_pk_1: {'product_code': product_code,
+cart data in request.session: {'cart':{"total": total sum, "count":
+        cart count, "products": {product_pk_1: {'product_code': product_code,
        'name': name,  'price': price,  'quant': quant, 'sum_': sum_}...}}
 
 Object cart:
@@ -26,14 +26,11 @@ Object cart:
         cart.products = {{'product_pk': product_code,  'name': name,  'price': price,
            'quant': quant, 'sum_': sum_}...} - dictionary
 
-        cart.sum - total cost of the cart products
+        cart.total - total cost of the cart products
 
         cart.count - total quantity of the cart products
-
-
-Testing apllication cart:
-    url = 'cart/test'
-
+        cart.url - url
+While no use settings .
 Settings:
     There is necessary insert in  settings:
     CART_SETTINGS = {

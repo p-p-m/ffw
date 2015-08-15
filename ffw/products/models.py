@@ -239,9 +239,9 @@ class Product(TimeStampedModel):
         if self.configurations.count() > 1:
             configurations_attribures_names = [set(c.attributes.all().values_list('name', 'value'))
                                                for c in self.configurations.all()]
-            print configurations_attribures_names
-            equal_names = reduce(lambda x, y: x & y, configurations_attribures_names)
-            return attributes.filter(name__in=equal_names)
+            equal_attribures = reduce(lambda x, y: x & y, configurations_attribures_names)
+            return attributes.filter(
+                name__in=[name for name, _ in equal_attribures], product_configuration=self.configurations.all()[0])
         else:
             return attributes
 
@@ -307,11 +307,11 @@ class ProductConfiguration(models.Model):
 
     def get_unique_attributes(self):
         common_attributes = self.product.get_attributes()
-        return self.attributes.exclude(id__in=common_attributes.values_list('id', flat=True))
+        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True))
 
     def get_formatted_unique_attributes(self):
         unique_attributes = self.get_unique_attributes()
-        return ', '.join(['{}: {}'.format(a.name, a.value) for a in unique_attributes])
+        return ', '.join(['{}: {}'.format(a.name, a.pretty_value) for a in unique_attributes])
 
     def save(self, *args, **kwargs):
         self.init_prices()
@@ -357,6 +357,13 @@ class ProductAttribute(models.Model):
     def save(self, *args, **kwargs):
         self._init_values()
         return super(ProductAttribute, self).save(*args, **kwargs)
+
+    @property
+    def pretty_value(self):
+        if self.units:
+            return '{} ({})'.format(self.value, self.units)
+        else:
+            return self.value
 
 
 class ProductImage(models.Model):

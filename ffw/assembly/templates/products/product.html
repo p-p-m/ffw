@@ -103,7 +103,7 @@
                                             <label for="">
                                                 <input type="checkbox" data-role="configuration-active">
                                                 <span class="name">{{ configuration.code }}
-                                                    <small>({{configuration.get_formatted_unique_attributes}})</small>
+                                                    <small>{{configuration.get_formatted_unique_attributes}}</small>
                                                 </span>
                                             </label>
                                         </td>
@@ -139,7 +139,7 @@
                             {% for attribute in product.get_attributes %}
                                 <tr>
                                     <td>{{ attribute.name }}</td>
-                                    <td>{{ attribute.value }}</td>
+                                    <td>{{ attribute.pretty_value }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

@@ -26,7 +26,6 @@ $(document).ready(function() {
 
    $('button#set').on('click', function() {
         for (product_pk=1; product_pk<2; product_pk++) {
-
              cart.set(+product_pk, 1, callback=order.setTotalData);
         }
    }) ;
@@ -42,6 +41,7 @@ $(document).ready(function() {
 
              //cart.get(callback=alert, callbackData = 'Get');
              console.log('get - ', cart.total, cart.count, cart.products)
+
    }) ;
 
 });

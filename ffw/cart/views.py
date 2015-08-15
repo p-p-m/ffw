@@ -18,7 +18,6 @@ from . import settings
 class Cart():
 
     def __init__(self, request):
-
         print '__init__'
         if not 'cart' in request.session :
             print 1111111111111111111
@@ -31,23 +30,23 @@ class Cart():
         self.cart = request.session['cart']
         self.products = request.session['cart']['products']
 
+
     def _calculate(self):
         print '_calculate'
         """ Recalculate product quantity and sum """
         self.cart['total'] = round(sum([v['sum_'] for v in self.products.values()]), 2)
         self.cart['count'] = sum([v['quant'] for v in self.products.values()])
 
-
     def set(self, product_pk, quant):
         print "set"
         if quant > 0:
+
             product_pk = int(product_pk)
             product = get_object_or_404(Product, pk=product_pk)
             price = float(product.price_min)
             sum_ = round(quant * price, 2)
             product_pk = str(product_pk)
             self.products[product_pk] = {'name': product.name, 'product_code': 'kjhgf', 'price': price, 'quant': quant, 'sum_': sum_}
-
             self._calculate()
         else:
             self.remove(product_pk)
@@ -105,9 +104,7 @@ class CartView(View):
         """
         if request.is_ajax:
             Cart(request).clear()
-
             return HttpResponse(json.dumps({'cart': request.session['cart']}))
-
 
 class CartRemoveView(View):
 
@@ -140,7 +137,6 @@ class CartSetView(View):
             self._call_cart(cart, product_pk, quant)
             print 'CartSetVew.cart - out',  request.session['cart']
             return HttpResponse(json.dumps({'cart': request.session['cart']}))
-
 
 class CartAddView(CartSetView):
     pass
@@ -184,10 +180,7 @@ class OrderView(FormView):
             session['total'] = 0
             session['count'] = 0
         '''
-
-
         return {'summ': self.request.session['cart']['total'], 'quant': self.request.session['cart']['count']}
-
 
 class ThankView(TemplateView):
     template_name = 'thank.html'

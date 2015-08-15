@@ -231,6 +231,24 @@ class Product(TimeStampedModel):
         else:
             return self.price_min
 
+    def get_attributes(self):
+        """
+        Return all attributes if product has one configuration, else return common attributes for configurations
+        """
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        if self.configurations.count() > 1:
+            configurations_attribures_names = [set(c.attributes.all().values_list('name', 'value'))
+                                               for c in self.configurations.all()]
+            print configurations_attribures_names
+            equal_names = reduce(lambda x, y: x & y, configurations_attribures_names)
+            return attributes.filter(name__in=equal_names)
+        else:
+            return attributes
+
+    def recalculate_prices(self):
+        self.price_max = self.configurations.aggregate(models.Max('price_uah'))['price_uah__max']
+        self.price_min = self.configurations.aggregate(models.Min('price_uah'))['price_uah__min']
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):
@@ -286,6 +304,14 @@ class ProductConfiguration(models.Model):
             self.price_usd = value / config.USD_RATE
         if not self.price_eur:
             self.price_eur = value / config.EUR_RATE
+
+    def get_unique_attributes(self):
+        common_attributes = self.product.get_attributes()
+        return self.attributes.exclude(id__in=common_attributes.values_list('id', flat=True))
+
+    def get_formatted_unique_attributes(self):
+        unique_attributes = self.get_unique_attributes()
+        return ', '.join(['{}: {}'.format(a.name, a.value) for a in unique_attributes])
 
     def save(self, *args, **kwargs):
         self.init_prices()

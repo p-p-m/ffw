@@ -14,9 +14,15 @@ class ProductsConfig(AppConfig):
 
     def ready(self):
         signals.post_save.connect(
-            handlers.create_price_attributes,
+            handlers.calculate_price_attributes,
             sender=models.ProductConfiguration,
-            dispatch_uid='products.handlers.create_price_attributes',
+            dispatch_uid='products.handlers.calculate_price_attributes',
+        )
+
+        signals.post_delete.connect(
+            handlers.calculate_price_attributes,
+            sender=models.ProductConfiguration,
+            dispatch_uid='products.handlers.calculate_price_attributes',
         )
 
         signals.post_save.connect(

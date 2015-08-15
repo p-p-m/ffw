@@ -27,7 +27,7 @@
                 <th></th>
             </tr>
 
-            {% for key,value in products_cart.items %}
+            {% for key,value in cart.products.items %}
                 <tr id={{key}}>
                     <td id={{key}}>{{value.name}}</td>
                     <td><input class="quant" id={{key}} value={{value.quant}}></td>
@@ -39,7 +39,7 @@
             {% endfor %}
 
         </table> <br/>
-        <button id = 'set'> Пополнить корзину</button>
+        <button id = 'set'> Пополнить корзину</button><button id = 'get'> Корзина в сессии - вывод в console.log</button>
 
         <form action="." method="post">{% csrf_token %}
             {{ form.as_p }}

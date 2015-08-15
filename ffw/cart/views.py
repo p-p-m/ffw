@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView, FormView
+from django.views.generic.base import ContextMixin
 from django.utils.decorators import method_decorator
 
 from forms import OrderForm
@@ -14,81 +15,111 @@ from products.models import Product
 from . import settings
 
 
-class CartClearMixin():
+class Cart():
 
-    def cart_clear(self, session):
-        if 'products_cart' in session:
-            del session['products_cart']
-        if 'sum_cart' in session:
-            del session['sum_cart']
-        if 'count_cart' in session:
-            del session['count_cart']
+    def __init__(self, request):
+        print '__init__'
+        self.session = request.session
 
-
-class CartResultView(CartClearMixin, View):
-
-    def format_response(self, session):
-        if 'products_cart' in session:
-            if session["products_cart"] == {}:
-                self.cart_clear(session)
-                sum_cart = 0
-                count_cart = 0
-                products_cart = {}
-            else:
-                session['sum_cart'] = round(sum(
-                    [v['sum_'] for v in session['products_cart'].values()]), 2)
-                session['count_cart'] = sum(
-                    [v['quant'] for v in session['products_cart'].values()])
-
-                count_cart = session['count_cart']
-                sum_cart = session['sum_cart']
-                products_cart = session['products_cart']
+        if not 'cart' in self.session :
+            self.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
         else:
-            self.cart_clear(session)
-            sum_cart = 0
-            count_cart = 0
-            products_cart = {}
-        return HttpResponse(
-            json.dumps({'sum_cart': sum_cart, 'count_cart': count_cart, 'products_cart': products_cart}))
+            if not 'products' in self.session['cart']:
+                self.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
+
+    def _calculate(self):
+        print '_calculate'
+        """ Recalculate product quantity and sum """
+        self.session['cart']['total'] = 0
+        self.session['cart']['count'] = 0
+        self.session['cart']['total'] = round(sum([v['sum_'] for v in self.session['cart']['products'].values()]), 2)
+        self.session['cart']['count'] = sum([v['quant'] for v in self.session['cart']['products'].values()])
 
 
-class CartRemoveView(CartResultView):
+    def set(self, product_pk, quant):
+        print "set"
+        if quant > 0:
+            product = get_object_or_404(Product, pk=product_pk)
+            price = float(product.price_min)
+            sum_ = round(quant * price, 2)
+            product_pk = str(product_pk)
+            self.session['cart']['products'][product_pk] = {'name': product.name, 'product_code': 'kjhgf', 'price': price, 'quant': quant, 'sum_': sum_}
+            self._calculate()
+        else:
+            self.remove(product_pk)
 
-    def post(self, request, *args, **kwargs):
-        if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
+    def remove(self, product_pk):
+        print "remove", type(product_pk)
+        if product_pk in self.session['cart']['products'].keys():
+            print 'Yes', self.session['cart']
+            print 'pop - ', product_pk, self.session['cart']['products'].pop(product_pk)
+            #del self.session['cart']['products'][product_pk]
+            self._calculate()
+            print 'after _calculate - ', self.session['cart']
 
-            if product_pk in request.session["products_cart"]:
-                del request.session["products_cart"][product_pk]
+    def clear(self):
+        print "clear"
+        self.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
 
-            return self.format_response(request.session)
+    def add(self, product_pk, quant):
+        print 'add'
+        if product_pk in self.session['cart']['products']:
+            quant += self.session['cart']['products'][product_pk]['quant']
+
+        self.set(product_pk, quant)
 
 
-class CartView(CartResultView, CartClearMixin):
+class CartView(View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
-            return self.format_response(request.session)
+            print 'CartVew.get - request.cart-in', request.session['cart']
+            '''
+            cart = Cart(request)
+            
+            cart.clear()
+            print(4556699995999)
+            cart.set(2, 1)
+            
+            cart.set(1, 1)
+            '''
+            '''
+            #cart.set(3, 5)
+            #cart.set(4, 5)
+            #cart.set(5, 5)
+            '''
+        return HttpResponse(json.dumps({'cart': request.session['cart']}))
 
     def post(self, request, *args, **kwargs):
         """
         Clear cart
         """
         if request.is_ajax:
-            self.cart_clear(request.session)
+            Cart(request).clear()
 
-            return self.format_response(request.session)
+            return HttpResponse(json.dumps({'cart': request.session['cart']}))
 
 
-class CartSetView(CartResultView):
-    """
-    Super for CartAddView
-    """
+class CartRemoveView(View):
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            session = request.session
-            session['products_cart'] = session.get('products_cart', {})
+            print ('cartRemoveView-in - ' , request.session['cart'])
+            product_pk = request.POST.get('product_pk', '')
+            cart = Cart(request)
+            cart.remove(product_pk)
+            print ('cartRemoveView-out - cart.cart' , cart.session['cart'])
+            print ('cartRemoveView-out - request.cart' , request.session['cart'])
+        return HttpResponse((json.dumps({'cart': request.session['cart']})))
 
+
+class CartSetView(View):
+    pass
+    def _call_cart(self, cart, product_pk, quant):
+        cart.set(product_pk, quant)
+    
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax:
             product_pk = request.POST.get('product_pk', '')
 
             try:
@@ -96,85 +127,57 @@ class CartSetView(CartResultView):
             except ValueError:
                 quant = 0
 
-
-            if quant <= 0:
-                if product_pk in session["products_cart"]:
-                    self.change_session(session["products_cart"], product_pk)
-            else:
-                product = get_object_or_404(Product, pk=product_pk)
-                price = float(product.price_min)
-                name = product.name
-                product_code = 'kjhgf' #product.code
-
-                quant = self.calc_quant(session, product_pk, quant)
-                sum_ = round(quant * price, 2)
-
-                session['products_cart'][product_pk] = {
-                    'product_code': product_code,
-                    'name': name,
-                    'price': price,
-                    'quant': quant,
-                    'sum_': sum_}
-
-        return self.format_response(session)
-
-    def get_object_attribute(self, field_name, obj):
-        return reduce(getattr, field_name.split("."), obj)
-
-    def change_session(self, products_cart, product_pk):
-        products_cart.pop(product_pk)
-
-    def calc_quant(self, session, product_pk, quant):
-        return quant
+            cart = Cart(request)
+            self._call_cart(cart, product_pk, quant)
+            cart.set(product_pk, quant)
+        
+        return HttpResponse(json.dumps({'cart': request.session['cart']}))
 
 
 class CartAddView(CartSetView):
-
-    def change_session(self, products_cart, product_pk):
-        pass
-
-    def calc_quant(self, session, product_pk, quant):
-        if product_pk in session["products_cart"]:
-            quant += session["products_cart"][product_pk]['quant']
-        return quant
-
-from models import Order
+    pass
+    def _call_cart(self, cart, product_pk, quant):
+        cart.add(product_pk, quant)
 
 
 class OrderView(FormView):
+    print "OrderView"
     template_name = 'order.html'
     form_class = OrderForm
     success_url = 'thank/'
 
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
-        context['products_cart'] = self.request.session.get('products_cart',{})
-        context['count_cart'] = self.request.session.get('count_cart',0)
-        context['sum_cart'] = self.request.session.get('sum_cart',0)
+        context['cart'] = self.request.session['cart']
         return context
 
     def form_valid(self, form):
         order_obj = form.save()
 
-        if 'products_cart' in self.request.session:
-            for key, value in self.request.session['products_cart'].items():
-                product_obj = Product.objects.get(id=int(key))
-                ordered_product = OrderedProduct(
-                    order=order_obj,
-                    product=product_obj,
-                    name=value['name'],
-                    price=value['price'],
-                    quant=value['quant'],
-                    summ=value['sum_'])
-        else:
-            self.request.session['products_cart'] = {}
-            self.request.session['sum_'] = 0
-            self.request.session['quant'] = 0
+
+        for key, value in self.request.session['cart']['products'].items():
+            product_obj = Product.objects.get(id=int(key))
+            ordered_product = OrderedProduct(
+                order=order_obj,
+                product=product_obj,
+                name=value['name'],
+                price=value['price'],
+                quant=value['quant'],
+                summ=value['sum_'])
 
         return super(OrderView, self).form_valid(form)
 
     def get_initial(self):
-        return {'summ': self.request.session.get('sum_cart',0), 'quant': self.request.session.get('count_cart',0)}
+        session = self.request.session
+        '''
+        if not 'products' in self.request.session:
+            session['products'] = {}
+            session['total'] = 0
+            session['count'] = 0
+        '''
+
+
+        return {'summ': session['cart']['total'], 'quant': session['cart']['count']}
 
 
 class ThankView(TemplateView):

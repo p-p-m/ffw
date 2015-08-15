@@ -154,9 +154,9 @@
                     <ul class="thumbnails-in-product">
                         {% for image in product.images.all %}
                             <li>
-                                <img src="{{ image.image.url }}"
+                                <img src="{{ image.image_small_thumbnail.url }}"
                                     data-front="image-in-product"
-                                    data-front-url="{{ image.image.url }}"
+                                    data-front-url="{{ image.image_small_thumbnail.url }}"
                                     alt="{{ image.description }}"
                                     title="{{ image.description }}">
                             </li>

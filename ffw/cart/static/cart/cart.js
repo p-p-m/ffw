@@ -29,7 +29,9 @@ Object cart:
         cart.total - total cost of the cart products
 
         cart.count - total quantity of the cart products
+
         cart.url - url
+
 While no use settings .
 Settings:
     There is necessary insert in  settings:
@@ -60,7 +62,6 @@ var cart = {
                      callback();
                  };
             };
-            console.log( 'cart.js.cart.UpdateCart...cart - ', cart)
     },
     'set': function(product_pk, quant, callback=null, callbackData=null) {
         cart.csrf();
@@ -74,7 +75,7 @@ var cart = {
            },
             dataType: 'text'
         })
-        .done(function(responseData) {console.log('responseData - ', responseData)
+        .done(function(responseData) {
              cart.updateCartAndCallback(responseData, callback, callbackData);
         });
     },
@@ -105,7 +106,7 @@ var cart = {
            },
             dataType: 'text'
        })
-        .done(function(data) {console.log('cart.js.remove.done - ', data)
+        .done(function(data) {
              cart.updateCartAndCallback(data, callback, callbackData);
         });
     },

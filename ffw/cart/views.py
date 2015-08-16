@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 
 from forms import OrderForm
 from models import OrderedProduct
-from products.models import Product
+from products.models import Product,  ProductConfiguration
 from . import settings
 
 
@@ -33,11 +33,14 @@ class Cart():
     def set(self, product_pk, quant):
         if quant > 0:
             product_pk = int(product_pk)
-            product = get_object_or_404(Product, pk=product_pk)
-            price = float(product.price_min)
+            product = get_object_or_404(ProductConfiguration, pk=product_pk)
+            price = float(product.price_uah)
+            product_code = product.code
+            name = product.product.name
             sum_ = round(quant * price, 2)
             product_pk = str(product_pk)
-            self.cart['products'][product_pk] = {'name': product.name, 'product_code': 'kjhgf', 'price': price, 'quant': quant, 'sum_': sum_}
+            self.cart['products'][product_pk] = {'name': name, 'product_code': product_code, 'price': price,
+                                                                  'quant': quant, 'sum_': sum_}
             self._calculate()
         else:
             self.remove(product_pk)
@@ -58,36 +61,38 @@ class Cart():
 
         self.set(product_pk, quant)
 
+class ResponseView(View):
+    def format_response(self, cart):
+        self.request.session['cart'] = cart.cart
+        return HttpResponse(json.dumps({'cart': self.request.session['cart']}))
 
-class CartView(View):
+
+class CartView(ResponseView):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
             cart = Cart(request)
-            request.session['cart'] = cart.cart
-            return HttpResponse(json.dumps({'cart': request.session['cart']}))
+            return self.format_response(cart)
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
             cart = Cart(request)
             cart.clear()
-            request.session['cart'] = cart.cart
-            return HttpResponse(json.dumps({'cart': request.session['cart']}))
+            return self.format_response(cart)
 
 
-class CartRemoveView(View):
+class CartRemoveView(ResponseView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk = request.POST.get('product_pk', '')
             cart = Cart(request)
             cart.remove(product_pk)
-            request.session['cart'] = cart.cart
-            return HttpResponse((json.dumps({'cart': request.session['cart']})))
+            return self.format_response(cart)
 
 
-class CartSetView(View):
+class CartSetView(ResponseView):
 
     def _call_cart(self, cart, product_pk, quant):
         cart.set(product_pk, quant)
@@ -103,8 +108,7 @@ class CartSetView(View):
 
             cart = Cart(request)
             self._call_cart(cart, product_pk, quant)
-            request.session['cart'] = cart.cart
-            return HttpResponse(json.dumps({'cart': request.session['cart']}))
+            return self.format_response(cart)
 
 
 class CartAddView(CartSetView):

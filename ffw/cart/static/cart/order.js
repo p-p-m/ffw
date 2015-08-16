@@ -20,12 +20,11 @@ $(document).ready(function() {
         if (confirm("Удалить товар из корзины?")) {
             $('tr#' + product_pk).remove();
             cart.remove(product_pk, callback=order.setTotalData);
-            console.log('end - ', cart)
         };
    });
 
    $('button#set').on('click', function() {
-        for (product_pk=1; product_pk<6; product_pk++) {
+        for (product_pk=1; product_pk<3; product_pk++) {
              cart.set(+product_pk, 1, callback=order.setTotalData);
         };
    }) ;

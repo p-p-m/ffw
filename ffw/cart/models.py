@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
-from products.models import Product
+from products.models import ProductConfiguration
 from . import settings
 
 
@@ -25,12 +25,9 @@ class OrderedProduct(models.Model):
     class Meta:
         verbose_name = _('Ordered products')
         verbose_name_plural = _('Ordered products')
-    '''
-    replace field  product on configurations
-    '''
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
-    product = models.ForeignKey(Product, verbose_name='Product', related_name='ordered_product')
+    product = models.ForeignKey(ProductConfiguration, verbose_name='Product', related_name='ordered_product')
     name = models.CharField(_('Name'), max_length=127)
     code = models.CharField(_('Code'), max_length=127, unique=True)
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)

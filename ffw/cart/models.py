@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 from products.models import ProductConfiguration
-from . import settings
 
 
 class Order(TimeStampedModel):
@@ -16,8 +15,8 @@ class Order(TimeStampedModel):
 
     name = models.CharField(_('Name'), max_length=255)
     email = models.EmailField(_('E-mail'), max_length=125)
-    add_communication = models.CharField(_('Additional communication'), max_length=255, blank=True)
-    summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9, default=0)
+    contacts = models.CharField(_('Additional communication'), max_length=255, blank=True)
+    total = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9, default=0)
     quant = models.IntegerField(_('Quantity'),default=0)
 
 
@@ -32,4 +31,4 @@ class OrderedProduct(models.Model):
     code = models.CharField(_('Code'), max_length=127, unique=True)
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quant = models.IntegerField(_('Quantity'), default=0)
-    summ = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)
+    total = models.DecimalField(_('Sum'), decimal_places=2, max_digits=9)

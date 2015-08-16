@@ -8,13 +8,12 @@ from django.views.generic import View, TemplateView, FormView
 from django.views.generic.base import ContextMixin
 from django.utils.decorators import method_decorator
 
-from forms import OrderForm
-from models import OrderedProduct
-from products.models import Product,  ProductConfiguration
-from . import settings
+from .forms import OrderForm
+from .models import OrderedProduct
+from products.models import Product, ProductConfiguration
 
 
-class Cart():
+class Cart(object):
 
     def __init__(self, request):
         if not 'cart' in request.session :
@@ -121,6 +120,7 @@ class OrderView(FormView):
     template_name = 'order.html'
     form_class = OrderForm
     success_url = 'thank/'
+    #success_url = reverse('thank')
 
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
@@ -128,7 +128,6 @@ class OrderView(FormView):
 
     def form_valid(self, form):
         order_obj = form.save()
-
 
         for key, value in self.request.session['cart']['products'].items():
             product_obj = Product.objects.get(id=int(key))
@@ -149,7 +148,7 @@ class OrderView(FormView):
             if not 'products' in self.request.session['cart']:
                 self.request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
 
-        return {'summ': self.request.session['cart']['total'], 'quant': self.request.session['cart']['count']}
+        return {'total': self.request.session['cart']['total'], 'quant': self.request.session['cart']['count']}
 
 class ThankView(TemplateView):
     template_name = 'thank.html'

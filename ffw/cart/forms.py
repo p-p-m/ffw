@@ -9,6 +9,6 @@ class OrderForm(ModelForm):
         fields = [
             'name',
             'email',
-            'add_communication',
+            'contacts',
             'quant',
-            'summ']
+            'total']

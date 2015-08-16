@@ -49,7 +49,7 @@ var cart = {
     'total': 0,
     'count': 0,
     'url': '',
-    'updateCartAndCallback': function(data, callback=null, callbackData=null) {
+    'updateCartAndCallback': function(data, callback, callbackData) {
             var obj = $.parseJSON(data);
             cart.count = obj.cart.count;
             cart.total = obj.cart.total;
@@ -63,7 +63,7 @@ var cart = {
                  };
             };
     },
-    'set': function(product_pk, quant, callback=null, callbackData=null) {
+    'set': function(product_pk, quant, callback, callbackData) {
         cart.csrf();
 
         $.ajax({
@@ -79,7 +79,7 @@ var cart = {
              cart.updateCartAndCallback(responseData, callback, callbackData);
         });
     },
-    'add': function(product_pk, quant, callback=null, callbackData=null) {
+    'add': function(product_pk, quant, callback, callbackData) {
         cart.csrf();
 
         $.ajax({
@@ -95,7 +95,7 @@ var cart = {
              cart.updateCartAndCallback(data, callback, callbackData);
         });
     },
-    'remove': function(product_pk, callback=null, callbackData=null) {
+    'remove': function(product_pk, callback, callbackData) {
         cart.csrf();
 
         $.ajax({
@@ -110,7 +110,7 @@ var cart = {
              cart.updateCartAndCallback(data, callback, callbackData);
         });
     },
-    'clear': function(callback=null, callbackData=null) {
+    'clear': function(callback, callbackData) {
         cart.csrf();
 
         $.ajax({
@@ -122,7 +122,7 @@ var cart = {
              cart.updateCartAndCallback(data, callback, callbackData);
         });
    },
-    'get': function(callback=null, callbackData=null) {
+    'get': function(callback, callbackData) {
         $.ajax({
             url: cart.url,
             type: "GET",

@@ -11,7 +11,7 @@ $(document).ready(function() {
         },
         'setTotalData': function() {
             $('input#id_quant').val(cart.count);
-            $('input#id_summ').val(cart.total)
+            $('input#id_total').val(cart.total)
         },
      };
 
@@ -37,10 +37,10 @@ $(document).ready(function() {
     }) ;
 
     $('button#add').on('click', function() {
-             cart.add(1, 5, callback=order.setTotalData);
-        });
+        cart.add(1, 5, callback=order.setTotalData);
+    });
 
     $('button#clear').on('click', function() {
-             cart.clear(callback=order.setTotalData);
-        });
+         cart.clear(callback=order.setTotalData);
+    });
 });

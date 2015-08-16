@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, verbose_name='modified', editable=False)),
                 ('name', models.CharField(max_length=255, verbose_name='Name')),
                 ('email', models.EmailField(max_length=125, verbose_name='E-mail')),
-                ('add_communication', models.CharField(max_length=255, verbose_name='Additional communication', blank=True)),
+                ('contacts', models.CharField(max_length=255, verbose_name='Additional communication', blank=True)),
                 ('total', models.DecimalField(verbose_name='Total', max_digits=9, decimal_places=2)),
             ],
             options={

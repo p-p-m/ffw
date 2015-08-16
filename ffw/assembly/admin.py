@@ -1,7 +1,10 @@
+# coding: utf-8
 """
 This file is showing admin model for developers and water filters only.
 All custom admin views have to be located in application 'admin'.
 """
+from __future__ import unicode_literals
+
 import re
 
 from django import forms
@@ -199,7 +202,6 @@ class ProductConfigurationInline(admin.TabularInline):
                 'attributes': s,
             }] * 4
             formset.__init__ = curry(formset.__init__, initial=initial)
-            print 'qwwww'
 
             # Brutal hook to add initial values to new configurations
             def formset_empty_form(self):

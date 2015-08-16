@@ -5,14 +5,15 @@ import logging
 
 from constance import config
 from django.db import models
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, FieldError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 from django.utils.encoding import python_2_unicode_compatible
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
+from model_utils import FieldTracker
 from model_utils.models import TimeStampedModel
 
 from core.models import ImageFieldWaterMark
@@ -141,6 +142,14 @@ class Subcategory(AbstractCategory):
     def get_url(self):
         return reverse('products', args=(self.category.section.slug, self.category.slug, self.slug))
 
+    def get_all_related_characteristics(self):
+        query = (
+            models.Q(subcategories=self) |
+            models.Q(categories=self.category) |
+            models.Q(sections=self.category.section)
+        )
+        return Characteristic.objects.filter(query)
+
 
 PRODUCT_CATEGORIES_MODELS = [Subcategory, Category, Section]
 
@@ -167,11 +176,30 @@ class Product(TimeStampedModel):
         _('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)],
         help_text=_('Number between 0 and 5 that will be used for default sorting on products page. Products with '
                     'higher numbers will be displayed higher'))
-    price_min = models.FloatField(_('Max price in UAH'), null=True)
-    price_max = models.FloatField(_('Min price in UAH'), null=True)
+    price_min = models.DecimalField(_('Max price in UAH'), null=True, max_digits=10, decimal_places=2)
+    price_max = models.DecimalField(_('Min price in UAH'), null=True, max_digits=10, decimal_places=2)
+
+    tracker = FieldTracker()
 
     def __str__(self):
         return '{}'.format(self.name)
+
+    def clean(self):
+        # if subcategory changed
+        if Product.objects.filter(id=self.id).exclude(subcategory=self.subcategory).exists():
+            characteristics_names = set(self.subcategory.get_all_related_characteristics().values_list(
+                'name', flat=True))
+            for configuration in self.configurations.all():
+                attributes_names = set(configuration.attributes.values_list('name', flat=True))
+                missing_attributes = characteristics_names - attributes_names
+                if missing_attributes:
+                    raise ValidationError(
+                        ugettext('Product configuration %(configuration_code)s does not have attributes with '
+                                 'names: %(missing_attributes)s. They are required for new subcategory.') % {
+                            'configuration_code': configuration.code,
+                            'missing_attributes': ', '.join(missing_attributes),
+                            }
+                        )
 
     def get_url(self):
         return reverse('product', args=(self.slug, ))
@@ -180,7 +208,10 @@ class Product(TimeStampedModel):
         return self.images.all()
 
     def get_first_image(self):
-        return self.images.first()
+        image = self.images.filter(is_main=True).first()
+        if image is None:
+            image = self.images.first()
+        return image
 
     def get_characteristics(self):
         query = (
@@ -200,6 +231,24 @@ class Product(TimeStampedModel):
         else:
             return self.price_min
 
+    def get_attributes(self):
+        """
+        Return all attributes if product has one configuration, else return common attributes for configurations
+        """
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        if self.configurations.count() > 1:
+            configurations_attribures_names = [set(c.attributes.all().values_list('name', 'value'))
+                                               for c in self.configurations.all()]
+            equal_attribures = reduce(lambda x, y: x & y, configurations_attribures_names)
+            return attributes.filter(
+                name__in=[name for name, _ in equal_attribures], product_configuration=self.configurations.all()[0])
+        else:
+            return attributes
+
+    def recalculate_prices(self):
+        self.price_max = self.configurations.aggregate(models.Max('price_uah'))['price_uah__max']
+        self.price_min = self.configurations.aggregate(models.Min('price_uah'))['price_uah__min']
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):
@@ -210,9 +259,9 @@ class ProductConfiguration(models.Model):
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
     code = models.CharField(_('Code'), max_length=127, unique=True)
     is_active = models.BooleanField(_('Is configuration active'), default=True)
-    price_uah = models.FloatField(_('Price in UAH'), null=True)
-    price_eur = models.FloatField(_('Price in EUR'), null=True)
-    price_usd = models.FloatField(_('Price in USD'), null=True)
+    price_uah = models.DecimalField(_('Price in UAH'), null=True, max_digits=10, decimal_places=2)
+    price_eur = models.DecimalField(_('Price in EUR'), null=True, max_digits=10, decimal_places=2)
+    price_usd = models.DecimalField(_('Price in USD'), null=True, max_digits=10, decimal_places=2)
 
     def __str__(self):
         return '{}-{}'.format(self.product, self.code)
@@ -235,7 +284,7 @@ class ProductConfiguration(models.Model):
                 return self.attributes.get(name='key').value
 
             def __setattr__(self_, key, value):
-                attr, _ = self.attributes.get_or_create(name=key)
+                attr, created = self.attributes.get_or_create(name=key)
                 attr.value = value
                 attr.save()
 
@@ -255,6 +304,14 @@ class ProductConfiguration(models.Model):
             self.price_usd = value / config.USD_RATE
         if not self.price_eur:
             self.price_eur = value / config.EUR_RATE
+
+    def get_unique_attributes(self):
+        common_attributes = self.product.get_attributes()
+        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True))
+
+    def get_formatted_unique_attributes(self):
+        unique_attributes = self.get_unique_attributes()
+        return ', '.join(['{}: {}'.format(a.name, a.pretty_value) for a in unique_attributes])
 
     def save(self, *args, **kwargs):
         self.init_prices()
@@ -285,9 +342,28 @@ class ProductAttribute(models.Model):
         except (ValueError, TypeError):
             self.value_float = None
 
+    def connect_with_characteristic(self, subcategory=None, save=False):
+        """ Find characteristic that related to this attribute and connect to it """
+        subcategory = self.product_configuration.product.subcategory if subcategory is None else subcategory
+        try:
+            c = subcategory.get_all_related_characteristics().get(name=self.name)
+            self.characteristic = c
+            self.units = c.units
+            if save:
+                self.save()
+        except Characteristic.DoesNotExist:
+            pass
+
     def save(self, *args, **kwargs):
         self._init_values()
         return super(ProductAttribute, self).save(*args, **kwargs)
+
+    @property
+    def pretty_value(self):
+        if self.units:
+            return '{} ({})'.format(self.value, self.units)
+        else:
+            return self.value
 
 
 class ProductImage(models.Model):
@@ -308,3 +384,6 @@ class ProductImage(models.Model):
         format='JPEG',
         options={'quality': 100})
     description = models.CharField(_('Image description'), max_length=127, blank=True)
+    is_main = models.BooleanField(
+        default=True,
+        help_text=_('If image is main - it will be displayed on product list page'))

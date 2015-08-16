@@ -40,6 +40,9 @@
             } // logo
         } // &.logo-box
         &.search-box {
+            @include bp(xs) {
+                display: none;
+            } // xs
             @include table-cell;
             @include bp(sm) {
                 @include table-cell;
@@ -78,6 +81,9 @@
                 padding-left: 20px;
             } // lg
             .info {
+                @include bp(xs) {
+                    width: 100%;
+                } // xs
                 @include inline-middle;
                 background-color: white;
                 width: 50%;

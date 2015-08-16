@@ -31,7 +31,7 @@ class HomeView(View):
 
 class ProductListView(ListView):
 
-    paginate_by = 10
+    paginate_by = 12
     allow_empty = True
 
     def get(self, request, *args, **kwargs):
@@ -46,7 +46,7 @@ class ProductListView(ListView):
         return 'products'
 
     def get_queryset(self):
-        queryset = products_models.Product.objects.all().select_related('images')
+        queryset = products_models.Product.objects.filter(is_active=True).select_related('images')
 
         self.filters = []
         if 'subcategory' in self.kwargs:
@@ -135,6 +135,7 @@ class ProductListView(ListView):
         context['total_count'] = self.get_queryset().count()
         context['sort_form'] = products_forms.SortForm(self.request.GET)
         context['filters'] = self.filters
+        context['view_type'] = self.request.GET.get('view_type', 'list')
 
         if not self.request.is_ajax():
             context['selected_subcategory'] = self._get_selected_subcategory()
@@ -146,5 +147,5 @@ class ProductListView(ListView):
 class ProductView(View):
 
     def get(self, request, product):
-        product = get_object_or_404(models.Product.objects.select_related('attributes', 'images'), slug=product)
+        product = get_object_or_404(products_models.Product.objects.select_related('images'), slug=product)
         return render(request, 'products/product.html', {'product': product})

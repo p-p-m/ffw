@@ -79,6 +79,13 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
+                        cwd: 'bower_components/fontawesome/css',
+                        src: ['*.js'],
+                        dest: 'static/css/',
+                        filter: 'isFile'
+                    },
+                    {
+                        expand: true,
                         cwd: 'bower_components/normalize.css',
                         src: ['normalize.css'],
                         dest: 'static/css/',

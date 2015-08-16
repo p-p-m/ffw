@@ -1,0 +1,13 @@
+{% if view_type == 'grid' %}
+    {% with products as items %}
+        {% for item in items %}
+            {% include 'items/product-grid.html' %}
+        {% endfor %}
+    {% endwith %}
+{% else %}
+    {% with products as items %}
+        {% for item in items %}
+            {% include 'items/product-list.html' %}
+        {% endfor %}
+    {% endwith %}
+{% endif %}

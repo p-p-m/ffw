@@ -19,7 +19,7 @@ class FilterMixin(models.Model):
     priority = models.FloatField(
         _('Priority'), default=1, help_text=_('Filters with higher priority are displayed higher on page'))
     is_auto_update = models.BooleanField(
-        default=False,
+        default=True,
         help_text=_('If auto update is activated - filter will be'
                     ' automatically fill his fields.'))
 
@@ -52,6 +52,11 @@ class NumericFilterMixin(FilterMixin):
 
     class Meta:
         abstract = True
+
+    def clean(self):
+        if self.min_value > self.max_value:
+            raise ValidationError(_('Min has to be lower then max'))
+        return super(NumericFilterMixin, self).clean()
 
     def get_type(self):
         return FilterTypes.NUMERIC
@@ -126,7 +131,7 @@ class IntervalsFilterMixin(FilterMixin):
 
     def clean(self):
         if self.is_auto_update:
-            raise ValidationError('Interval filter does not support auto update')
+            self.is_auto_update = False
         if not self.intervals:
             raise ValidationError('Intervals have to be manually inserted for interval filter')
         try:

@@ -14,9 +14,15 @@ class ProductsConfig(AppConfig):
 
     def ready(self):
         signals.post_save.connect(
-            handlers.create_price_attributes,
+            handlers.calculate_price_attributes,
             sender=models.ProductConfiguration,
-            dispatch_uid='products.handlers.create_price_attributes',
+            dispatch_uid='products.handlers.calculate_price_attributes',
+        )
+
+        signals.post_delete.connect(
+            handlers.calculate_price_attributes,
+            sender=models.ProductConfiguration,
+            dispatch_uid='products.handlers.calculate_price_attributes',
         )
 
         signals.post_save.connect(
@@ -35,4 +41,10 @@ class ProductsConfig(AppConfig):
             handlers.connect_attribute_with_characteristic,
             sender=models.ProductAttribute,
             dispatch_uid='products.handlers.connect_attribute_with_characteristic',
+        )
+
+        signals.pre_save.connect(
+            handlers.disconnect_attributes_from_characteristics_on_subcategory_change,
+            sender=models.Product,
+            dispatch_uid='products.handlers.disconnect_attributes_from_characteristics_on_subcategory_change'
         )

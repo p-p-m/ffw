@@ -55,12 +55,7 @@ var cart = {
             cart.total = obj.cart.total;
             cart.products = obj.cart.products;
             if (callback) {
-                if (callbackData) {
-                     callback(callbackData);
-                }
-                 else {
-                     callback();
-                 };
+                callback();
             };
     },
     'set': function(product_pk, quant, callback, callbackData) {

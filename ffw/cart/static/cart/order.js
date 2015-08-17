@@ -6,7 +6,8 @@ $(document).ready(function() {
     var order = {
         'setProduct': function(data) {
             product = cart.products[data.product_pk];
-            $('td#' + data.product_pk + '_sum').text(product.sum_ );
+            var name = data.product_pk + '_sum';
+            $('[data-role=' + '"' + name  + '"'+ "]").text(product.sum_ );
             order.setTotalData();
         },
         'setTotalData': function() {
@@ -15,7 +16,7 @@ $(document).ready(function() {
         },
      };
 
-    $('button#remove').on('click', function() {
+    $('[data-role = "remove"]').on('click', function() {
         var product_pk = this.value;
         if (confirm("Удалить товар из корзины?")) {
             $('tr#' + product_pk).remove();
@@ -23,24 +24,25 @@ $(document).ready(function() {
         };
    });
 
-   $('button#set').on('click', function() {
+   $('[data-role = "set"]').on('click', function() {
         for (product_pk=1; product_pk<3; product_pk++) {
              cart.set(+product_pk, 1, callback=order.setTotalData);
         };
    }) ;
 
-   $(".quant").change( function() {
-        var product_pk = this.id;
-        var quant = this.value;
-        order.product_pk = product_pk;
-        cart.set(product_pk, quant, callback=order.setProduct, callbackData={'product_pk': product_pk});
+   $('[data-role = "quant"]').change( function() {
+       var product_pk = this.id;
+       var quant = this.value;
+       order.product_pk = product_pk;
+       var  callback = order.setProduct.bind('context', {'product_pk': product_pk});
+       cart.set(+product_pk, quant, callback);
     }) ;
 
-    $('button#add').on('click', function() {
+    $('[data-role = "add"]').on('click', function() {
         cart.add(1, 5, callback=order.setTotalData);
     });
 
-    $('button#clear').on('click', function() {
-         cart.clear(callback=order.setTotalData);
+    $('[data-role = "clear"]').on('click', function() {
+        cart.clear(callback=order.setTotalData);
     });
 });

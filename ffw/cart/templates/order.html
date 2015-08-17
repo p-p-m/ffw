@@ -28,20 +28,20 @@
             </tr>
 
             {% for key,value in cart.products.items %}
-                <tr id={{key}}>
-                    <td id={{key}}>{{value.name}}</td>
-                    <td><input class="quant" id={{key}} value={{value.quant}}></td>
+                <tr data-role='product_pk' value={{key}}>
+                    <td data-role='name'>{{value.name}}</td>
+                    <td><input class="quant" id={{key}} data-role='quant' value={{value.quant}}></td>
                     <td>{{value.product_code}}</td>
                     <td >{{value.price}}</td>
-                    <td id={{key}}_sum>{{value.sum_}}</td>
-                    <td><button id='remove' value={{key}}> Удалить</button></td>
+                    <td data-role={{key}}_sum>{{value.sum_}}</td>
+                    <td><button data-role='remove' value={{key}}> Удалить</button></td>
                 </tr>
             {% endfor %}
 
         </table> <br/>
-        <button id = 'set'> Пополнить корзину</button>
-        <button id = 'add'> Добавить товар pk=1 5 шт</button>
-        <button id = 'clear'>Очистить корзину   </button>
+        <button data-role='set'> Пополнить корзину</button>
+        <button data-role='add'> Добавить товар pk=1 5 шт</button>
+        <button data-role='clear'>Очистить корзину   </button>
         <form action="." method="post">{% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>

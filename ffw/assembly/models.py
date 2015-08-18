@@ -93,7 +93,6 @@ class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
         attribute_query = self.get_attribute_query()
         selected_min_value, selected_max_value = self._get_min_and_max(request)
         filter_query = self.get_filter_query('attributes__value_float', selected_min_value, selected_max_value)
-        print 'FITLER QUERY', filter_query
         return queryset.filter(attribute_query, filter_query)
 
     def update(self):

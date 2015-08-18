@@ -179,6 +179,8 @@ class Product(TimeStampedModel):
     price_min = models.DecimalField(_('Max price in UAH'), null=True, max_digits=10, decimal_places=2)
     price_max = models.DecimalField(_('Min price in UAH'), null=True, max_digits=10, decimal_places=2)
 
+    materials = models.ForeignKey(Subcategory, verbose_name=_('Consumables and accessories'), null=True)
+
     tracker = FieldTracker()
 
     def __str__(self):
@@ -248,6 +250,10 @@ class Product(TimeStampedModel):
     def recalculate_prices(self):
         self.price_max = self.configurations.aggregate(models.Max('price_uah'))['price_uah__max']
         self.price_min = self.configurations.aggregate(models.Min('price_uah'))['price_uah__min']
+
+    def get_materials(self):
+        if self.materials:
+            return self.materials.products.all()[:8]
 
 
 @python_2_unicode_compatible

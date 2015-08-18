@@ -200,6 +200,7 @@ class Command(BaseCommand):
                     short_description='product-short-description-{}-{}'.format(subcategory.id, i),
                     description='product-description-{}-{}'.format(subcategory.id, i),
                     subcategory=subcategory,
+                    materials=subcategories[1],
                 )
                 products_models.ProductImage.objects.create(
                     product=product,

@@ -7,19 +7,23 @@ $(document).ready(function() {
         'setProduct': function(data) {
             product = cart.products[data.product_pk];
             var name = data.product_pk + '_sum';
-            $('[data-role=' + '"' + name  + '"'+ "]").text(product.sum_ );
+            $(order.selector_role(name)).text(product.sum_ );
             order.setTotalData();
         },
         'setTotalData': function() {
             $('input#id_quant').val(cart.count);
             $('input#id_total').val(cart.total)
         },
+
+        'selector_role': function(name) {
+            return '[data-role=' + '"' + name  + '"'+ "]"
+        }
      };
 
     $('[data-role = "remove"]').on('click', function() {
         var product_pk = this.value;
         if (confirm("Удалить товар из корзины?")) {
-            $('tr#' + product_pk).remove();
+             $(order.selector_role(product_pk)).remove();
             cart.remove(product_pk, callback=order.setTotalData);
         };
    });

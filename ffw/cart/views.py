@@ -120,8 +120,13 @@ class CartAddView(CartSetView):
 class OrderView(FormView):
     template_name = 'order.html'
     form_class = OrderForm
-    success_url = 'thank/'
-    #success_url = reverse('thank')
+
+    def get_success_url(self):
+        return reverse('thank')
+
+    def __init__(self):
+        super(OrderView,self).__init__()
+        self.success_url =self.get_success_url()
 
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
@@ -131,14 +136,14 @@ class OrderView(FormView):
         order_obj = form.save()
 
         for key, value in self.request.session['cart']['products'].items():
-            product_obj = Product.objects.get(id=int(key))
+            product_obj = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order_obj,
                 product=product_obj,
                 name=value['name'],
                 price=value['price'],
                 quant=value['quant'],
-                summ=value['sum_'])
+                total=value['sum_'])
 
         return super(OrderView, self).form_valid(form)
 

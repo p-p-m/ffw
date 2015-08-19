@@ -28,9 +28,9 @@
             </tr>
 
             {% for key,value in cart.products.items %}
-                <tr data-role='product_pk' value={{key}}>
+                <tr data-role= {{key}} >
                     <td data-role='name'>{{value.name}}</td>
-                    <td><input class="quant" id={{key}} data-role='quant' value={{value.quant}}></td>
+                    <td><input class="quant" id={{key}} data-role='quant'  data-pk= {{key}} value={{value.quant}}></td>
                     <td>{{value.product_code}}</td>
                     <td >{{value.price}}</td>
                     <td data-role={{key}}_sum>{{value.sum_}}</td>

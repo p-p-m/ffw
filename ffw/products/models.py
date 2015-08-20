@@ -1,11 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import collections
 import logging
 
 from constance import config
 from django.db import models
-from django.core.exceptions import ValidationError, FieldError
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
@@ -148,7 +149,7 @@ class Subcategory(AbstractCategory):
             models.Q(categories=self.category) |
             models.Q(sections=self.category.section)
         )
-        return Characteristic.objects.filter(query)
+        return Characteristic.objects.filter(query).distinct()
 
 
 PRODUCT_CATEGORIES_MODELS = [Subcategory, Category, Section]
@@ -254,6 +255,19 @@ class Product(TimeStampedModel):
     def get_materials(self):
         if self.materials:
             return self.materials.products.all()[:8]
+
+    def get_products_with_same_name(self):
+        return Product.objects.filter(name=self.name)[:8]
+
+    # XXX: This method is too complex we need to do it in other way
+    def get_similar_products(self):
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        similar_products_groups = [list(Product.objects.filter(configurations__attributes__name=attribute.name,
+                                                               configurations__attributes__value=attribute.value,
+                                                               subcategory__category=self.subcategory.category))
+                                   for attribute in attributes]
+        similar_products = sum(similar_products_groups, [])
+        return collections.Counter(similar_products).keys()[:4]
 
 
 @python_2_unicode_compatible

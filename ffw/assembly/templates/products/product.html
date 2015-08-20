@@ -9,10 +9,12 @@
     <div class="wrap">
         <div class="filters-in-view" data-front="side-panel">
             <div class="produc-side-block">
-                <div class="product-image">
-                    <img src="{{ product.get_first_image.image_small_thumbnail.url }}"
-                         alt="product.get_first_image.description">
-                </div>
+                {% if product.get_first_image %}
+                    <div class="product-image">
+                        <img src="{{ product.get_first_image.image_small_thumbnail.url }}"
+                             title="{{ product.get_first_image.description }}">
+                    </div>
+                {% endif %}
             </div>
             <div class="produc-side-block">
                 <div class="price-line">
@@ -51,9 +53,11 @@
                             <a href="#charachteristics" data-front="scroll-to" class="guide-icon charachteristics">Характеристики</a>
                         </li>
                     {% endif %}
-                    <li>
-                        <a href="#photos" data-front="scroll-to" class="guide-icon photos">Фото</a>
-                    </li>
+                    {% if product.get_first_image %}
+                        <li>
+                            <a href="#photos" data-front="scroll-to" class="guide-icon photos">Фото</a>
+                        </li>
+                    {% endif %}
                     <li>
                         <a href="#comments" data-front="scroll-to" class="guide-icon comments">Отзывы</a>
                     </li>
@@ -151,24 +155,26 @@
                     </div>
                     <!-- /product-block -->
                 {% endif %}
-                <!-- product images -->
-                <div class="product-block" id="photos">
-                    <h3 class="product-block-title comments">
-                        Фото
-                    </h3>
-                    <ul class="thumbnails-in-product">
-                        {% for image in product.images.all %}
-                            <li>
-                                <img src="{{ image.image_small_thumbnail.url }}"
-                                    data-front="image-in-product"
-                                    data-front-url="{{ image.image_small_thumbnail.url }}"
-                                    alt="{{ image.description }}"
-                                    title="{{ image.description }}">
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <!-- /product images -->
+                {% if product.get_first_image %}
+                    <!-- product images -->
+                    <div class="product-block" id="photos">
+                        <h3 class="product-block-title comments">
+                            Фото
+                        </h3>
+                        <ul class="thumbnails-in-product">
+                            {% for image in product.images.all %}
+                                <li>
+                                    <img src="{{ image.image_small_thumbnail.url }}"
+                                        data-front="image-in-product"
+                                        data-front-url="{{ image.image_small_thumbnail.url }}"
+                                        alt="{{ image.description }}"
+                                        title="{{ image.description }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- /product images -->
+                {% endif %}
                 <!-- product-block -->
                 <div class="product-block" id="comments">
                     <h3 class="product-block-title comments">

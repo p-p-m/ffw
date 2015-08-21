@@ -46,6 +46,8 @@
             {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>
         </form>
+            <div> Заказано товаров, шт: <span data-role='count'>{{cart.count}}</span></div>
+            <div> на сумму, грн: <span data-role='total'>{{cart.total}}</span></div>
 
     </body>
 </html>

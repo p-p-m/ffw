@@ -11,8 +11,8 @@ $(document).ready(function() {
             order.setTotalData();
         },
         'setTotalData': function() {
-            $('[data-role="id_quant"]').val(cart.count);
-            $('[data-role="id_total"]').val(cart.total);
+            $('[data-role="count"]').text(cart.count);
+            $('[data-role="total"]').text(cart.total);
         },
 
         'selector_role': function(name) {

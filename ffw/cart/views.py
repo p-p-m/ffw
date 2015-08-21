@@ -10,7 +10,7 @@ from django.views.generic.base import ContextMixin
 from django.utils.decorators import method_decorator
 
 from .forms import OrderForm
-from .models import OrderedProduct
+from .models import OrderedProduct, Order
 from products.models import Product, ProductConfiguration
 
 
@@ -133,28 +133,23 @@ class OrderView(FormView):
         return context
 
     def form_valid(self, form):
-        order_obj = form.save()
+        order = form.save(commit=False)
+        order.count = self.request.session['cart']['count']
+        order.total = self.request.session['cart']['total']
+        order.save()
 
         for key, value in self.request.session['cart']['products'].items():
             product_obj = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
-                order=order_obj,
+                order=order,
                 product=product_obj,
                 name=value['name'],
                 price=value['price'],
                 quant=value['quant'],
                 total=value['sum_'])
-
+            ordered_product.save()
         return super(OrderView, self).form_valid(form)
 
-    def get_initial(self):
-        if not 'cart' in self.request.session :
-            self.request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
-        else:
-            if not 'products' in self.request.session['cart']:
-                self.request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
-
-        return {'total': self.request.session['cart']['total'], 'quant': self.request.session['cart']['count']}
 
 class ThankView(TemplateView):
     template_name = 'thank.html'

@@ -133,21 +133,26 @@ class OrderView(FormView):
         return context
 
     def form_valid(self, form):
-        order = form.save(commit=False)
-        order.count = self.request.session['cart']['count']
-        order.total = self.request.session['cart']['total']
-        order.save()
+        order = form.save()
+        self.count = 0
+        self.total = 0
 
         for key, value in self.request.session['cart']['products'].items():
             product_obj = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order,
                 product=product_obj,
-                name=value['name'],
-                price=value['price'],
+                name=product_obj.product.name,
+                price=product_obj.price_uah,
                 quant=value['quant'],
-                total=value['sum_'])
+                total=round(product_obj.price_uah * value['quant'], 2))
             ordered_product.save()
+            self.total += ordered_product.total
+            self.count += ordered_product.quant
+
+        order.count = self.count
+        order.total = self.total
+        order.save()
         return super(OrderView, self).form_valid(form)
 
 

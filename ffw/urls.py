@@ -14,6 +14,7 @@ urlpatterns = patterns(
     url(r'^gallery/', include('gallery.urls')),
     url(r'^cart/', include('cart.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^summernote/', include('django_summernote.urls')),
 )
 
 

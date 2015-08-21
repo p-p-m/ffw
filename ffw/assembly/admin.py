@@ -12,6 +12,7 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import widgets
 from django.utils.functional import curry
+from django_summernote.admin import SummernoteModelAdmin
 
 from assembly import models as assembly_models
 from products import models as products_models
@@ -223,7 +224,7 @@ class ProductImageInline(admin.TabularInline):
     extra = 0
 
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(SummernoteModelAdmin):
     inlines = (ProductConfigurationInline, ProductImageInline)
     model = products_models.Product
     list_display = ('name', 'is_active', 'modified', 'created')

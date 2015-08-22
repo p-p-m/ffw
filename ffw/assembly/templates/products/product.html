@@ -9,17 +9,23 @@
     <div class="wrap">
         <div class="filters-in-view" data-front="side-panel">
             <div class="produc-side-block">
-                <div class="product-image">
-                    <img src="{{ product.get_first_image.image_small_thumbnail.url }}"
-                         alt="product.get_first_image.description">
-                </div>
+                {% if product.get_first_image %}
+                    <div class="product-image">
+                        <img src="{{ product.get_first_image.image_small_thumbnail.url }}"
+                             title="{{ product.get_first_image.description }}">
+                    </div>
+                {% endif %}
             </div>
             <div class="produc-side-block">
                 <div class="price-line">
-                    <span class="price" data-role="product-price">{{ product.get_display_price_uah }}</span>
-                    <span class="currency">грн.</span>
+                    {% if product.get_display_price_uah %}
+                        <span class="price" data-role="product-price">{{ product.get_display_price_uah }}</span>
+                        <span class="currency">грн.</span>
+                    {% else %}
+                        <span class="currency">свяжитесь с нами насчет цены</span>
+                    {% endif %}
                 </div>
-                {% if not product.configurations.count > 1 %}
+                {% if not product.configurations.count > 1 and product.get_display_price_uah %}
                     <div class="price-line">
                         <div class="combined-price-count">
                             <input type="number" class="count" min="1" value="1" data-role="product-count">
@@ -28,7 +34,7 @@
                     </div>
                 {% endif %}
             </div>
-            {% if not product.configurations.count > 1 %}
+            {% if not product.configurations.count > 1 and product.get_display_price_uah %}
                 <div class="produc-side-block">
                     <div class="by-one-click-side">
                         <input type="text" data-role="phone-mask">
@@ -51,12 +57,19 @@
                             <a href="#charachteristics" data-front="scroll-to" class="guide-icon charachteristics">Характеристики</a>
                         </li>
                     {% endif %}
-                    <li>
-                        <a href="#photos" data-front="scroll-to" class="guide-icon photos">Фото</a>
-                    </li>
+                    {% if product.get_first_image %}
+                        <li>
+                            <a href="#photos" data-front="scroll-to" class="guide-icon photos">Фото</a>
+                        </li>
+                    {% endif %}
                     <li>
                         <a href="#comments" data-front="scroll-to" class="guide-icon comments">Отзывы</a>
                     </li>
+                    {% if product.get_materials %}
+                        <li>
+                            <a href="#materials" data-front="scroll-to" class="guide-icon materials">Комплектующие</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -137,33 +150,37 @@
                         </h3>
                         <table class="chars">
                             {% for attribute in product.get_attributes %}
-                                <tr>
-                                    <td>{{ attribute.name }}</td>
-                                    <td>{{ attribute.pretty_value }}</td>
-                                </tr>
+                                {% if attribute.value %}
+                                    <tr>
+                                        <td>{{ attribute.name }}</td>
+                                        <td>{{ attribute.pretty_value }}</td>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                         </table>
                     </div>
                     <!-- /product-block -->
                 {% endif %}
-                <!-- product images -->
-                <div class="product-block" id="photos">
-                    <h3 class="product-block-title comments">
-                        Фото
-                    </h3>
-                    <ul class="thumbnails-in-product">
-                        {% for image in product.images.all %}
-                            <li>
-                                <img src="{{ image.image_small_thumbnail.url }}"
-                                    data-front="image-in-product"
-                                    data-front-url="{{ image.image_small_thumbnail.url }}"
-                                    alt="{{ image.description }}"
-                                    title="{{ image.description }}">
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <!-- /product images -->
+                {% if product.get_first_image %}
+                    <!-- product images -->
+                    <div class="product-block" id="photos">
+                        <h3 class="product-block-title comments">
+                            Фото
+                        </h3>
+                        <ul class="thumbnails-in-product">
+                            {% for image in product.images.all %}
+                                <li>
+                                    <img src="{{ image.image_small_thumbnail.url }}"
+                                        data-front="image-in-product"
+                                        data-front-url="{{ image.image_small_thumbnail.url }}"
+                                        alt="{{ image.description }}"
+                                        title="{{ image.description }}">
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- /product images -->
+                {% endif %}
                 <!-- product-block -->
                 <div class="product-block" id="comments">
                     <h3 class="product-block-title comments">
@@ -215,109 +232,42 @@
                     {% endcomment %}
                 </div>
                 <!-- /product-block -->
-                {% comment %}
-                <!-- product-block -->
-                <div class="product-block">
-                    <h3 class="product-block-title">
-                        Похожие товары
-                    </h3>
-                    <!-- products-list-box -->
-                    <div class="products-list-box">
-                        <ul class="products-list">
-                            <!-- product-box -->
-                            <li class="product-box">
-                                <a href="#" class="product product-grid">
-                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
-                                    <div class="description elipsis-box">
-                                        <span class="elipsis">
-                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
-                                        </span>
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="/static/images/tmp/waterfilter.png" alt="">
-                                    </div>
-                                    <div class="price-tag">
-                                        <span class="price">340,00</span>
-                                        <span class="currency">грн.</span>
-                                    </div>
-                                    <div class="add-to-cart-box">
-                                        <button class="button button-blue add-to-cart">Купить</button>
-                                    </div>
-                                </a>
-                            </li>
-                            <!-- /product-box -->
-                            <!-- product-box -->
-                            <li class="product-box">
-                                <a href="#" class="product product-grid">
-                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
-                                    <div class="description elipsis-box">
-                                        <span class="elipsis">
-                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
-                                        </span>
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="/static/images/tmp/waterfilter.png" alt="">
-                                    </div>
-                                    <div class="price-tag">
-                                        <span class="price">340,00</span>
-                                        <span class="currency">грн.</span>
-                                    </div>
-                                    <div class="add-to-cart-box">
-                                        <button class="button button-blue add-to-cart">Купить</button>
-                                    </div>
-                                </a>
-                            </li>
-                            <!-- /product-box -->
-                            <!-- product-box -->
-                            <li class="product-box">
-                                <a href="#" class="product product-grid">
-                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
-                                    <div class="description elipsis-box">
-                                        <span class="elipsis">
-                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
-                                        </span>
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="/static/images/tmp/waterfilter.png" alt="">
-                                    </div>
-                                    <div class="price-tag">
-                                        <span class="price">340,00</span>
-                                        <span class="currency">грн.</span>
-                                    </div>
-                                    <div class="add-to-cart-box">
-                                        <button class="button button-blue add-to-cart">Купить</button>
-                                    </div>
-                                </a>
-                            </li>
-                            <!-- /product-box -->
-                            <!-- product-box -->
-                            <li class="product-box">
-                                <a href="#" class="product product-grid">
-                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
-                                    <div class="description elipsis-box">
-                                        <span class="elipsis">
-                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
-                                        </span>
-                                    </div>
-                                    <div class="img-box">
-                                        <img src="/static/images/tmp/waterfilter.png" alt="">
-                                    </div>
-                                    <div class="price-tag">
-                                        <span class="price">340,00</span>
-                                        <span class="currency">грн.</span>
-                                    </div>
-                                    <div class="add-to-cart-box">
-                                        <button class="button button-blue add-to-cart">Купить</button>
-                                    </div>
-                                </a>
-                            </li>
-                            <!-- /product-box -->
-                        </ul>
+                {% if product.get_materials %}
+                    <!-- product-block -->
+                    <div class="product-block" id="materials">
+                        <h3 class="product-block-title">
+                            Материалы и комплектующие
+                        </h3>
+                        <!-- products-list-box -->
+                        <div class="products-list-box">
+                            <ul class="products-list">
+                                {% for material in product.get_materials %}
+                                    <!-- product-box -->
+                                    <li class="product-box">
+                                        <a href="{{ material.get_url }}" class="product product-grid">
+                                            <h2 class="title">{{ material.name }}</h2>
+                                            <div class="description elipsis-box">
+                                                <span class="elipsis">
+                                                    {{ material.short_description }}
+                                                </span>
+                                            </div>
+                                            <div class="img-box" align="center">
+                                                <img src="{{ material.get_first_image.image_small_thumbnail.url }}" alt="">
+                                            </div>
+                                            <div class="price-tag">
+                                                <span class="price">{{ material.get_display_price_uah }}</span>
+                                                <span class="currency">грн.</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- /product-box -->
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- /products-list-box -->
                     </div>
-                    <!-- /products-list-box -->
-                </div>
-                <!-- /product-block -->
-                {% endcomment %}
+                    <!-- /product-block -->
+                {% endif %}
             </div>
         </div>
     </div>

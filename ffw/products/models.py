@@ -1,11 +1,12 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import collections
 import logging
 
 from constance import config
 from django.db import models
-from django.core.exceptions import ValidationError, FieldError
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
@@ -148,7 +149,7 @@ class Subcategory(AbstractCategory):
             models.Q(categories=self.category) |
             models.Q(sections=self.category.section)
         )
-        return Characteristic.objects.filter(query)
+        return Characteristic.objects.filter(query).distinct()
 
 
 PRODUCT_CATEGORIES_MODELS = [Subcategory, Category, Section]
@@ -178,6 +179,8 @@ class Product(TimeStampedModel):
                     'higher numbers will be displayed higher'))
     price_min = models.DecimalField(_('Max price in UAH'), null=True, max_digits=10, decimal_places=2)
     price_max = models.DecimalField(_('Min price in UAH'), null=True, max_digits=10, decimal_places=2)
+
+    materials = models.ForeignKey(Subcategory, verbose_name=_('Consumables and accessories'), null=True, blank=True)
 
     tracker = FieldTracker()
 
@@ -226,6 +229,8 @@ class Product(TimeStampedModel):
         return super(Product, self).save(*args, **kwargs)
 
     def get_display_price_uah(self):
+        if self.price_min is None:
+            return
         if self.price_min != self.price_max:
             return '{}-{}'.format(self.price_min, self.price_max)
         else:
@@ -249,6 +254,23 @@ class Product(TimeStampedModel):
         self.price_max = self.configurations.aggregate(models.Max('price_uah'))['price_uah__max']
         self.price_min = self.configurations.aggregate(models.Min('price_uah'))['price_uah__min']
 
+    def get_materials(self):
+        if self.materials:
+            return self.materials.products.all()[:8]
+
+    def get_products_with_same_name(self):
+        return Product.objects.filter(name=self.name)[:8]
+
+    # XXX: This method is too complex we need to do it in other way
+    def get_similar_products(self):
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        similar_products_groups = [list(Product.objects.filter(configurations__attributes__name=attribute.name,
+                                                               configurations__attributes__value=attribute.value,
+                                                               subcategory__category=self.subcategory.category))
+                                   for attribute in attributes]
+        similar_products = sum(similar_products_groups, [])
+        return collections.Counter(similar_products).keys()[:4]
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):
@@ -265,10 +287,6 @@ class ProductConfiguration(models.Model):
 
     def __str__(self):
         return '{}-{}'.format(self.product, self.code)
-
-    def clean(self):
-        if not self.price_uah and not self.price_usd and not self.price_eur:
-            raise ValidationError('At least one price has to be defined')
 
     @property
     def attrs(self):
@@ -291,6 +309,7 @@ class ProductConfiguration(models.Model):
         return Attrs()
 
     def init_prices(self):
+        value = None
         if self.price_uah:
             value = float(self.price_uah)
         elif self.price_usd:
@@ -298,12 +317,13 @@ class ProductConfiguration(models.Model):
         elif self.price_eur:
             value = float(self.price_eur) * config.EUR_RATE
 
-        if not self.price_uah:
-            self.price_uah = value
-        if not self.price_usd:
-            self.price_usd = value / config.USD_RATE
-        if not self.price_eur:
-            self.price_eur = value / config.EUR_RATE
+        if value is not None:
+            if not self.price_uah:
+                self.price_uah = value
+            if not self.price_usd:
+                self.price_usd = value / config.USD_RATE
+            if not self.price_eur:
+                self.price_eur = value / config.EUR_RATE
 
     def get_unique_attributes(self):
         common_attributes = self.product.get_attributes()

@@ -2,7 +2,7 @@ var configurations = [];
 
 
 function initSinglePriceCalculation(priceForOneProduct, productPriceElement, productCountElement) {
-    productCountElement.change(function() {
+    productCountElement.on('input', function() {
         productPriceElement.text(priceForOneProduct * $(this).val());
     });
     if (productCountElement.val() > 1) {
@@ -19,8 +19,8 @@ function initConfigrations() {
             countElement: $(this).find($('[data-role="configuration-count"]')),
             activeElement: $(this).find('[data-role="configuration-active"]')
         };
-        configuration.activeElement.change(calculateConfigurationsTotal);
-        configuration.countElement.change(calculateConfigurationsTotal);
+        configuration.activeElement.on('change', calculateConfigurationsTotal);
+        configuration.countElement.on('input', calculateConfigurationsTotal);
         configurations.push(configuration);
     });
 }

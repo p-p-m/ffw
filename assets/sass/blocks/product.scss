@@ -413,4 +413,9 @@
             content: "\f03e";
         } // &:before
     } // &.photos
+    &.materials {
+        &:before {
+            content: "\f013";
+        } // &:before
+    } // &.materials
 } // guide-icon

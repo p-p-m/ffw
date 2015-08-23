@@ -60,6 +60,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
     'products.processors.sections_processor',
     'products.processors.debug_processor',
+    'cart.processors.cart_processor',
 )
 
 
@@ -118,3 +119,4 @@ CONSTANCE_CONFIG = {
     'USD_RATE': (24.1, 'UAH/USD rate'),
     'EUR_RATE': (26.2, 'UAH/EUR rate'),
 }
+

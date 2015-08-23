@@ -1,0 +1,60 @@
+<!--For test only-->
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Корзина</title>
+    </head>
+
+    <body>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <div id='cart'   data-url="{% url 'cart' %}"></div>
+
+        <table border="1">
+            <caption>Корзина</caption>
+            <tr>
+                <th>Товар</th>
+                <th>Кол-во</th>
+                <th>Код</th>
+                <th>Цена</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+
+            {% for key,value in cart.products.items %}
+                <tr data-role= {{key}} >
+                    <td data-role='name'>{{value.name}}</td>
+                    <td><input class="quant" id={{key}} data-role='quant'  data-pk= {{key}} value={{value.quant}}></td>
+                    <td>{{value.product_code}}</td>
+                    <td >{{value.price}}</td>
+                    <td data-role={{key}}_sum>{{value.sum_}}</td>
+                    <td><button data-role='remove' value={{key}}> Удалить</button></td>
+                </tr>
+            {% endfor %}
+
+        </table> <br/>
+        <button data-role='set'> Пополнить корзину</button>
+        <button data-role='add'> Добавить товар pk=1 5 шт</button>
+        <button data-role='clear'>Очистить корзину   </button>
+        <form action="." method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Оформить заказ" ><br>
+        </form>
+            <div> Заказано товаров, шт: <span data-role='count'>{{cart.count}}</span></div>
+            <div> на сумму, грн: <span data-role='total'>{{cart.total}}</span></div>
+
+    </body>
+</html>
+
+{% block basejs %}
+    <script src="{% static 'cart/cart.js' %}"> </script>
+    <script src="{% static 'cart/order.js' %}"> </script>
+{% endblock basejs %}
+
+

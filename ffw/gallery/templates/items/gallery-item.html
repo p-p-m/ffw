@@ -8,14 +8,14 @@
                 <span class="close" data-role="close"><i class="fa fa-times"></i></span>
                 <div class="sub-images" data-role="sub-images">
                     <div class="sub-image" data-role="sub-image">
-                        <img src="{{ item.photo.url }}" alt="{{ item.description }}" data-role="sub-image-next">
+                        <img src="{{ item.photo_big_thumbnail.url }}" alt="{{ item.description }}" data-role="sub-image-next">
                         <div class="description">
                             <a href={{ item.link }} class="link">{{ item.description }}</a>
                         </div>
                     </div>
                     {% for image in item.images.all %}
                         <div class="sub-image" data-role="sub-image">
-                            <img src="{{ image.photo.url }}" alt="{{ image.description }}" data-role="sub-image-next">
+                            <img src="{{ image.photo_big_thumbnail.url }}" alt="{{ image.description }}" data-role="sub-image-next">
                             <div class="description">
                                 <a href={{ image.link }} class="link">{{ image.description }}</a>
                             </div>

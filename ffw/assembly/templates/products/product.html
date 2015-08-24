@@ -26,9 +26,19 @@
                     {% endif %}
                 </div>
                 {% if not product.configurations.count > 1 and product.get_display_price_uah %}
-                    <div class="price-line">
+                    <div class="price-line in-side">
                         <div class="combined-price-count">
-                            <input type="number" class="count" min="1" value="1" data-role="product-count">
+                            <span data-front="price-input">
+                                <span data-front="cart-input-count-minus">
+                                    <i class="fa fa-minus-circle"></i>
+                                </span>
+                                <input class="count" type="number" value="1" min="1"
+                                    data-front="price-input-count"
+                                    data-role="product-count">
+                                <span data-front="cart-input-count-plus">
+                                    <i class="fa fa-plus-circle"></i>
+                                </span>
+                            </span>
                             <button class="button button-blue add-to-cart">Купить</button>
                         </div>
                     </div>

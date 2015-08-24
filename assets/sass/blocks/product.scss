@@ -74,7 +74,7 @@
                 margin-bottom: 10px;
                 border: 1px solid #D1D1D1;
                 border-radius: 2px;
-                text-align: center;
+                // text-align: center;
                 font-size: rem(16);
                 padding: 4px 8px;
             } // input[type="text"]
@@ -87,6 +87,14 @@
         } // product-image
         .price-line {
             text-align: center;
+            &.in-side {
+                // [data-front="price-input"] {
+                //     @include table;
+                //     > * {
+                //         @include table-cell;
+                //     }
+                // } // [data-front="price-input"]
+            }
             .price {
                 @include inline-middle;
                 color: #417505;
@@ -95,18 +103,18 @@
                 @include inline-middle;
             } // currency
             .combined-price-count {
-                @include clearfix;
                 margin-top: 4px;
-                input {
-                    width: 34%;
-                    float: left;
+                [data-front="price-input"] {
                     box-sizing: border-box;
                     padding: 4px 8px;
                     font-size: rem(16);
-                } // input
+                    margin-bottom: 20px;
+                    input {
+                        width: 30px;
+                        text-align: center;
+                    }
+                } // [data-front="price-input"]
                 button {
-                    width: 62%;
-                    float: right;
                     text-align: center;
                 } // button
             } // combined-price-count

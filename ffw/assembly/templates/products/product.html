@@ -226,20 +226,21 @@
 
                         </div>
 
-                        <button class="button button-blue"> Оставить отзыв </button><br/>
-
                     </div>
-                    {% comment %}
-                        <h3 class="product-block-title comments">
-                            Оставить отзыв
-                        </h3>
-                        <div class="product-block-content">
-                            <div class="left-commnet">
-                                <textarea name="" id="" class="left-commnet"></textarea>
-                                <!-- TODO: Add button here -->
+                    <div class="left-comment-in-box">
+                        <button class="button button-blue">Оставить отзыв</button>
+                        {% comment %}
+                            <h3 class="product-block-title comments">
+                                Оставить отзыв
+                            </h3>
+                            <div class="product-block-content">
+                                <div class="left-commnet">
+                                    <textarea name="" id="" class="left-commnet"></textarea>
+                                    <!-- TODO: Add button here -->
+                                </div>
                             </div>
-                        </div>
-                    {% endcomment %}
+                        {% endcomment %}
+                    </div>
                 </div>
                 <!-- /product-block -->
                 {% if product.get_materials %}

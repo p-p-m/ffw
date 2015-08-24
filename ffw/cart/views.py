@@ -1,88 +1,31 @@
 #  -*- coding: utf-8 -*-
-import json
-
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic import View, TemplateView, FormView
-from django.views.generic.base import ContextMixin
-from django.utils.decorators import method_decorator
 
 from .forms import OrderForm
-from .models import OrderedProduct, Order
-from products.models import Product, ProductConfiguration
+from .models import Cart, OrderedProduct
+from products.models import ProductConfiguration
 
 
-class Cart(object):
+# XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
 
-    def __init__(self, request):
-        if not 'cart' in request.session :
-            request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
-        else:
-            if not 'products' in request.session['cart']:
-                request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
-
-        self.cart = request.session['cart']
-
-    def _calculate(self):
-        """ Recalculate product quantity and sum """
-        self.cart['total'] = round(sum([v['sum_'] for v in self.cart['products'].values()]), 2)
-        self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
-
-    def set(self, product_pk, quant):
-        if quant > 0:
-            product_pk = int(product_pk)
-            product = get_object_or_404(ProductConfiguration, pk=product_pk)
-            price = float(product.price_uah)
-            product_code = product.code
-            name = product.product.name
-            sum_ = round(quant * price, 2)
-            product_pk = str(product_pk)
-            self.cart['products'][product_pk] = {'name': name, 'product_code': product_code, 'price': price,
-                                                                  'quant': quant, 'sum_': sum_}
-            self._calculate()
-        else:
-            self.remove(product_pk)
-
-    def remove(self, product_pk):
-        product_pk = str(product_pk)
-        if product_pk in self.cart['products'].keys():
-            del self.cart['products'][product_pk]
-            self._calculate()
-
-    def clear(self):
-        self.cart = {'products': {}, 'total': 0, 'count': 0}
-
-    def add(self, product_pk, quant):
-        product_pk = str(product_pk)
-        if product_pk in self.cart['products']:
-            quant += self.cart['products'][product_pk]['quant']
-
-        self.set(product_pk, quant)
-
-class ResponseView(View):
-    def format_response(self, cart):
-        self.request.session['cart'] = cart.cart
-        return HttpResponse(json.dumps({'cart': self.request.session['cart']}))
-
-
-class CartView(ResponseView):
+class CartView(View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
             cart = Cart(request)
-            return self.format_response(cart)
+            return HttpResponse(cart.as_json())
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
             cart = Cart(request)
             cart.clear()
-            return self.format_response(cart)
+            return HttpResponse(cart.as_json())
 
 
-class CartRemoveView(ResponseView):
+class CartRemoveView(View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -92,7 +35,7 @@ class CartRemoveView(ResponseView):
             return self.format_response(cart)
 
 
-class CartSetView(ResponseView):
+class CartSetView(View):
 
     def _call_cart(self, cart, product_pk, quant):
         cart.set(product_pk, quant)
@@ -125,8 +68,8 @@ class OrderView(FormView):
         return reverse('thank')
 
     def __init__(self):
-        super(OrderView,self).__init__()
-        self.success_url =self.get_success_url()
+        super(OrderView, self).__init__()
+        self.success_url = self.get_success_url()
 
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)

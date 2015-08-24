@@ -55,7 +55,7 @@ class GalleryPrimImage(models.Model):
     photo = ImageFieldWaterMark(upload_to='gallery/gallery', verbose_name=('Photo'))
     photo_small_thumbnail = ImageSpecField(
         source='photo',
-        processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
+        processors=[ResizeToFit(width=150, height=150, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 100})
     photo_big_thumbnail = ImageSpecField(
@@ -68,7 +68,7 @@ class GalleryPrimImage(models.Model):
     is_active = models.BooleanField(_('Is image active'), default=True)
 
     def __str__(self):
-        return self.description
+        return str(self.pk) + " - " + self.description
 
 
 @python_2_unicode_compatible
@@ -93,4 +93,4 @@ class GalleryImage(models.Model):
     is_active = models.BooleanField(_('Is image active'), default=True)
 
     def __str__(self):
-        return self.description
+        return str(self.pk) + " - " + self.description

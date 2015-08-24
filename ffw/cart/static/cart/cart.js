@@ -3,8 +3,8 @@ Connect:
     1. <script src="{{ STATIC_URL }}cart/cart.js"> </script>
     2. Должен быть задан урл в свойстве тега data-cart-url='some/url/'.
 
-cart data in request.session: {"cart_sum": cart_sum, "cart-count":
-        cart_count, "products": {product_pk_1: {'product_code': product_code,
+cart data in request.session: {'cart':{"total": total sum, "count":
+        cart count, "products": {product_pk_1: {'product_code': product_code,
        'name': name,  'price': price,  'quant': quant, 'sum_': sum_}...}}
 
 Object cart:
@@ -26,14 +26,13 @@ Object cart:
         cart.products = {{'product_pk': product_code,  'name': name,  'price': price,
            'quant': quant, 'sum_': sum_}...} - dictionary
 
-        cart.sum - total cost of the cart products
+        cart.total - total cost of the cart products
 
         cart.count - total quantity of the cart products
 
+        cart.url - url
 
-Testing apllication cart:
-    url = 'cart/test'
-
+While no use settings .
 Settings:
     There is necessary insert in  settings:
     CART_SETTINGS = {
@@ -47,17 +46,19 @@ Settings:
 
 var cart = {
     'products': {},
-    'sum': 0,
+    'total': 0,
     'count': 0,
     'url': '',
-    'updateCartAndCallback': function(data,callback) {
+    'updateCartAndCallback': function(data, callback) {
             var obj = $.parseJSON(data);
-            cart.count = obj.count_cart;
-            cart.sum = obj.sum_cart;
-            cart.products = obj.products_cart;
-            callback();
-        },
-    'set': function(product_pk, quant, test=false, callback) {
+            cart.count = obj.cart.count;
+            cart.total = obj.cart.total.toFixed(2);
+            cart.products = obj.cart.products
+            if (callback) {
+                callback();
+            };
+    },
+    'set': function(product_pk, quant, callback) {
         cart.csrf();
 
         $.ajax({
@@ -66,15 +67,14 @@ var cart = {
             data:{
                 'product_pk': product_pk,
                 'quant': quant,
-                'test': test
            },
             dataType: 'text'
         })
-        .done(function(data) {
-             cart.updateCartAndCallback(data, callback);
+        .done(function(responseData) {
+             cart.updateCartAndCallback(responseData, callback);
         });
     },
-    'add': function(product_pk, quant, test=false, callback) {
+    'add': function(product_pk, quant, callback) {
         cart.csrf();
 
         $.ajax({
@@ -83,7 +83,6 @@ var cart = {
             data:{
                 'product_pk': product_pk,
                 'quant': quant,
-                'test': test
            },
             dataType: 'text'
         })

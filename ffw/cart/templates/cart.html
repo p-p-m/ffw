@@ -1,0 +1,21 @@
+<!--For test only-->
+
+{% load staticfiles %}
+{% load i18n %}
+
+
+
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+</head>
+<body>
+
+<div id='cart'   data-url="{% url 'cart' %}"></div>
+<span> {{cart}}</span><br>
+<button id='session'>Смотреть корзину в сессии</button>  
+
+
+
+</body>
+</html>

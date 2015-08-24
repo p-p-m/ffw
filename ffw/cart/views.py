@@ -10,6 +10,7 @@ from products.models import ProductConfiguration
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
 
+
 class CartView(View):
 
     def get(self, request, *args, **kwargs):
@@ -51,13 +52,13 @@ class CartSetView(View):
 
             cart = Cart(request)
             self._call_cart(cart, product_pk, quant)
-            return self.format_response(cart)
+            return HttpResponse(cart.as_json())
 
 
 class CartAddView(CartSetView):
     def _call_cart(self, cart, product_pk, quant):
         cart.add(product_pk, quant)
-        self.request.session['cart'] = cart.cart
+        #self.request.session['cart'] = cart.cart
 
 
 class OrderView(FormView):

@@ -61,24 +61,28 @@ class CartProduct(object):
     def price(self):
         return self.product.price_uah
 
+    @property
+    def pk(self):
+        return self.product.pk
+
 
 class Cart(dict):
 
     def __init__(self, request):
-        self = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
-        request.session['cart'] = self
+        self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
+        request.session['cart'] = self.cart
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self['total'] = round(sum([v['sum_'] for v in self['products'].values()]), 2)
-        self['count'] = sum([v['quant'] for v in self['products'].values()])
+        self.cart['total'] = round(sum([v['sum_'] for v in self.cart['products'].values()]), 2)
+        self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
 
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
-            self['products'][product.pk] = {
+            self.cart['products'][product.pk] = {
                 'name': product.name,
-                'product_code': product.product_code,
+                'product_code': product.code,
                 'price': product.price,
                 'quant': quant,
                 'sum_': quant * product.price,
@@ -90,22 +94,21 @@ class Cart(dict):
     def remove(self, product_pk):
         product = CartProduct(product_pk)
         try:
-            del self['products'][product.pk]
+            del self.cart['products'][product.pk]
         except KeyError:
-            raise CartException('Cart does not contain product with key {}'.format(product.pk))
+            raise CartException('Cart does not contain product with key {}'.format(product_pk))
         self._calculate()
 
     def clear(self):
         # XXX: When do we use this function?
-        self = {'products': {}, 'total': 0, 'count': 0}
+        self.cart = {'products': {}, 'total': 0, 'count': 0}
 
     def add(self, product_pk, quant):
-        product = Cart.CartProduct(product_pk)
-        if product.pk not in self['products']:
-            raise CartException('Cart does not contain product with key {}'.format(product.pk))
+        if product_pk in self.cart['products']:
+            quant += self.cart['products'][product_pk]['quant']
 
-        quant += self['products'][product.pk]['quant']
-        self.set(product.pk, quant)
+        self.set(product_pk, quant)
 
     def as_json(self):
-        return json.dumps(self)
+        print self.cart.items()
+        return json.dumps(self.cart)

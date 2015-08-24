@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+
+{% load static i18n %}
+{% get_media_prefix as MEDIA_PREFIX %}
+
+{% block content %}
+<div class="view-title-box">
+    <div class="wrap">
+        <h1 class="view-title">Оформление заказа</h1>
+    </div>
+</div>
+
+<!-- order-container -->
+<div class="order-container">
+    <div class="wrap">
+        <!-- strip -->
+        <div class="small-area">
+            <div class="strip" data-role="decor-line">
+                <div class="disk active" data-role="decor-disk-1">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="disk" data-role="decor-disk-2">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="disk" data-role="decor-disk-3">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div>
+                    <h1 class="view-title">Контакты</h1>
+                    <h1 class="view-title">Доставка</h1>
+                    <h1 class="view-title">Оплата</h1>
+                </div>
+            </div>
+        </div>
+        <!-- /strip -->
+
+        <!-- form -->
+        <form action="" data-role="order-form">
+            <div class="big-area">
+                <div class="order-form">
+
+                    <!-- step-1 -->
+                    <div class="step-1 active" data-role="order-step-1">
+                        <fieldset>
+                            <label>Телефон:</label>
+                            <div class="input">
+                                <input type="tel">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Имя:</label>
+                            <div class="input">
+                                <input type="text">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Email:</label>
+                            <div class="input">
+                                <input type="email">
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Сообщение:</label>
+                            <div class="input">
+                                <textarea name="" id=""></textarea>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- /step-1 -->
+                    <!-- step-2 -->
+                    <div class="step-2" data-role="order-step-2">
+                        <fieldset>
+                            <label>Способ доставки:</label>
+                            <div class="input">
+                                <div class="custom-select normal-select">
+                                    <select name="" id="">
+                                        <option value="">Some option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Перевозчик:</label>
+                            <div class="input">
+                                <div class="custom-select normal-select">
+                                    <select name="" id="">
+                                        <option value="">Some option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Способ оплаты:</label>
+                            <div class="input">
+                                <div class="custom-select normal-select">
+                                    <select name="" id="">
+                                        <option value="">Some option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Адрес доставки:</label>
+                            <div class="input">
+                                <div class="custom-select normal-select">
+                                    <select name="" id="">
+                                        <option value="">Some option</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset>
+                            <label>Получатель:</label>
+                            <div class="input">
+                                <input type="text">
+                            </div>
+                        </fieldset>
+                    </div>
+                    <!-- /step-2 -->
+                    <div class="step-3" data-role="order-step-3">
+                        <div class="column first">
+                            <ul class="radio-list">
+                                <li>
+                                    <a href="#clearing" data-role="tab-trigger">Безналичный расчет</a>
+                                </li>
+                                <li>
+                                    <a href="#card" data-role="tab-trigger">Оплата картой Visa\MasterCard</a>
+                                </li>
+                                <li>
+                                    <a href="#whenget" data-role="tab-trigger">Оплата при получении</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="column second">
+                            <div id="clearing" class="order-tab active" data-role="tab">
+                                <h4>Реквизиты для оплаты заказа</h4>
+                                <h4>Итого к оплате: 400грн.</h4>
+                                <p>
+                                    Банк: фил. КБ "Приватбанк" Зап. Рег. Управ.<br>
+                                    Расчетный счет: 2600578391884<br>
+                                    ОКПО (ЭДРПОУ): 67584930<br>
+                                    МФО: 333100<br>
+                                    Назначение платежа: оплата заказа №014420
+                                </p>
+                            </div>
+                            <div id="card" class="order-tab" data-role="tab">
+                                фы
+                            </div>
+                            <div id="whenget" class="order-tab" data-role="tab">
+                                <p>
+                                    Оплата при получении курьеру.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button form="" type="submit" class="button" data-trigger="prev">Назад</button>
+                <button form="" type="submit" class="button button-blue" data-trigger="next">продолжить</button>
+                <button form="" type="submit" class="button button-blue" data-trigger="finish">Оформить заказ</button>
+            </div>
+        </form>
+        <!-- /form -->
+    </div>
+</div>
+<!-- /order-container -->
+{% endblock %}

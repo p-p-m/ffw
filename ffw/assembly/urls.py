@@ -19,6 +19,7 @@ urlpatterns = patterns(
 
     # this temporary url patterns
     url(r'^static-product/$', TemplateView.as_view(template_name='static_templates/product.html')),
+    url(r'^static-order/$', TemplateView.as_view(template_name='static_templates/order.html')),
 
 
 )

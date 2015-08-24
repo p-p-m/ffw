@@ -121,6 +121,9 @@
                     font-size: rem(16);
                     color: #5C5C5C;
                     text-decoration: none;
+                    &.active {
+                        color: #4A90E1;
+                    } // &.active
                 } // a
             } // li
         } // product-guides

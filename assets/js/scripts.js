@@ -670,6 +670,7 @@
 
     function sideScroll() {
         var scrollToTrigger = $('[data-front="scroll-to"]');
+
         scrollToTrigger.click(function() {
             var thisHash = this.hash;
             var scrollTo = null;
@@ -682,6 +683,25 @@
                 scrollTop: scrollTo
             }, 300);
         });
+
+        var win = $(window);
+        var highLightItem = $('.product-block');
+        var menuItem = $('.product-guides li a');
+
+        win.scroll(function() {
+            highLightItem.each(function() {
+                if (win.scrollTop() >= $(this).offset().top) {
+                    var highLightID = $(this).attr('id');
+                    menuItem.removeClass('active');
+                    menuItem.each(function() {
+                        if ($(this).attr('href').split('#')[1] == highLightID) {
+                            $(this).addClass('active');
+                        }
+                    });
+                }
+            });
+        });
+
     }
 
     // document ready

@@ -419,3 +419,23 @@
         } // &:before
     } // &.materials
 } // guide-icon
+
+[data-front="price-input"] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+} // [data-front="price-input"]
+
+[data-front="cart-input-count-minus"] {
+    cursor: pointer;
+} // [data-front="cart-input-count-minus"]
+[data-front="cart-input-count-plus"] {
+    cursor: pointer;
+} // [data-front="cart-input-count-plus"]

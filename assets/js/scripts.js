@@ -273,6 +273,38 @@
         });
     }
 
+    // price input
+    function priceInput() {
+        var item = $('[data-front="price-input"]')
+
+        item.each(function() {
+            var input = $(this).find('[data-front="price-input-count"]');
+            var plus = $(this).find('[data-front="cart-input-count-plus"]');
+            var minus = $(this).find('[data-front="cart-input-count-minus"]');
+
+            plus.click(function() {
+                var inputValue = parseInt(input.val());
+                function update() {
+                    inputValueUpdated = parseInt((inputValue + 1))
+                }
+                update();
+                input.val(inputValueUpdated);
+            });
+            minus.click(function() {
+                inputValue = parseInt(input.val());
+                function update() {
+                    inputValueUpdated = parseInt((inputValue - 1))
+                }
+                if (inputValue == 1 || inputValue < 0) {
+                    prevent.default;
+                } else {
+                    update();
+                    input.val(inputValueUpdated);
+                }
+            });
+        });
+    }
+
     // Cart behavior
     // Count items
     function cartItemCountUpdate() {
@@ -676,6 +708,7 @@
         reloadState();
         sidePanel();
         sideScroll();
+        priceInput();
     });
 
     // all initial on window resize

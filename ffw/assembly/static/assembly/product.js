@@ -17,7 +17,8 @@ function initConfigrations() {
             active: $(this).find('[data-role="configuration-active"]').is(':checked'),
             priceElement: $(this).find($('[data-role="configuration-price"]')),
             countElement: $(this).find($('[data-role="configuration-count"]')),
-            activeElement: $(this).find('[data-role="configuration-active"]')
+            activeElement: $(this).find('[data-role="configuration-active"]'),
+            pkElement: $(this).find($('[data-role="config-pk"]')).text()
         };
         configuration.activeElement.on('change', calculateConfigurationsTotal);
         configuration.countElement.on('input', calculateConfigurationsTotal);
@@ -43,6 +44,8 @@ function calculateConfigurationsTotal() {
 $(document).ready(function() {
     initConfigrations();
 
+    cart.url =$('div#cart').data('url');
+
     if (configurations.length === 0) {
         // product without configurations
         var productCountElement = $('[data-role="product-count"]'),
@@ -63,5 +66,26 @@ $(document).ready(function() {
 
         calculateConfigurationsTotal();
     }
+
+    $('[data-role="add-cart"]').on("click", function() {
+        var product_list = {}
+        for (var i = 0; i < configurations.length; i++) {
+            configuration = configurations[i];
+
+            if (configuration.activeElement.is(':checked')) {console.log('i1- ' +i)
+               product_list[i] = parseInt(configuration.countElement.val())
+
+                //cart.add(configuration.pkElement, parseInt(configuration.countElement.val()));
+            };
+        };
+    });
+
+    $('button#print').on("click", function() {
+         console.log( cart.count, " - ", cart.total);
+    });
+
+    $('button#clear').on("click", function() {
+          cart.clear();
+    });
 
 });

@@ -4,6 +4,8 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
+
+<div id='cart'   data-role='cart-url' data-url="{% url 'cart' %}"></div>
 <!-- product -->
 <section class="product">
     <div class="wrap">
@@ -115,9 +117,10 @@
                                         <td>
                                             <label for="">
                                                 <input type="checkbox" data-role="configuration-active">
-                                                <span class="name">{{ configuration.code }}
+                                                <span class="name" data-role="config-code">{{ configuration.code }} 
                                                     <small>{{configuration.get_formatted_unique_attributes}}</small>
                                                 </span>
+                                                <span data-role="config-pk"  hidden>  {{configuration.pk}}  </span>
                                             </label>
                                         </td>
                                         <td>
@@ -135,7 +138,8 @@
                             </table>
                             <!-- combain-product-summary -->
                             <div class="combain-product-summary">
-                                Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн. <button class="button button-blue add-to-cart">Купить</button>
+                                Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн. <button class="button button-blue add-to-cart" data-role = "add-cart">Купить</button>
+                                 <br><button id="print"> Корзина </button> <button id="clear"> Очистить </button>
                             </div>
                             <!-- /combain-product-summary -->
                         </div>

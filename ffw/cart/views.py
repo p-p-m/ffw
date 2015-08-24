@@ -55,10 +55,15 @@ class Cart(object):
         self.cart = {'products': {}, 'total': 0, 'count': 0}
 
     def add(self, product_pk, quant):
-        product_pk = str(product_pk)
-        if product_pk in self.cart['products']:
+        product_pk = str(product_pk).strip()
+        print('pk = ', product_pk)
+
+        print('keys - ', self.cart['products'].keys())
+        if product_pk in self.cart['products'].keys():
+            print( 'add - in ', product_pk, quant)
             quant += self.cart['products'][product_pk]['quant']
 
+        print( 'add - ', product_pk, quant)
         self.set(product_pk, quant)
 
 class ResponseView(View):

@@ -47,6 +47,6 @@ $(document).ready(function() {
     });
 
     $('[data-role="clear"]').on('click', function() {
-        cart.clear(callback=order.setTotalData);
+        cart.clear(order.setTotalData);
     });
 });

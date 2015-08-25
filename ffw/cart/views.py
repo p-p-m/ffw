@@ -1,4 +1,6 @@
 #  -*- coding: utf-8 -*-
+import json
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, FormView
@@ -9,23 +11,28 @@ from products.models import ProductConfiguration
 
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
+class ResponseView(View):
+    def format_response(self, cart):
+        self.request.session['cart'] = cart.cart
+        return HttpResponse(json.dumps({'cart': self.request.session['cart']}))
 
-class CartView(View):
+
+class CartView(ResponseView):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
             cart = Cart(request)
-            return HttpResponse(cart.as_json())
+            return self.format_response(cart)
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
             cart = Cart(request)
             cart.clear()
-            return HttpResponse(cart.as_json())
+            return self.format_response(cart)
 
 
-class CartRemoveView(View):
+class CartRemoveView(ResponseView):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -35,7 +42,7 @@ class CartRemoveView(View):
             return self.format_response(cart)
 
 
-class CartSetView(View):
+class CartSetView(ResponseView):
 
     def _call_cart(self, cart, product_pk, quant):
         cart.set(product_pk, quant)
@@ -57,7 +64,7 @@ class CartSetView(View):
 class CartAddView(CartSetView):
     def _call_cart(self, cart, product_pk, quant):
         cart.add(product_pk, quant)
-        self.request.session['cart'] = cart.cart
+        #self.request.session['cart'] = cart.cart
 
 
 class OrderView(FormView):

@@ -67,13 +67,12 @@ class CartProduct(object):
 
 class Cart(dict):
 
-    def __init__(self, request):
-        self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
-        request.session['cart'] = self.cart
+    def __init__(self, cart):
+        self.cart = cart
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self.cart['total'] = str(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
         self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
 
     def set(self, product_pk, quant):
@@ -83,11 +82,10 @@ class Cart(dict):
             self.cart['products'][product_pk] = {
                 'name': product.name,
                 'product_code': product.code,
-                'price': str(product.price),
+                'price': float(product.price),
                 'quant': quant,
                 'sum_': float(quant * product.price),
             }
-
             self._calculate()
         else:
             self.remove(product_pk)
@@ -99,11 +97,6 @@ class Cart(dict):
         except KeyError:
             raise CartException('Cart does not contain product with key {}'.format(product_pk))
         self._calculate()
-
-    def clear(self):
-        # XXX: When do we use this function?
-        self.cart = {'products': {}, 'total': 0, 'count': 0}
-
 
     def add(self, product_pk, quant):
         if product_pk in self.cart['products']:

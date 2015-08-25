@@ -64,9 +64,6 @@ class CartProduct(object):
     def pk(self):
         return self.product.pk
 
-    def __str__(self):
-        return 'Product: pk= ' + str(self.pk) + ' code = ' + self.code + ' name = ' + self.name
-
 
 class Cart(dict):
 
@@ -76,7 +73,7 @@ class Cart(dict):
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['total'] = str(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
         self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
 
     def set(self, product_pk, quant):
@@ -86,7 +83,7 @@ class Cart(dict):
             self.cart['products'][product_pk] = {
                 'name': product.name,
                 'product_code': product.code,
-                'price': float(product.price),
+                'price': str(product.price),
                 'quant': quant,
                 'sum_': float(quant * product.price),
             }

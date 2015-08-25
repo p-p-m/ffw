@@ -58,7 +58,7 @@ class CartSetView(ResponseView):
 
             cart = Cart(request)
             self._call_cart(cart, product_pk, quant)
-            return self.format_response(cart)
+            return HttpResponse(cart.as_json())
 
 
 class CartAddView(CartSetView):

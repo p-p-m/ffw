@@ -84,7 +84,8 @@ class GalleryImage(models.Model):
         processors=[ResizeToFit(width=80, height=80, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 100})
-    photo_big_thumbnail = ImageSpecField(source='photo',
+    photo_big_thumbnail = ImageSpecField(
+        source='photo',
         processors=[ResizeToFit(width=1000, height=1000, upscale=True, mat_color='white')],
         format='JPEG',
         options={'quality': 100})

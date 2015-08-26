@@ -39,8 +39,9 @@ class CartRemoveView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
-            Cart(self.cart).remove(product_pk)
+            product_pk_list =(request.POST.get('product_pk_list', '[]'))
+            product_pk_list =json.loads(product_pk_list)
+            [Cart(self.cart).remove(product_pk) for product_pk in product_pk_list]
             return self.format_response(request)
 
 
@@ -51,14 +52,9 @@ class CartSetView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
-
-            try:
-                quant = int(request.POST.get('quant', '0'))
-            except ValueError:
-                quant = 0
-
-            self._call_cart( product_pk, quant)
+            product_dict =(request.POST.get('product_dict', '{}'))
+            product_dict =json.loads(product_dict)
+            [self._call_cart(product_pk=item[0], quant=int(item[1])) for item in product_dict.items()]
             return self.format_response(request)
 
 

@@ -43,6 +43,8 @@ class CartProduct(object):
     """ Wrapper for abstract product that is defined by cart application settings """
     # TODO: rewrite this class to use product table configuration from cart settings
     def __init__(self, product_pk):
+        product_pk = int(product_pk)
+
         try:
             self.product = ProductConfiguration.objects.get(pk=product_pk)
         except ProductConfiguration.DoesNotExist:
@@ -61,8 +63,12 @@ class CartProduct(object):
         return self.product.price_uah
 
     @property
-    def pk(self):
+    def pk_int(self):
         return self.product.pk
+
+    @property
+    def pk_str(self):
+        return str(self.product.pk).strip()
 
 
 class Cart(object):
@@ -93,13 +99,13 @@ class Cart(object):
     def remove(self, product_pk):
         product = CartProduct(product_pk)
         try:
-            del self.cart['products'][product_pk]
+            del self.cart['products'][product.pk_str]
         except KeyError:
-            raise CartException('Cart does not contain product with key {}'.format(product_pk))
+            raise CartException('Cart does not contain product with key {}'.format(product.pk_str))
         self._calculate()
 
     def add(self, product_pk, quant):
-        if product_pk in self.cart['products']:
-            quant += self.cart['products'][product_pk]['quant']
+        if str(product_pk).strip()  in self.cart['products']:
+            quant += self.cart['products'][str(product_pk).strip()]['quant']
 
         self.set(product_pk, quant)

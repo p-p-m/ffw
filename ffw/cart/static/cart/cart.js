@@ -52,8 +52,9 @@ var cart = {
     'updateCartAndCallback': function(data, callback) {
             var obj = $.parseJSON(data);
             cart.count = obj.cart.count;
-            cart.total = obj.cart.total.toFixed(2);
+            cart.total = obj.cart.total;
             cart.products = obj.cart.products
+
             if (callback) {
                 callback();
             };

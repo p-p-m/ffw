@@ -1,4 +1,6 @@
 #  -*- coding: utf-8 -*-
+import json
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, FormView
@@ -9,36 +11,43 @@ from products.models import ProductConfiguration
 
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
+class CartMixin(object):
 
-class CartView(View):
+    def dispatch(self, request, *args, **kwargs):
+        self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
+        return super(CartMixin, self).dispatch(request, *args, **kwargs)
+
+    def format_response(self, request):
+        request.session['cart'] = self.cart
+        return HttpResponse(json.dumps({'cart': request.session['cart']}))
+
+
+class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
-            cart = Cart(request)
-            return HttpResponse(cart.as_json())
+            return self.format_response(request)
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
-            cart = Cart(request)
-            cart.clear()
-            return HttpResponse(cart.as_json())
+            self.cart ={'products': {}, 'total': 0, 'count': 0}
+            return self.format_response(request)
 
 
-class CartRemoveView(View):
+class CartRemoveView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk = request.POST.get('product_pk', '')
-            cart = Cart(request)
-            cart.remove(product_pk)
-            return self.format_response(cart)
+            Cart(self.cart).remove(product_pk)
+            return self.format_response(request)
 
 
-class CartSetView(View):
+class CartSetView(CartMixin, View):
 
-    def _call_cart(self, cart, product_pk, quant):
-        cart.set(product_pk, quant)
+    def _call_cart(self, product_pk, quant):
+        Cart(self.cart).set(product_pk, quant)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -49,15 +58,13 @@ class CartSetView(View):
             except ValueError:
                 quant = 0
 
-            cart = Cart(request)
-            self._call_cart(cart, product_pk, quant)
-            return self.format_response(cart)
+            self._call_cart( product_pk, quant)
+            return self.format_response(request)
 
 
 class CartAddView(CartSetView):
-    def _call_cart(self, cart, product_pk, quant):
-        cart.add(product_pk, quant)
-        self.request.session['cart'] = cart.cart
+    def _call_cart(self, product_pk, quant):
+        Cart(self.cart).add(product_pk, quant)
 
 
 class OrderView(FormView):

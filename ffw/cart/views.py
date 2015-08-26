@@ -6,12 +6,47 @@ from django.http import HttpResponse
 from django.views.generic import View, TemplateView, FormView
 
 from .forms import OrderForm
-from .models import Cart, OrderedProduct
+from .models import CartProduct, OrderedProduct
 from products.models import ProductConfiguration
 
+class CartMixin(dict):
+
+    def _calculate(self):
+        """ Recalculate product quantity and sum """
+        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
+
+    def set(self, product_pk, quant):
+        if quant > 0:
+            product = CartProduct(product_pk)
+
+            self.cart['products'][product_pk] = {
+                'name': product.name,
+                'product_code': product.code,
+                'price': float(product.price),
+                'quant': quant,
+                'sum_': float(quant * product.price),
+            }
+            self._calculate()
+        else:
+            self.remove(product_pk)
+
+    def remove(self, product_pk):
+        product = CartProduct(product_pk)
+        try:
+            del self.cart['products'][product_pk]
+        except KeyError:
+            raise CartException('Cart does not contain product with key {}'.format(product_pk))
+        self._calculate()
+
+    def add(self, product_pk, quant):
+        if product_pk in self.cart['products']:
+            quant += self.cart['products'][product_pk]['quant']
+
+        self.set(product_pk, quant)
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
-class ResponseView(View):
+class ResponseView(CartMixin, View):
 
     def __init__(self, **kwargs):
         super(ResponseView,self).__init__( **kwargs)
@@ -51,14 +86,14 @@ class CartRemoveView(ResponseView):
         if request.is_ajax:
             super(CartRemoveView,self).get(request, *args, **kwargs)
             product_pk = request.POST.get('product_pk', '')
-            Cart(self.cart).remove(product_pk)
+            self.remove(product_pk)
             return self.format_response(request)
 
 
 class CartSetView(ResponseView):
 
     def _call_cart(self, product_pk, quant):
-        Cart(self.cart).set(product_pk, quant)
+        self.set(product_pk, quant)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -76,7 +111,7 @@ class CartSetView(ResponseView):
 
 class CartAddView(CartSetView):
     def _call_cart(self, product_pk, quant):
-        Cart(self.cart).add(product_pk, quant)
+        self.add(product_pk, quant)
 
 
 class OrderView(FormView):

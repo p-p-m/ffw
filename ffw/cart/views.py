@@ -9,7 +9,7 @@ from .forms import OrderForm
 from .models import CartProduct, OrderedProduct
 from products.models import ProductConfiguration
 
-class CartMixin(dict):
+class CartMixin(object):
 
     def _calculate(self):
         """ Recalculate product quantity and sum """

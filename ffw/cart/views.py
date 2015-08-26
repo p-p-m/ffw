@@ -61,7 +61,6 @@ class CartSetView(ResponseView):
         Cart(self.cart).set(product_pk, quant)
 
     def post(self, request, *args, **kwargs):
-
         if request.is_ajax:
             super(CartSetView,self).get(request, *args, **kwargs)
             product_pk = request.POST.get('product_pk', '')

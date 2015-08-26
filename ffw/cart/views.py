@@ -11,7 +11,7 @@ from products.models import ProductConfiguration
 
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
-class CartMixin(View):
+class CartMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
@@ -22,7 +22,7 @@ class CartMixin(View):
         return HttpResponse(json.dumps({'cart': request.session['cart']}))
 
 
-class CartView(CartMixin):
+class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -35,7 +35,7 @@ class CartView(CartMixin):
             return self.format_response(request)
 
 
-class CartRemoveView(CartMixin):
+class CartRemoveView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
@@ -44,7 +44,7 @@ class CartRemoveView(CartMixin):
             return self.format_response(request)
 
 
-class CartSetView(CartMixin):
+class CartSetView(CartMixin, View):
 
     def _call_cart(self, product_pk, quant):
         Cart(self.cart).set(product_pk, quant)

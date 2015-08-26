@@ -11,58 +11,46 @@ from products.models import ProductConfiguration
 
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
-class ResponseView(View):
+class CartMixin(View):
 
-    def __init__(self, **kwargs):
-        super(ResponseView,self).__init__( **kwargs)
-        self.cart = {'products': {}, 'total': 0, 'count': 0}
-
-    def _get_cart(self, session):
-        if session['cart']:
-            self.cart = session['cart']
-
-    def get(self, request, *args, **kwargs):
-            self._get_cart(request.session)
-
-    def post(self, request, *args, **kwargs):
-            self._get_cart(request.session)
+    def dispatch(self, request, *args, **kwargs):
+        self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
+        return super(CartMixin, self).dispatch(request, *args, **kwargs)
 
     def format_response(self, request):
         request.session['cart'] = self.cart
         return HttpResponse(json.dumps({'cart': request.session['cart']}))
 
 
-class CartView(ResponseView):
+class CartView(CartMixin):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
-            super(CartView,self).get(request, *args, **kwargs)
             return self.format_response(request)
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
+            self.cart ={'products': {}, 'total': 0, 'count': 0}
             return self.format_response(request)
 
 
-class CartRemoveView(ResponseView):
+class CartRemoveView(CartMixin):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            super(CartRemoveView,self).get(request, *args, **kwargs)
             product_pk = request.POST.get('product_pk', '')
             Cart(self.cart).remove(product_pk)
             return self.format_response(request)
 
 
-class CartSetView(ResponseView):
+class CartSetView(CartMixin):
 
     def _call_cart(self, product_pk, quant):
         Cart(self.cart).set(product_pk, quant)
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            super(CartSetView,self).get(request, *args, **kwargs)
             product_pk = request.POST.get('product_pk', '')
 
             try:

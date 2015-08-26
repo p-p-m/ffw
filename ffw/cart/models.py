@@ -65,7 +65,7 @@ class CartProduct(object):
         return self.product.pk
 
 
-class Cart(dict):
+class Cart(object):
 
     def __init__(self, cart):
         self.cart = cart

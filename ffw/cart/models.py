@@ -22,6 +22,8 @@ class Order(TimeStampedModel):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9, default=0)
     count = models.IntegerField(_('Quantity'), default=0)
 
+    def __str__(self):
+        return self.name
 
 class OrderedProduct(models.Model):
     class Meta:

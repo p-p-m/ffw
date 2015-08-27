@@ -16,6 +16,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 from model_utils import FieldTracker
 from model_utils.models import TimeStampedModel
+from unidecode import unidecode
 
 from core.models import ImageFieldWaterMark
 
@@ -225,7 +226,7 @@ class Product(TimeStampedModel):
         return Characteristic.objects.filter(query)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(unidecode(self.name))
         return super(Product, self).save(*args, **kwargs)
 
     def get_display_price_uah(self):

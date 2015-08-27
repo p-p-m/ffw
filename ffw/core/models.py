@@ -7,6 +7,7 @@ import uuid
 from django.db import models
 from django.template.defaultfilters import slugify
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+from unidecode import unidecode
 
 
 class ImageFieldWaterMark(models.ImageField):
@@ -18,7 +19,7 @@ class ImageFieldWaterMark(models.ImageField):
         self.opacity = opacity
         self.mark_text = mark_text
         self.font = font
-        kwargs['upload_to'] = safe_upload_to(kwargs['upload_to'])
+        kwargs['upload_to'] = safe_upload
         super(ImageFieldWaterMark, self).__init__(verbose_name, name, width_field=None, height_field=None, **kwargs)
 
     def pre_save(self, model_instance, add):
@@ -50,12 +51,10 @@ class ImageFieldWaterMark(models.ImageField):
         Image.composite(watermark, img, watermark).save(file_path, 'JPEG')
 
 
-def safe_upload_to(path):
-    def wrapper(instance, filename):
-        name, ext = filename.split('.')
-        name = slugify(name)
-        if not name:
-            name = uuid.uuid4().hex
-        filename = '{}.{}'.format(name, ext)
-        return os.path.join(path, filename)
-    return wrapper
+def safe_upload(instance, filename):
+    name, ext = filename.split('.')
+    name = slugify(unidecode(name))
+    if not name:
+        name = uuid.uuid4().hex
+    filename = '{}.{}'.format(name, ext)
+    return os.path.join('wm_images', filename)

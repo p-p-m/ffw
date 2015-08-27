@@ -273,6 +273,38 @@
         });
     }
 
+    // price input
+    function priceInput() {
+        var item = $('[data-front="price-input"]')
+
+        item.each(function() {
+            var input = $(this).find('[data-front="price-input-count"]');
+            var plus = $(this).find('[data-front="cart-input-count-plus"]');
+            var minus = $(this).find('[data-front="cart-input-count-minus"]');
+
+            plus.click(function() {
+                var inputValue = parseInt(input.val());
+                function update() {
+                    inputValueUpdated = parseInt((inputValue + 1))
+                }
+                update();
+                input.val(inputValueUpdated);
+            });
+            minus.click(function() {
+                inputValue = parseInt(input.val());
+                function update() {
+                    inputValueUpdated = parseInt((inputValue - 1))
+                }
+                if (inputValue == 1 || inputValue < 0) {
+                    prevent.default;
+                } else {
+                    update();
+                    input.val(inputValueUpdated);
+                }
+            });
+        });
+    }
+
     // Cart behavior
     // Count items
     function cartItemCountUpdate() {
@@ -638,6 +670,7 @@
 
     function sideScroll() {
         var scrollToTrigger = $('[data-front="scroll-to"]');
+
         scrollToTrigger.click(function() {
             var thisHash = this.hash;
             var scrollTo = null;
@@ -649,6 +682,40 @@
             $('html, body').animate({
                 scrollTop: scrollTo
             }, 300);
+        });
+
+        var win = $(window);
+        var highLightItem = $('.product-block');
+        var menuItem = $('.product-guides li a');
+
+        win.scroll(function() {
+            highLightItem.each(function() {
+                if (win.scrollTop() >= $(this).offset().top) {
+                    var highLightID = $(this).attr('id');
+                    menuItem.removeClass('active');
+                    menuItem.each(function() {
+                        if ($(this).attr('href').split('#')[1] == highLightID) {
+                            $(this).addClass('active');
+                        }
+                    });
+                }
+            });
+        });
+
+    }
+
+    // popup
+    function regularPopup() {
+        var popup = $('[data-front="popup"]');
+        var popupHeight = popup.height();
+        var popupWidth = popup.width();
+        popup.css({
+            'left': '50%',
+            'top': '50%',
+            'position': 'fixed',
+            'z-index': 9999,
+            'margin-top': -popupHeight/2,
+            'margin-left': -popupWidth/2
         });
     }
 
@@ -676,6 +743,8 @@
         reloadState();
         sidePanel();
         sideScroll();
+        priceInput();
+        regularPopup();
     });
 
     // all initial on window resize

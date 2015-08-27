@@ -704,6 +704,21 @@
 
     }
 
+    // popup
+    function regularPopup() {
+        var popup = $('[data-front="popup"]');
+        var popupHeight = popup.height();
+        var popupWidth = popup.width();
+        popup.css({
+            'left': '50%',
+            'top': '50%',
+            'position': 'fixed',
+            'z-index': 9999,
+            'margin-top': -popupHeight/2,
+            'margin-left': -popupWidth/2
+        });
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -729,6 +744,7 @@
         sidePanel();
         sideScroll();
         priceInput();
+        regularPopup();
     });
 
     // all initial on window resize

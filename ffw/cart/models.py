@@ -23,7 +23,8 @@ class Order(TimeStampedModel):
     count = models.IntegerField(_('Quantity'), default=0)
 
     def __str__(self):
-        return self.name
+        return  str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+
 
 class OrderedProduct(models.Model):
     class Meta:
@@ -39,6 +40,9 @@ class OrderedProduct(models.Model):
     price = models.DecimalField(_('Price'), decimal_places=2, max_digits=7)
     quant = models.IntegerField(_('Quantity'), default=0)
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
+
+    def __str__(self):
+        return str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " + str(self.quant) + " " + str(self.total)
 
 
 class CartProduct(object):

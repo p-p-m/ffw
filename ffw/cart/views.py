@@ -84,14 +84,15 @@ class OrderView(FormView):
         self.total = 0
 
         for key, value in self.request.session['cart']['products'].items():
-            product_obj = ProductConfiguration.objects.get(id=int(key))
+            product = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order,
-                product=product_obj,
-                name=product_obj.product.name,
-                price=product_obj.price_uah,
+                product=product,
+                name=product.product.name,
+                code=product.code,
+                price=product.price_uah,
                 quant=value['quant'],
-                total=round(product_obj.price_uah * value['quant'], 2))
+                total=round(product.price_uah * value['quant'], 2))
             ordered_product.save()
             self.total += ordered_product.total
             self.count += ordered_product.quant

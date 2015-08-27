@@ -40,7 +40,8 @@ class CartRemoveView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk_list = json.loads(request.POST.get('product_pk_list', '[]'))
-            [Cart(self.cart).remove(product_pk) for product_pk in product_pk_list]
+            for product_pk in product_pk_list:
+                Cart(self.cart).remove(product_pk)
             return self.format_response(request)
 
 

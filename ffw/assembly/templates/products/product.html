@@ -26,9 +26,19 @@
                     {% endif %}
                 </div>
                 {% if not product.configurations.count > 1 and product.get_display_price_uah %}
-                    <div class="price-line">
+                    <div class="price-line in-side">
                         <div class="combined-price-count">
-                            <input type="number" class="count" min="1" value="1" data-role="product-count">
+                            <span data-front="price-input">
+                                <span data-front="cart-input-count-minus">
+                                    <i class="fa fa-minus-circle"></i>
+                                </span>
+                                <input class="count" type="number" value="1" min="1"
+                                    data-front="price-input-count"
+                                    data-role="product-count">
+                                <span data-front="cart-input-count-plus">
+                                    <i class="fa fa-plus-circle"></i>
+                                </span>
+                            </span>
                             <button class="button button-blue add-to-cart">Купить</button>
                         </div>
                     </div>
@@ -113,15 +123,25 @@
                                     <!-- item -->
                                     <tr data-role="configuration">
                                         <td>
-                                            <label for="">
-                                                <input type="checkbox" data-role="configuration-active">
+                                            <label for="checksubitem-{{ forloop.counter }}">
+                                                <input id="checksubitem-{{ forloop.counter }}" type="checkbox" data-role="configuration-active">
                                                 <span class="name">{{ configuration.code }}
                                                     <small>{{configuration.get_formatted_unique_attributes}}</small>
                                                 </span>
                                             </label>
                                         </td>
                                         <td>
-                                            <input class="count" type="number" value="1" min="1" data-role="configuration-count">
+                                            <div data-front="price-input">
+                                                <span data-front="cart-input-count-minus">
+                                                    <i class="fa fa-minus-circle"></i>
+                                                </span>
+                                                <input class="count" type="number" value="1" min="1"
+                                                    data-front="price-input-count"
+                                                    data-role="configuration-count">
+                                                <span data-front="cart-input-count-plus">
+                                                    <i class="fa fa-plus-circle"></i>
+                                                </span>
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="price-line">
@@ -216,20 +236,21 @@
 
                         </div>
 
-                        <button class="button button-blue"> Оставить отзыв </button><br/>
-
                     </div>
-                    {% comment %}
-                        <h3 class="product-block-title comments">
-                            Оставить отзыв
-                        </h3>
-                        <div class="product-block-content">
-                            <div class="left-commnet">
-                                <textarea name="" id="" class="left-commnet"></textarea>
-                                <!-- TODO: Add button here -->
+                    <div class="left-comment-in-box">
+                        <button class="button button-blue">Оставить отзыв</button>
+                        {% comment %}
+                            <h3 class="product-block-title comments">
+                                Оставить отзыв
+                            </h3>
+                            <div class="product-block-content">
+                                <div class="left-commnet">
+                                    <textarea name="" id="" class="left-commnet"></textarea>
+                                    <!-- TODO: Add button here -->
+                                </div>
                             </div>
-                        </div>
-                    {% endcomment %}
+                        {% endcomment %}
+                    </div>
                 </div>
                 <!-- /product-block -->
                 {% if product.get_materials %}

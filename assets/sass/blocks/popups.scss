@@ -1,0 +1,23 @@
+.popup {
+    box-sizing: border-box;
+    width: 400px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 4px 4px 0px -1px rgb(187, 217, 228);
+    border: 1px solid #98C6D8;
+    @include bp(xs) {
+        width: 80%;
+    } // xs
+    @include bp(xs) {
+        width: 80%;
+    } // sm
+    .description {
+        font-size: rem(16);
+        line-height: 1.2;
+        color: #5C5C5C;
+        margin-bottom: 20px;
+    } // description
+    .buttons {
+        text-align: center;
+    } // buttons
+} // popup

@@ -29,14 +29,6 @@ $(document).ready(function() {
         };
    });
 
-   $('[data-role="set"]').on('click', function() {
-        var productDict ={}
-        for (productPk=1; productPk<4; productPk++) {
-             productDict[productPk] = 2 + 2 * productPk
-        };
-        cart.set(productDict, callback=order.setTotalData);
-   }) ;
-
     $('[data-role="quant"]').on('input', function() {
        var productPk = this.id;
        var quant = this.value;
@@ -46,14 +38,6 @@ $(document).ready(function() {
        productDict[productPk]= quant;
        cart.set(productDict, callback);
     }) ;
-
-    $('[data-role="add"]').on('click', function() {
-        var productDict ={}
-        for (productPk=1; productPk<4; productPk++) {
-             productDict[productPk] =10
-        };
-        cart.add(productDict, callback=order.setTotalData);
-    });
 
     $('[data-role="clear"]').on('click', function() {
         cart.clear(order.setTotalData);

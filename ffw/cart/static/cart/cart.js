@@ -59,47 +59,39 @@ var cart = {
                 callback();
             };
     },
-    'set': function(product_pk, quant, callback) {
+    'set': function(product_dict, callback) {
         cart.csrf();
 
         $.ajax({
             url: cart.url + 'set/',
             type: "POST",
-            data:{
-                'product_pk': product_pk,
-                'quant': quant,
-           },
-            dataType: 'text'
+            data: {'product_dict': JSON.stringify(product_dict)},
+            dataType: 'text',
         })
         .done(function(responseData) {
              cart.updateCartAndCallback(responseData, callback);
         });
     },
-    'add': function(product_pk, quant, callback) {
+    'add': function(product_dict, callback) {
         cart.csrf();
 
         $.ajax({
             url: cart.url + 'add/',
             type: "POST",
-            data:{
-                'product_pk': product_pk,
-                'quant': quant,
-           },
+            data: {'product_dict': JSON.stringify(product_dict)},
             dataType: 'text'
         })
         .done(function(data) {
              cart.updateCartAndCallback(data, callback);
         });
     },
-    'remove': function(product_pk, callback) {
+    'remove': function(productPkList, callback) {
         cart.csrf();
 
         $.ajax({
             url: cart.url + 'remove/',
             type: "POST",
-            data:{
-                'product_pk': product_pk,
-           },
+            data:{ 'product_pk_list': JSON.stringify(productPkList)},
             dataType: 'text'
        })
         .done(function(data) {

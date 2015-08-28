@@ -39,8 +39,9 @@ class CartRemoveView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
-            Cart(self.cart).remove(product_pk)
+            product_pk_list = json.loads(request.POST.get('product_pk_list', '[]'))
+            for product_pk in product_pk_list:
+                Cart(self.cart).remove(product_pk)
             return self.format_response(request)
 
 
@@ -51,14 +52,10 @@ class CartSetView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
+            product_dict = json.loads(request.POST.get('product_dict', '{}'))
 
-            try:
-                quant = int(request.POST.get('quant', '0'))
-            except ValueError:
-                quant = 0
-
-            self._call_cart( product_pk, quant)
+            for item in product_dict.items():
+                self._call_cart(product_pk=item[0], quant=int(item[1]))
             return self.format_response(request)
 
 
@@ -88,14 +85,15 @@ class OrderView(FormView):
         self.total = 0
 
         for key, value in self.request.session['cart']['products'].items():
-            product_obj = ProductConfiguration.objects.get(id=int(key))
+            product = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order,
-                product=product_obj,
-                name=product_obj.product.name,
-                price=product_obj.price_uah,
+                product=product,
+                name=product.product.name,
+                code=product.code,
+                price=product.price_uah,
                 quant=value['quant'],
-                total=round(product_obj.price_uah * value['quant'], 2))
+                total=round(product.price_uah * value['quant'], 2))
             ordered_product.save()
             self.total += ordered_product.total
             self.count += ordered_product.quant

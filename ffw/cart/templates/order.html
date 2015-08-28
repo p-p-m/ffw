@@ -38,10 +38,10 @@
             {% endfor %}
 
         </table> <br/>
-        <button data-role='set'> Пополнить корзину</button>
-        <button data-role='add'> Добавить товар pk=1 5 шт</button>
+
         <button data-role='clear'>Очистить корзину   </button>
-        <form action="." method="post">{% csrf_token %}
+
+       <form action="." method="post">{% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="Оформить заказ" ><br>
         </form>

@@ -42,8 +42,7 @@ class OrderedProduct(models.Model):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
     def __str__(self):
-
-        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " + 
+        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
                     str(self.quant) + " " + str(self.total))
 
 

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import json
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
@@ -23,6 +22,9 @@ class Order(TimeStampedModel):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9, default=0)
     count = models.IntegerField(_('Quantity'), default=0)
 
+    def __str__(self):
+        return  str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+
 
 class OrderedProduct(models.Model):
     class Meta:
@@ -39,11 +41,17 @@ class OrderedProduct(models.Model):
     quant = models.IntegerField(_('Quantity'), default=0)
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
+    def __str__(self):
+        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " + 
+                    str(self.quant) + " " + str(self.total))
+
 
 class CartProduct(object):
     """ Wrapper for abstract product that is defined by cart application settings """
     # TODO: rewrite this class to use product table configuration from cart settings
     def __init__(self, product_pk):
+        product_pk = int(product_pk)
+
         try:
             self.product = ProductConfiguration.objects.get(pk=product_pk)
         except ProductConfiguration.DoesNotExist:
@@ -61,27 +69,35 @@ class CartProduct(object):
     def price(self):
         return self.product.price_uah
 
+    @property
+    def pk_int(self):
+        return self.product.pk
 
-class Cart(dict):
+    @property
+    def pk_str(self):
+        return str(self.product.pk).strip()
 
-    def __init__(self, request):
-        self = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
-        request.session['cart'] = self
+
+class Cart(object):
+
+    def __init__(self, cart):
+        self.cart = cart
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self['total'] = round(sum([v['sum_'] for v in self['products'].values()]), 2)
-        self['count'] = sum([v['quant'] for v in self['products'].values()])
+        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
 
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
-            self['products'][product.pk] = {
+
+            self.cart['products'][product_pk] = {
                 'name': product.name,
-                'product_code': product.product_code,
-                'price': product.price,
+                'product_code': product.code,
+                'price': float(product.price),
                 'quant': quant,
-                'sum_': quant * product.price,
+                'sum_': float(quant * product.price),
             }
             self._calculate()
         else:
@@ -90,22 +106,13 @@ class Cart(dict):
     def remove(self, product_pk):
         product = CartProduct(product_pk)
         try:
-            del self['products'][product.pk]
+            del self.cart['products'][product.pk_str]
         except KeyError:
-            raise CartException('Cart does not contain product with key {}'.format(product.pk))
+            raise CartException('Cart does not contain product with key {}'.format(product.pk_str))
         self._calculate()
 
-    def clear(self):
-        # XXX: When do we use this function?
-        self = {'products': {}, 'total': 0, 'count': 0}
-
     def add(self, product_pk, quant):
-        product = Cart.CartProduct(product_pk)
-        if product.pk not in self['products']:
-            raise CartException('Cart does not contain product with key {}'.format(product.pk))
+        if str(product_pk).strip()  in self.cart['products']:
+            quant += self.cart['products'][str(product_pk).strip()]['quant']
 
-        quant += self['products'][product.pk]['quant']
-        self.set(product.pk, quant)
-
-    def as_json(self):
-        return json.dumps(self)
+        self.set(product_pk, quant)

@@ -5,8 +5,8 @@ $(document).ready(function() {
     cart.get()
     var order = {
         'setProduct': function(data) {
-            product = cart.products[data.product_pk];
-            var name = data.product_pk + '_sum';
+            product = cart.products[data.productPk];
+            var name = data.productPk + '_sum';
             $(order.selector_role(name)).text(product.sum_ );
             order.setTotalData();
         },
@@ -21,32 +21,25 @@ $(document).ready(function() {
      };
 
     $('[data-role="remove"]').on('click', function() {
-        var product_pk = this.value;
+        var productPk = this.value;
         if (confirm("Удалить товар из корзины?")) {
-             $(order.selector_role(product_pk)).remove();
-            cart.remove(product_pk, callback=order.setTotalData);
+             //$(order.selector_role(productPk)).remove();
+            var productPkList = [productPk,];
+            cart.remove(productPkList, callback=order.setTotalData);
         };
    });
 
-   $('[data-role="set"]').on('click', function() {
-        for (product_pk=1; product_pk<3; product_pk++) {
-             cart.set(+product_pk, 1, callback=order.setTotalData);
-        };
-   }) ;
-
     $('[data-role="quant"]').on('input', function() {
-       var product_pk = this.id;
+       var productPk = this.id;
        var quant = this.value;
-       order.product_pk = product_pk;
-       var  callback = order.setProduct.bind('context', {'product_pk': product_pk});
-       cart.set(+product_pk, quant, callback);
+       order.productPk = productPk;
+       var  callback = order.setProduct.bind('context', {'productPk': productPk});
+       var productDict = {};
+       productDict[productPk]= quant;
+       cart.set(productDict, callback);
     }) ;
 
-    $('[data-role="add"]').on('click', function() {
-        cart.add(1, 5, callback=order.setTotalData);
-    });
-
     $('[data-role="clear"]').on('click', function() {
-        cart.clear(callback=order.setTotalData);
+        cart.clear(order.setTotalData);
     });
 });

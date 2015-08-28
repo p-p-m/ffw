@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import core.models
 import django.core.validators
 
 
@@ -27,7 +28,7 @@ class Migration(migrations.Migration):
             name='BannerImage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('photo', models.ImageField(upload_to=b'gallery', verbose_name=b'Photo')),
+                ('photo', core.models.ImageFieldWaterMark(upload_to=core.models.safe_upload, verbose_name=b'Photo')),
                 ('link', models.URLField(default=b'', max_length=127, verbose_name='Link', blank=True, validators=[django.core.validators.URLValidator])),
                 ('description', models.CharField(max_length=127, verbose_name='Image description', blank=True)),
                 ('is_active', models.BooleanField(default=True, verbose_name='Is image active')),
@@ -43,7 +44,7 @@ class Migration(migrations.Migration):
             name='GalleryImage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('photo', models.ImageField(upload_to=b'gallery/gallery', verbose_name=b'Photo')),
+                ('photo', core.models.ImageFieldWaterMark(upload_to=core.models.safe_upload, verbose_name=b'Photo')),
                 ('link', models.URLField(default=b'', max_length=127, verbose_name='Link', blank=True, validators=[django.core.validators.URLValidator])),
                 ('description', models.CharField(max_length=127, verbose_name='Image description', blank=True)),
                 ('is_active', models.BooleanField(default=True, verbose_name='Is image active')),
@@ -58,7 +59,7 @@ class Migration(migrations.Migration):
             name='GalleryPrimImage',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('photo', models.ImageField(upload_to=b'gallery/gallery', verbose_name=b'Photo')),
+                ('photo', core.models.ImageFieldWaterMark(upload_to=core.models.safe_upload, verbose_name=b'Photo')),
                 ('link', models.URLField(default=b'', max_length=127, verbose_name='Link', validators=[django.core.validators.URLValidator])),
                 ('description', models.CharField(max_length=255, verbose_name='Image description', blank=True)),
                 ('is_active', models.BooleanField(default=True, verbose_name='Is image active')),

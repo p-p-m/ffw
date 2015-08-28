@@ -1,4 +1,6 @@
 #  -*- coding: utf-8 -*-
+import json
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.generic import View, TemplateView, FormView
@@ -9,55 +11,57 @@ from products.models import ProductConfiguration
 
 
 # XXX: Cart endpoints completely breaks REST architecture. We need to rewrite them.
+class CartMixin(object):
 
-class CartView(View):
+    def dispatch(self, request, *args, **kwargs):
+        self.cart = request.session.get('cart', {'products': {}, 'total': 0, 'count': 0})
+        return super(CartMixin, self).dispatch(request, *args, **kwargs)
+
+    def format_response(self, request):
+        request.session['cart'] = self.cart
+        return HttpResponse(json.dumps({'cart': request.session['cart']}))
+
+
+class CartView(CartMixin, View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax:
-            cart = Cart(request)
-            return HttpResponse(cart.as_json())
+            return self.format_response(request)
 
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
-            cart = Cart(request)
-            cart.clear()
-            return HttpResponse(cart.as_json())
+            self.cart ={'products': {}, 'total': 0, 'count': 0}
+            return self.format_response(request)
 
 
-class CartRemoveView(View):
-
-    def post(self, request, *args, **kwargs):
-        if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
-            cart = Cart(request)
-            cart.remove(product_pk)
-            return self.format_response(cart)
-
-
-class CartSetView(View):
-
-    def _call_cart(self, cart, product_pk, quant):
-        cart.set(product_pk, quant)
+class CartRemoveView(CartMixin, View):
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
-            product_pk = request.POST.get('product_pk', '')
+            product_pk_list = json.loads(request.POST.get('product_pk_list', '[]'))
+            for product_pk in product_pk_list:
+                Cart(self.cart).remove(product_pk)
+            return self.format_response(request)
 
-            try:
-                quant = int(request.POST.get('quant', '0'))
-            except ValueError:
-                quant = 0
 
-            cart = Cart(request)
-            self._call_cart(cart, product_pk, quant)
-            return self.format_response(cart)
+class CartSetView(CartMixin, View):
+
+    def _call_cart(self, product_pk, quant):
+        Cart(self.cart).set(product_pk, quant)
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax:
+            product_dict = json.loads(request.POST.get('product_dict', '{}'))
+
+            for item in product_dict.items():
+                self._call_cart(product_pk=item[0], quant=int(item[1]))
+            return self.format_response(request)
 
 
 class CartAddView(CartSetView):
-    def _call_cart(self, cart, product_pk, quant):
-        cart.add(product_pk, quant)
-        self.request.session['cart'] = cart.cart
+    def _call_cart(self, product_pk, quant):
+        Cart(self.cart).add(product_pk, quant)
 
 
 class OrderView(FormView):
@@ -81,14 +85,15 @@ class OrderView(FormView):
         self.total = 0
 
         for key, value in self.request.session['cart']['products'].items():
-            product_obj = ProductConfiguration.objects.get(id=int(key))
+            product = ProductConfiguration.objects.get(id=int(key))
             ordered_product = OrderedProduct(
                 order=order,
-                product=product_obj,
-                name=product_obj.product.name,
-                price=product_obj.price_uah,
+                product=product,
+                name=product.product.name,
+                code=product.code,
+                price=product.price_uah,
                 quant=value['quant'],
-                total=round(product_obj.price_uah * value['quant'], 2))
+                total=round(product.price_uah * value['quant'], 2))
             ordered_product.save()
             self.total += ordered_product.total
             self.count += ordered_product.quant

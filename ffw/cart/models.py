@@ -26,7 +26,6 @@ class Order(TimeStampedModel):
         return  str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
 
 
-
 class OrderedProduct(models.Model):
     class Meta:
         verbose_name = _('Ordered products')

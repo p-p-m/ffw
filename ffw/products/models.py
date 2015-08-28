@@ -33,6 +33,9 @@ class Characteristic(models.Model):
     description = models.TextField(_('Characteristic description'), blank=True)
     default_value = models.CharField(_('Default value'), max_length=127, blank=True)
     units = models.CharField(_('Units'), max_length=50, blank=True)
+    rating = models.FloatField(
+        _('Rating'), default=4.0,
+        help_text=_('Characteristic with higher ratings will be displayed first'))
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
@@ -241,7 +244,8 @@ class Product(TimeStampedModel):
         """
         Return all attributes if product has one configuration, else return common attributes for configurations
         """
-        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self).order_by(
+            '-characteristic__rating')
         if self.configurations.count() > 1:
             configurations_attribures_names = [set(c.attributes.all().values_list('name', 'value'))
                                                for c in self.configurations.all()]
@@ -328,7 +332,8 @@ class ProductConfiguration(models.Model):
 
     def get_unique_attributes(self):
         common_attributes = self.product.get_attributes()
-        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True))
+        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True)).order_by(
+            '-characteristic__rating')
 
     def get_formatted_unique_attributes(self):
         unique_attributes = self.get_unique_attributes()

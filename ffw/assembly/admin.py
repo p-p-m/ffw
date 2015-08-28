@@ -55,7 +55,7 @@ class IntervalsAttributeFilterInline(BaseFilterInline):
 
 class CharacteristicAdmin(admin.ModelAdmin):
     model = products_models.Characteristic
-    list_display = ('name', 'default_value', 'units',)
+    list_display = ('name', 'default_value', 'units', 'rating')
     search_fields = ('name', 'units')
 
 
@@ -233,16 +233,44 @@ class ProductAdmin(SummernoteModelAdmin):
     list_filter = ('is_active',)
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ('preview', 'price_max', 'price_min')
+    change_list_template = 'admin/product_change_list.html'
 
     def get_form(self, request, obj=None, **kwargs):
         # just save obj reference for future processing in Inline
         request._obj_ = obj
         return super(ProductAdmin, self).get_form(request, obj, **kwargs)
 
+    def lookup_allowed(self, key, value):
+        if key in ['subcategory', 'subcategory__category', 'subcategory__category__section']:
+            return True
+
     def preview(self, obj):
         if obj.id is None:
             return
         return '<strong><a href="' + obj.get_url() + '" target="_blank"> Project on site </a></strong>'
+
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        # Get selected categories from GET request
+        selected_section_id = int(request.GET.get('subcategory__category__section', 0))
+        selected_category_id = int(request.GET.get('subcategory__category', 0))
+        selected_subcategory_id = int(request.GET.get('subcategory', 0))
+
+        extra_context['selected_section_id'] = selected_section_id
+        extra_context['selected_category_id'] = selected_category_id
+        extra_context['selected_subcategory_id'] = selected_subcategory_id
+
+        extra_context['sections'] = products_models.Section.objects.all()
+        extra_context['categories'] = products_models.Category.objects.all()
+        extra_context['subcategories'] = products_models.Subcategory.objects.all()
+        if selected_section_id:
+            extra_context['categories'] = extra_context['categories'].filter(section_id=selected_section_id)
+            extra_context['subcategories'] = extra_context['subcategories'].filter(
+                category__section_id=selected_section_id)
+        if selected_category_id:
+            extra_context['subcategories'] = extra_context['subcategories'].filter(
+                category_id=selected_category_id)
+        return super(ProductAdmin, self).changelist_view(request, extra_context=extra_context)
 
 
 admin.site.register(products_models.Section, SectionAdmin)

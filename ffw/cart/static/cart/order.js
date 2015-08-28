@@ -23,7 +23,7 @@ $(document).ready(function() {
     $('[data-role="remove"]').on('click', function() {
         var productPk = this.value;
         if (confirm("Удалить товар из корзины?")) {
-             //$(order.selector_role(productPk)).remove();
+            $(order.selector_role(productPk)).remove();
             var productPkList = [productPk,];
             cart.remove(productPkList, callback=order.setTotalData);
         };

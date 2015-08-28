@@ -74,7 +74,7 @@ class CartProduct(object):
 
     @property
     def pk_str(self):
-        return str(self.product.pk).strip()
+        return str(self.product.pk)
 
 
 class Cart(object):
@@ -90,6 +90,7 @@ class Cart(object):
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
+            print (product.pk_int, product.pk_str)
 
             self.cart['products'][product_pk] = {
                 'name': product.name,
@@ -104,6 +105,7 @@ class Cart(object):
 
     def remove(self, product_pk):
         product = CartProduct(product_pk)
+
         try:
             del self.cart['products'][product.pk_str]
         except KeyError:
@@ -111,7 +113,9 @@ class Cart(object):
         self._calculate()
 
     def add(self, product_pk, quant):
-        if str(product_pk).strip()  in self.cart['products']:
-            quant += self.cart['products'][str(product_pk).strip()]['quant']
+        product = CartProduct(product_pk)
 
-        self.set(product_pk, quant)
+        if product.pk_str in  self.cart['products'].keys():
+            quant += self.cart['products'][product.pk_str]['quant']
+
+        self.set(product.pk_str, quant)

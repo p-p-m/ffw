@@ -68,16 +68,16 @@ $(document).ready(function() {
     }
 
     $('[data-role="add-cart"]').on("click", function() {
-        var product_list = {}
+        var productDict = {}
         for (var i = 0; i < configurations.length; i++) {
             configuration = configurations[i];
 
-            if (configuration.activeElement.is(':checked')) {console.log('i1- ' +i)
-               product_list[i] = parseInt(configuration.countElement.val())
-
-                //cart.add(configuration.pkElement, parseInt(configuration.countElement.val()));
+            if (configuration.activeElement.is(':checked')) {console.log('i1- ', typeof(configuration).pkElement, parseInt(configuration.countElement.val()))
+               productDict[configuration.pkElement] = parseInt(configuration.countElement.val())
             };
         };
+        console.log(productDict)
+        cart.add(productDict);
     });
 
     $('button#print').on("click", function() {

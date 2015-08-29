@@ -719,6 +719,35 @@
         });
     }
 
+    /*
+
+    call this function with selector as argument, and after
+    use activate/deactivate
+
+    example
+
+    var newPop = activatePopUpBySelector('.newPop');
+    newPop.activate();
+    newPop.deactivate();
+
+    or
+
+    activatePopUpBySelector('.newPop').activate();
+
+    */
+    function activatePopUpBySelector(selector) {
+        var el = $(selector);
+        console.log(el);
+        return {
+            activate: function() {
+                el.addClass('active');
+            },
+            deactivate: function() {
+                el.removeClass('active');
+            }
+        }
+    }
+
     // document ready
     $(window).on('load', function() {
         topBanners();

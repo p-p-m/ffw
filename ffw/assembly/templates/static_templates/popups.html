@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+
+{% load static i18n %}
+{% get_media_prefix as MEDIA_PREFIX %}
+
+{% block content %}
+<div class="flash-popup">
+    <div class="content">
+        Some message
+        <button class="button close"></button>
+    </div>
+</div>
+{% comment %}
+<!-- popup -->
+<div class="popup" data-front="popup">
+    <article class="descriptoin">
+        Test text. Put here something.
+    </article>
+    <div class="buttons">
+        <button class="button button-blue">Cancel</button>
+        <button class="button button-blue">Yes!</button>
+    </div>
+</div>
+<!-- /popup -->
+{% endcomment %}
+<!-- This popup with radio choises -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup" style="display: none;">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="radios">
+        <label for="positive-comment">
+            <input id="positive-comment" name="pos-neg" type="radio">
+            Положительный
+        </label>
+        <label for="negative-comment">
+            <input id="negative-comment" name="pos-neg" type="radio">
+            Негативный
+        </label>
+    </div>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <textarea name="" id="" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
+<!-- This popup with 2 fields -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <label for="advantages">Преимущества</label>
+            <textarea name="" id="advantages" class="left-commnet"></textarea>
+            <label for="limitations">Недостатка</label>
+            <textarea name="" id="limitations" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
+
+<!-- product -->
+<section class="product">
+    <div class="wrap">
+        <div class="filters-in-view" data-front="side-panel">
+            <div class="produc-side-block">
+                <div class="product-image">
+                    <img src="/static/images/tmp/waterfilter.png" alt="">
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="price-line">
+                    <span class="price">340,00</span>
+                    <span class="currency">грн.</span>
+                </div>
+                <div class="price-line">
+                    <div class="combined-price-count">
+                        <input type="number" class="count" min="0" value="1">
+                        <button class="button button-blue add-to-cart">Купить</button>
+                    </div>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <div class="by-one-click-side">
+                    <input type="text" data-role="phone-mask">
+                    <button class="button button-blue">Купить в один клик</button>
+                </div>
+            </div>
+            <div class="produc-side-block">
+                <ul class="product-guides">
+                    <li>
+                        <a href="#description" data-front="scroll-to" class="guide-icon guide-description">Описание</a>
+                    </li>
+                    <li>
+                        <a href="#product-choises" data-front="scroll-to" class="guide-icon choice">Выбор товаров</a>
+                    </li>
+                    <li>
+                        <a href="#charachteristics" data-front="scroll-to" class="guide-icon charachteristics">Характеристики</a>
+                    </li>
+                    <li>
+                        <a href="#photos" data-front="scroll-to" class="guide-icon photos">Фото</a>
+                    </li>
+                    <li>
+                        <a href="#comments" data-front="scroll-to" class="guide-icon comments">Отзывы</a>
+                    </li>
+                    <li>
+                        <a href="#comments-add" data-front="scroll-to" class="guide-icon comments">Оставить отзыв</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="products-in-view">
+            <!-- info-box -->
+            <div class="info-box">
+                <div class="title-line">
+                    <h1 class="product-title">Фильтр для питьевой воды XCore 11</h1>
+                    <span class="label new">новинка</span>
+                </div>
+            </div>
+            <!-- /info-box -->
+            <div class="product-blocks">
+                <!-- product-block -->
+                <div class="product-block">
+                    <h3 class="product-block-title description">
+                        Описание
+                    </h3>
+                    <div class="product-block-content">
+                        <article class="description">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="product-choises">
+                    <h3 class="product-block-title item-choice">
+                        Выбор товаров
+                    </h3>
+                    <div class="product-block-content">
+                        <table class="combain-product-list">
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                            </tr>
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <label for="">
+                                        <input type="checkbox">
+                                        <span class="name">Item name</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="count" type="number" value="1">
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                        </table>
+                        <!-- combain-product-summary -->
+                        <div class="combain-product-summary">
+                            Всего наименований 1 на сумму 37 грн. <button class="button button-blue add-to-cart">Купить</button>
+                        </div>
+                        <!-- /combain-product-summary -->
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="charachteristics">
+                    <h3 class="product-block-title comments">
+                        Харакетеристики
+                    </h3>
+                    <table class="chars">
+                        <tr>
+                            <td>Брэнд</td>
+                            <td>Колены ПВХ</td>
+                        </tr>
+                        <tr>
+                            <td>Диметр труб</td>
+                            <td>45 радианов</td>
+                        </tr>
+                        <tr>
+                            <td>Какой-то параметр</td>
+                            <td>34</td>
+                        </tr>
+                        <tr>
+                            <td>Что-то еще</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td>Материал</td>
+                            <td>Пластик</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="photos">
+                    <h3 class="product-block-title comments">
+                        Фото
+                    </h3>
+                    <ul class="thumbnails-in-product">
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                        <li>
+                            <img src="/static/images/tmp/waterfilter.png"
+                                data-front="image-in-product"
+                                data-front-url="/static/images/tmp/waterfilter.png"
+                                alt="">
+                        </li>
+                    </ul>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments">
+                    <h3 class="product-block-title comments">
+                        Отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="comment-block">
+                            <div class="comment-author-photo">
+                                <img src="/static/images/tmp/avatar.png" alt="">
+                            </div>
+                            <div class="comment-body">
+                                <h3 class="comment-author-name">Michael Yakimenko</h3>
+                                <article>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
+                                    </p>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="comments-add">
+                    <h3 class="product-block-title comments">
+                        Оставить отзывы
+                    </h3>
+                    <div class="product-block-content">
+                        <div class="left-commnet">
+                            <textarea name="" id="" class="left-commnet"></textarea>
+                            <div class="simple-text">
+                                Опубликовать с помощью
+                            </div>
+                            <div class="login-for-comment simple-text">
+                                <button class="button button-blue">Tweeter</button>
+                                <button class="button button-red">Google +</button>
+                                <span>или <a href="#">войти</a> используя свой логин и пароль </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block">
+                    <h3 class="product-block-title">
+                        Похожие товары
+                    </h3>
+                    <!-- products-list-box -->
+                    <div class="products-list-box">
+                        <ul class="products-list">
+                            <!-- product-box -->
+                            <li class="product-box">
+                                <a href="#" class="product product-grid">
+                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
+                                    <div class="description elipsis-box">
+                                        <span class="elipsis">
+                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
+                                        </span>
+                                    </div>
+                                    <div class="img-box">
+                                        <img src="/static/images/tmp/waterfilter.png" alt="">
+                                    </div>
+                                    <div class="price-tag">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                    <div class="add-to-cart-box">
+                                        <button class="button button-blue add-to-cart">Купить</button>
+                                    </div>
+                                </a>
+                            </li>
+                            <!-- /product-box -->
+                            <!-- product-box -->
+                            <li class="product-box">
+                                <a href="#" class="product product-grid">
+                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
+                                    <div class="description elipsis-box">
+                                        <span class="elipsis">
+                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
+                                        </span>
+                                    </div>
+                                    <div class="img-box">
+                                        <img src="/static/images/tmp/waterfilter.png" alt="">
+                                    </div>
+                                    <div class="price-tag">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                    <div class="add-to-cart-box">
+                                        <button class="button button-blue add-to-cart">Купить</button>
+                                    </div>
+                                </a>
+                            </li>
+                            <!-- /product-box -->
+                            <!-- product-box -->
+                            <li class="product-box">
+                                <a href="#" class="product product-grid">
+                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
+                                    <div class="description elipsis-box">
+                                        <span class="elipsis">
+                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
+                                        </span>
+                                    </div>
+                                    <div class="img-box">
+                                        <img src="/static/images/tmp/waterfilter.png" alt="">
+                                    </div>
+                                    <div class="price-tag">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                    <div class="add-to-cart-box">
+                                        <button class="button button-blue add-to-cart">Купить</button>
+                                    </div>
+                                </a>
+                            </li>
+                            <!-- /product-box -->
+                            <!-- product-box -->
+                            <li class="product-box">
+                                <a href="#" class="product product-grid">
+                                    <h2 class="title">Фильтр для питьевой воды XCore 11</h2>
+                                    <div class="description elipsis-box">
+                                        <span class="elipsis">
+                                            Объем: 7 литров. Материал: пластик.м Объем: 7 литров. Материал: пластик.м
+                                        </span>
+                                    </div>
+                                    <div class="img-box">
+                                        <img src="/static/images/tmp/waterfilter.png" alt="">
+                                    </div>
+                                    <div class="price-tag">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                    <div class="add-to-cart-box">
+                                        <button class="button button-blue add-to-cart">Купить</button>
+                                    </div>
+                                </a>
+                            </li>
+                            <!-- /product-box -->
+                        </ul>
+                    </div>
+                    <!-- /products-list-box -->
+                </div>
+                <!-- /product-block -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /product -->
+{% endblock %}

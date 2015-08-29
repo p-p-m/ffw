@@ -21,3 +21,29 @@
         text-align: center;
     } // buttons
 } // popup
+
+.popup-comment {
+    width: 600px;
+    font-size: rem(16);
+    @include bp(xs) {
+        width: 80%;
+    } // xs
+    @include bp(xs) {
+        width: 80%;
+    } // sm
+    .product-block-title {
+        margin-top: 0;
+        font-size: rem(22);
+        color: #516D91;
+        line-height: 28px;
+    }
+    textarea {
+        border: 1px solid #D1D1D1;
+        margin-bottom: 20px;
+    } // textarea
+    .button {
+        text-transform: none;
+        padding: 4px 8px;
+        padding-top: 7px;
+    } // button
+} // popup-comment

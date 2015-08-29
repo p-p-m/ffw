@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import json
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
@@ -23,7 +22,7 @@ class Order(TimeStampedModel):
     count = models.IntegerField(_('Quantity'), default=0)
 
     def __str__(self):
-        return  str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+        return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
 
 
 class OrderedProduct(models.Model):
@@ -42,8 +41,8 @@ class OrderedProduct(models.Model):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
     def __str__(self):
-        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " + 
-                    str(self.quant) + " " + str(self.total))
+        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
+                str(self.quant) + " " + str(self.total))
 
 
 class CartProduct(object):
@@ -112,7 +111,7 @@ class Cart(object):
         self._calculate()
 
     def add(self, product_pk, quant):
-        if str(product_pk).strip()  in self.cart['products']:
+        if str(product_pk).strip() in self.cart['products']:
             quant += self.cart['products'][str(product_pk).strip()]['quant']
 
         self.set(product_pk, quant)

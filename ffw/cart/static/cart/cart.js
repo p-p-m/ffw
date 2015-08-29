@@ -53,11 +53,11 @@ var cart = {
             var obj = $.parseJSON(data);
             cart.count = obj.cart.count;
             cart.total = obj.cart.total;
-            cart.products = obj.cart.products
+            cart.products = obj.cart.products;
 
             if (callback) {
                 callback();
-            };
+            }
     },
     'set': function(product_dict, callback) {
         cart.csrf();
@@ -123,7 +123,7 @@ var cart = {
     'csrf': function() {
         function getCookie(name) {
             var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
+            if (document.cookie && document.cookie !== '') {
                 var cookies = document.cookie.split(';');
                 for (var i = 0; i < cookies.length; i++) {
                     var cookie = $.trim(cookies[i]);
@@ -150,4 +150,4 @@ var cart = {
            }
         });
    },
-}
+};

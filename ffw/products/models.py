@@ -276,6 +276,9 @@ class Product(TimeStampedModel):
         similar_products = sum(similar_products_groups, [])
         return collections.Counter(similar_products).keys()[:4]
 
+    def get_approved_comments(self):
+        return self.comments.filter(is_approved=True)
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):
@@ -285,7 +288,7 @@ class ProductConfiguration(models.Model):
 
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
     code = models.CharField(_('Code'), max_length=127, unique=True)
-    is_active = models.BooleanField(_('Is configuration active'), default=True)
+    is_active = models.BooleanField(_('Is active'), default=True)
     price_uah = models.DecimalField(_('Price in UAH'), null=True, max_digits=10, decimal_places=2)
     price_eur = models.DecimalField(_('Price in EUR'), null=True, max_digits=10, decimal_places=2)
     price_usd = models.DecimalField(_('Price in USD'), null=True, max_digits=10, decimal_places=2)
@@ -413,3 +416,18 @@ class ProductImage(models.Model):
     is_main = models.BooleanField(
         default=True,
         help_text=_('If image is main - it will be displayed on product list page'))
+
+
+class Comment(TimeStampedModel):
+    class Meta:
+        verbose_name = _('Product comment')
+        verbose_name_plural = _('Product comments')
+
+    product = models.ForeignKey(Product, related_name='comments')
+    positive_sides = models.TextField(_('Positive sides'), blank=True)
+    negative_sides = models.TextField(_('Negative sides'), blank=True)
+    is_approved = models.BooleanField(
+        _('Is approved by stuff'),
+        default=False,
+        help_text=_('Only approved comments is visible for users')
+    )

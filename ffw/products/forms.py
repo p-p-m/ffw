@@ -2,6 +2,8 @@ from django import forms
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
+from . import models
+
 
 class SortForm(forms.Form):
     SORT_CHOICES = (
@@ -18,3 +20,10 @@ class SortForm(forms.Form):
         elif sort_by == 'PD':
             queryset = queryset.order_by('-price_max')
         return queryset
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta(object):
+        model = models.Comment
+        fields = ('positive_sides', 'negative_sides', 'product')

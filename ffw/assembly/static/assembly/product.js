@@ -35,7 +35,6 @@ function calculateConfigurationsTotal() {
             totalPrice += parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
         }
     }
-    console.log('ololol!');
     $('[data-role="configurations-total-count"]').text(totalCount);
     $('[data-role="configurations-total-price"]').text(totalPrice);
 }
@@ -63,5 +62,12 @@ $(document).ready(function() {
 
         calculateConfigurationsTotal();
     }
+    // comments
+    $('[data-role="add-comment-button"]').click(function() {
+        var productId = $('[data-role="product"]').attr('data-product');
+        comments.add('positive!!', 'negative!!', productId, function() {
+            alert('Comment was successfully added.');
+        });
+    });
 
 });

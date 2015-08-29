@@ -10,6 +10,7 @@ import re
 from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.forms import widgets
 from django.utils.functional import curry
 from django_summernote.admin import SummernoteModelAdmin
@@ -123,7 +124,7 @@ class SubcategoryAdmin(BaseCategoryAdmin):
 
 
 class ProductConfigurationForm(forms.ModelForm):
-    attributes = forms.CharField(label='Attributes', widget=widgets.Textarea)
+    attributes = forms.CharField(label='Attributes', widget=widgets.Textarea(attrs={'rows': 4, 'cols': 58}))
 
     class Meta:
         model = products_models.ProductConfiguration
@@ -133,7 +134,7 @@ class ProductConfigurationForm(forms.ModelForm):
         super(ProductConfigurationForm, self).__init__(*args, **kwargs)
         self.initial_attributes = kwargs.get('initial', {}).get('attributes')
         if self.instance.id is not None:
-            self.fields['attributes'].initial = '\n'.join('{}: {} ({})'.format(
+            self.fields['attributes'].initial = '\n'.join('{}:            {}            ({})'.format(
                 a.name, a.value, a.units) for a in self.instance.attributes.all())
             self.initial_attributes = self.fields['attributes'].initial
         self.fields['attributes'].required = False
@@ -198,7 +199,7 @@ class ProductConfigurationInline(admin.TabularInline):
         formset = super(ProductConfigurationInline, self).get_formset(request, obj, **kwargs)
         if request._obj_ is not None:
             characteristics = request._obj_.get_characteristics()
-            s = '\n'.join('{}: {} ({})'.format(c.name, c.default_value, c.units) for c in characteristics)
+            s = '\n'.join('{}:            {}            ({})'.format(c.name, c.default_value, c.units) for c in characteristics)
             initial = [{
                 'attributes': s,
             }] * 4
@@ -228,7 +229,7 @@ class ProductAdmin(SummernoteModelAdmin):
     inlines = (ProductConfigurationInline, ProductImageInline)
     model = products_models.Product
     list_display = ('name', 'is_active', 'modified', 'created')
-    ordering = ('modified', 'name')
+    ordering = ('-modified', 'name')
     search_fields = ('name', )
     list_filter = ('is_active',)
     prepopulated_fields = {"slug": ("name",)}
@@ -273,8 +274,16 @@ class ProductAdmin(SummernoteModelAdmin):
         return super(ProductAdmin, self).changelist_view(request, extra_context=extra_context)
 
 
+class CommentAdmin(admin.ModelAdmin):
+    model = products_models.Comment
+    list_display = ('id', 'positive_sides', 'negative_sides', 'is_approved', 'created')
+    list_filter = ('is_approved',)
+    ordering = ('-created',)
+
+
 admin.site.register(products_models.Section, SectionAdmin)
 admin.site.register(products_models.Category, CategoryAdmin)
 admin.site.register(products_models.Subcategory, SubcategoryAdmin)
 admin.site.register(products_models.Product, ProductAdmin)
 admin.site.register(products_models.Characteristic, CharacteristicAdmin)
+admin.site.register(products_models.Comment, CommentAdmin)

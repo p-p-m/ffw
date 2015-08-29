@@ -42,7 +42,7 @@ class OrderedProduct(models.Model):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
     def __str__(self):
-        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " + 
+        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
                     str(self.quant) + " " + str(self.total))
 
 
@@ -75,7 +75,7 @@ class CartProduct(object):
 
     @property
     def pk_str(self):
-        return str(self.product.pk).strip()
+        return str(self.product.pk)
 
 
 class Cart(object):
@@ -105,6 +105,7 @@ class Cart(object):
 
     def remove(self, product_pk):
         product = CartProduct(product_pk)
+
         try:
             del self.cart['products'][product.pk_str]
         except KeyError:
@@ -112,7 +113,9 @@ class Cart(object):
         self._calculate()
 
     def add(self, product_pk, quant):
-        if str(product_pk).strip()  in self.cart['products']:
-            quant += self.cart['products'][str(product_pk).strip()]['quant']
+        product = CartProduct(product_pk)
 
-        self.set(product_pk, quant)
+        if product.pk_str in  self.cart['products'].keys():
+            quant += self.cart['products'][product.pk_str]['quant']
+
+        self.set(product.pk_str, quant)

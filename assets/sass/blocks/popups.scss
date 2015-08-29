@@ -47,3 +47,26 @@
         padding-top: 7px;
     } // button
 } // popup-comment
+
+.flash-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px 10%;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #00A2E2;
+    color: white;
+    z-index: 9999;
+    .content {
+        @include clearfix;
+    }
+    .close {
+        float: right;
+        &:before {
+            @include icon-fa;
+            content: "\f057";
+        } // &:before
+    } // close
+} // flash-popup

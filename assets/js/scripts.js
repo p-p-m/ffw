@@ -737,7 +737,6 @@
     */
     function activatePopUpBySelector(selector) {
         var el = $(selector);
-        console.log(el);
         return {
             activate: function() {
                 el.addClass('active');

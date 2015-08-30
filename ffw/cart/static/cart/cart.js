@@ -72,7 +72,7 @@ var cart = {
              cart.updateCartAndCallback(responseData, callback);
         });
     },
-    'add': function(product_dict, callback) {
+    'add': function(product_dict, callback) {console.log('product_dict - ', JSON.stringify(product_dict));
         cart.csrf();
 
         $.ajax({

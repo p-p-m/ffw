@@ -31,7 +31,7 @@ function calculateConfigurationsTotal() {
     for (var i = 0; i < configurations.length; i++) {
         configuration = configurations[i];
         if (configuration.activeElement.is(':checked')) {
-            totalCount += parseInt(configuration.countElement.val());
+            totalCount += 1;
             totalPrice += parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
         }
     }
@@ -41,6 +41,7 @@ function calculateConfigurationsTotal() {
 
 $(document).ready(function() {
     initConfigrations();
+    var commentPopup = activatePopUpBySelector($('[data-role="comment-popup"]'));
 
     if (configurations.length === 0) {
         // product without configurations
@@ -64,15 +65,21 @@ $(document).ready(function() {
     }
     // comments
     $('[data-role="add-comment-button"]').click(function() {
-        var productId = $('[data-role="product"]').attr('data-product');
-        comments.add('positive!!', 'negative!!', productId, function() {
-            alert('Comment was successfully added.');
+        var productId = $('[data-role="product"]').attr('data-product'),
+            positive = $('[data-role="comment-positive"]').val(),
+            negative = $('[data-role="comment-negative"]').val();
+        comments.add(positive, negative, productId, function() {
+            alert('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов');
         });
+        commentPopup.deactivate();
     });
 
     $('[data-role="show-comment-popup"]').click(function() {
-        $('[data-role="comment-popup"]').removeAttr('style');
+        commentPopup.activate();
     });
 
+    $('[data-role="comment-cancel"]').click(function() {
+        commentPopup.deactivate();
+    });
 
 });

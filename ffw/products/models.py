@@ -226,7 +226,7 @@ class Product(TimeStampedModel):
             models.Q(subcategories=self.subcategory) |
             models.Q(sections=self.subcategory.category.section)
         )
-        return Characteristic.objects.filter(query)
+        return Characteristic.objects.filter(query).distinct()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(unidecode(self.name))

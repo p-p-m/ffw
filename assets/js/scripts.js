@@ -140,7 +140,7 @@
 
             for (i = 0; i < itemsArray.length; i++) {
                 var item = itemsArray.eq(i);
-                var decorItem = decorArray.eq(i)
+                var decorItem = decorArray.eq(i);
                 if (item.hasClass('active')) {
                     item.removeClass('active');
                     item.hide();
@@ -245,7 +245,7 @@
         if (window.matchMedia('(min-width : 768px)').matches) {
 
             topForCartDisplay = (triggerHeight + triggerPosition.top + 20);
-            leftForCartDisplay = (triggerPosition.left + triggerWidth)
+            leftForCartDisplay = (triggerPosition.left + triggerWidth);
             cartDisplay.removeAttr('style');
             cartDisplay.css({
                 'top': topForCartDisplay,
@@ -436,106 +436,6 @@
         elem.off();
     }
 
-    // // Price range slider
-    // function priceRange(sliderid, min, max, values) {
-
-    //     function collision($div1, $div2) {
-    //         var x1 = $div1.offset().left;
-    //         var w1 = 40;
-    //         var r1 = x1 + w1;
-    //         var x2 = $div2.offset().left;
-    //         var w2 = 40;
-    //         var r2 = x2 + w2;
-
-    //         if (r1 < x2 || x1 > r2) return false;
-    //         return true;
-
-    //     }
-
-    //     function updateFromInputMin() {
-    //         $('[data-role="field-min"]').keyup(function(e) {
-    //             oldMax = $('#' + sliderid).slider('values', 1 );
-    //             newMin = $(this).val();
-    //             $('#' + sliderid).slider("option", "values", [newMin, oldMax]);
-    //             updateMin(newMin);
-    //             updateDiffLine(newMin, oldMax);
-    //         });
-    //     }
-
-    //     function updateFromInputMax() {
-    //         $('[data-role="field-max"]').keyup(function() {
-    //             oldMin = $('#' + sliderid).slider('values', 0 );
-    //             newMax = $(this).val();
-    //             $('#' + sliderid).slider("option", "values", [oldMin, newMax]);
-    //             updateMax(newMax);
-    //             updateDiffLine(oldMin, newMax);
-    //         });
-    //     }
-
-    //     function updateBothValues(currenValMin, currenValMax) {
-    //         $('[data-role="field-min"]').attr('value', currenValMin);
-    //         $('[data-role="field-max"]').attr('value', currenValMax);
-    //         updateDiffLine(currenValMin, currenValMax);
-    //     }
-
-    //     function updateMax(currentValueMax) {
-    //         $('.ui-slider-range').find('span.price-range-both')
-    //         .attr('data-highprice', currentValueMax);
-    //         $('.ui-slider-handle:eq(1)').html('<span class="price-range-max value">'
-    //         + currentValueMax + ' грн</span>');
-    //     }
-    //     function updateMin(currentValueMin) {
-    //         $('.ui-slider-range').find('span.price-range-both')
-    //         .attr('data-highprice', currentValueMin);
-    //         $('.ui-slider-handle:eq(0)').html('<span class="price-range-min value">'
-    //         + currentValueMin + ' грн</span>');
-    //     }
-
-    //     function updateDiffLine(currentValueMin, currentValueMax) {
-    //         $('.ui-slider-range').html('<span class="price-range-both value"><i>'
-    //         + currentValueMin + ' грн - ' + currentValueMax + ' грн</i></span>');
-    //         $('#range-both').html('<span class="price-range-both value">' + currentValueMin +
-    //             ' - ' + currentValueMax + '</span>');
-    //     }
-
-    //     $('#' + sliderid).slider({
-    //         range: true,
-    //         min: min,
-    //         max: max,
-    //         values: values,
-    //         slide: function(event, ui) {
-
-    //             $('[data-role="field-min"]').attr('value', ui.values[ 0 ]);
-    //             $('[data-role="field-max"]').attr('value', ui.values[ 1 ]);
-
-    //             $('.ui-slider-handle:eq(0) .price-range-min').html(ui.values[ 0 ] + ' грн');
-    //             $('.ui-slider-handle:eq(1) .price-range-max').html(ui.values[ 1 ] + ' грн');
-    //             $('.price-range-both').html('<i>' + ui.values[ 0 ] + ' грн - ' + ui.values[ 1 ] + ' грн</i>');
-    //             $('.ui-slider-range').find('span.price-range-both').attr('data-lowprice', ui.values[ 0 ]);
-    //             $('.ui-slider-range').find('span.price-range-both').attr('data-highprice', ui.values[ 1 ]);
-    //             $('#range-both').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
-
-    //             updateBothValues(ui.values[ 0 ], ui.values[ 1 ]);
-
-    //             if (collision($('.price-range-min'), $('.price-range-max')) === true) {
-    //                 $('.price-range-min, .price-range-max').css('opacity', '0');
-    //             } else {
-    //                 $('.price-range-min, .price-range-max').css('opacity', '1');
-    //             }
-
-    //         }
-    //     });
-
-    //     valueMin = $('#' + sliderid).slider('values', 0 );
-    //     valueMax = $('#' + sliderid).slider('values', 1 );
-
-    //     updateMin(valueMin);
-    //     updateMax(valueMax);
-    //     updateBothValues(valueMin, valueMax);
-    //     updateFromInputMin();
-    //     updateFromInputMax();
-    // }
-
     function slickStandart(argContainer, argBaner, argPrev, argNext) {
         var banerContainer = argContainer;
         var banerSelector = argBaner;
@@ -719,34 +619,6 @@
         });
     }
 
-    /*
-
-    call this function with selector as argument, and after
-    use activate/deactivate
-
-    example
-
-    var newPop = activatePopUpBySelector('.newPop');
-    newPop.activate();
-    newPop.deactivate();
-
-    or
-
-    activatePopUpBySelector('.newPop').activate();
-
-    */
-    function activatePopUpBySelector(selector) {
-        var el = $(selector);
-        return {
-            activate: function() {
-                el.addClass('active');
-            },
-            deactivate: function() {
-                el.removeClass('active');
-            }
-        }
-    }
-
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -783,3 +655,32 @@
 
 
 })(jQuery);
+
+
+/*
+
+call this function with selector as argument, and after
+use activate/deactivate
+
+example
+
+var newPop = activatePopUpBySelector('.newPop');
+newPop.activate();
+newPop.deactivate();
+
+or
+
+activatePopUpBySelector('.newPop').activate();
+
+*/
+function activatePopUpBySelector(selector) {
+    var el = $(selector);
+    return {
+        activate: function() {
+            el.addClass('active');
+        },
+        deactivate: function() {
+            el.removeClass('active');
+        }
+    };
+}

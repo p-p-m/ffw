@@ -10,7 +10,6 @@ import re
 from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.forms import widgets
 from django.utils.functional import curry
 from django_summernote.admin import SummernoteModelAdmin

@@ -18,7 +18,7 @@
     </div>
     <div class="buttons">
     <button class="button button-blue" data-role="add-comment-button">Оставить отзыв</button>
-        <button class="button">Отмена</button>
+        <button class="button" data-role="comment-cancel">Отмена</button>
     </div>
 </div>
 
@@ -244,20 +244,12 @@
                                 </div>
                             </div>
                         {% endfor %}
+                        {% if not product.get_approved_comments %}
+                            <small>Никто еще не добавил отзыва. Будьте первыми!</small>
+                        {% endif %}
                     </div>
                     <div class="left-comment-in-box">
                         <button class="button button-blue" data-role="show-comment-popup">Оставить отзыв</button>
-                        {% comment %}
-                            <h3 class="product-block-title comments">
-                                Оставить отзыв
-                            </h3>
-                            <div class="product-block-content">
-                                <div class="left-commnet">
-                                    <textarea name="" id="" class="left-commnet"></textarea>
-                                    <!-- TODO: Add button here -->
-                                </div>
-                            </div>
-                        {% endcomment %}
                     </div>
                 </div>
                 <!-- /product-block -->

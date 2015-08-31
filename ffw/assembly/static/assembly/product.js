@@ -70,4 +70,9 @@ $(document).ready(function() {
         });
     });
 
+    $('[data-role="show-comment-popup"]').click(function() {
+        $('[data-role="comment-popup"]').removeAttr('style');
+    });
+
+
 });

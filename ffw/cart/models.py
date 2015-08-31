@@ -74,7 +74,7 @@ class CartProduct(object):
 
     @property
     def pk_str(self):
-        return str(self.product.pk).strip()
+        return str(self.product.pk)
 
 
 class Cart(object):
@@ -111,7 +111,7 @@ class Cart(object):
         self._calculate()
 
     def add(self, product_pk, quant):
-        if str(product_pk).strip() in self.cart['products']:
-            quant += self.cart['products'][str(product_pk).strip()]['quant']
+        product = CartProduct(product_pk)
 
-        self.set(product_pk, quant)
+        if product.pk_str in self.cart['products'].keys():
+            quant += self.cart['products'][product.pk_str]['quant']

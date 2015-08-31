@@ -714,9 +714,37 @@
             'top': '50%',
             'position': 'fixed',
             'z-index': 9999,
-            'margin-top': -popupHeight/2,
+            'margin-top': -((popupHeight/2) + 100),
             'margin-left': -popupWidth/2
         });
+    }
+
+    /*
+
+    call this function with selector as argument, and after
+    use activate/deactivate
+
+    example
+
+    var newPop = activatePopUpBySelector('.newPop');
+    newPop.activate();
+    newPop.deactivate();
+
+    or
+
+    activatePopUpBySelector('.newPop').activate();
+
+    */
+    function activatePopUpBySelector(selector) {
+        var el = $(selector);
+        return {
+            activate: function() {
+                el.addClass('active');
+            },
+            deactivate: function() {
+                el.removeClass('active');
+            }
+        }
     }
 
     // document ready

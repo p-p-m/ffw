@@ -4,6 +4,79 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
+{% comment %}
+<div class="flash-popup">
+    <div class="content">
+        Some message
+        <button class="button close"></button>
+    </div>
+</div>
+<!-- popup -->
+<div class="popup" data-front="popup">
+    <article class="descriptoin">
+        Test text. Put here something.
+    </article>
+    <div class="buttons">
+        <button class="button button-blue">Cancel</button>
+        <button class="button button-blue">Yes!</button>
+    </div>
+</div>
+<!-- /popup -->
+{% endcomment %}
+<!-- This popup with radio choises -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup" style="display: none;">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="radios">
+        <label for="positive-comment">
+            <input id="positive-comment" name="pos-neg" type="radio">
+            Положительный
+        </label>
+        <label for="negative-comment">
+            <input id="negative-comment" name="pos-neg" type="radio">
+            Негативный
+        </label>
+    </div>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <textarea name="" id="" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
+<!-- This popup with 2 fields -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <label for="advantages">Преимущества</label>
+            <textarea name="" id="advantages" class="left-commnet"></textarea>
+            <label for="limitations">Недостатка</label>
+            <textarea name="" id="limitations" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
+
 <!-- product -->
 <section class="product">
     <div class="wrap">

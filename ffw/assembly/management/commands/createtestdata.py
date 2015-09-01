@@ -194,7 +194,7 @@ class Command(BaseCommand):
             subcategories = subcategories[:2]
         for index, subcategory in enumerate(subcategories):
             self.stdout.write('Creating products for subcategory {}'.format(subcategory))
-            for i in range(50 if index == 0 else 3):
+            for i in range(3 if index == 0 else 3):
                 product = products_models.Product.objects.create(
                     name='product-{}-{}'.format(subcategory.id, i),
                     short_description='product-short-description-{}-{}'.format(subcategory.id, i),

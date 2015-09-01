@@ -33,6 +33,9 @@ class Characteristic(models.Model):
     description = models.TextField(_('Characteristic description'), blank=True)
     default_value = models.CharField(_('Default value'), max_length=127, blank=True)
     units = models.CharField(_('Units'), max_length=50, blank=True)
+    rating = models.FloatField(
+        _('Rating'), default=4.0,
+        help_text=_('Characteristic with higher ratings will be displayed first'))
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
@@ -223,7 +226,7 @@ class Product(TimeStampedModel):
             models.Q(subcategories=self.subcategory) |
             models.Q(sections=self.subcategory.category.section)
         )
-        return Characteristic.objects.filter(query)
+        return Characteristic.objects.filter(query).distinct()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(unidecode(self.name))
@@ -241,7 +244,8 @@ class Product(TimeStampedModel):
         """
         Return all attributes if product has one configuration, else return common attributes for configurations
         """
-        attributes = ProductAttribute.objects.filter(product_configuration__product=self)
+        attributes = ProductAttribute.objects.filter(product_configuration__product=self).order_by(
+            '-characteristic__rating')
         if self.configurations.count() > 1:
             configurations_attribures_names = [set(c.attributes.all().values_list('name', 'value'))
                                                for c in self.configurations.all()]
@@ -272,6 +276,9 @@ class Product(TimeStampedModel):
         similar_products = sum(similar_products_groups, [])
         return collections.Counter(similar_products).keys()[:4]
 
+    def get_approved_comments(self):
+        return self.comments.filter(is_approved=True)
+
 
 @python_2_unicode_compatible
 class ProductConfiguration(models.Model):
@@ -281,7 +288,7 @@ class ProductConfiguration(models.Model):
 
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
     code = models.CharField(_('Code'), max_length=127, unique=True)
-    is_active = models.BooleanField(_('Is configuration active'), default=True)
+    is_active = models.BooleanField(_('Is active'), default=True)
     price_uah = models.DecimalField(_('Price in UAH'), null=True, max_digits=10, decimal_places=2)
     price_eur = models.DecimalField(_('Price in EUR'), null=True, max_digits=10, decimal_places=2)
     price_usd = models.DecimalField(_('Price in USD'), null=True, max_digits=10, decimal_places=2)
@@ -328,7 +335,8 @@ class ProductConfiguration(models.Model):
 
     def get_unique_attributes(self):
         common_attributes = self.product.get_attributes()
-        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True))
+        return self.attributes.exclude(name__in=common_attributes.values_list('name', flat=True)).order_by(
+            '-characteristic__rating')
 
     def get_formatted_unique_attributes(self):
         unique_attributes = self.get_unique_attributes()
@@ -408,3 +416,18 @@ class ProductImage(models.Model):
     is_main = models.BooleanField(
         default=True,
         help_text=_('If image is main - it will be displayed on product list page'))
+
+
+class Comment(TimeStampedModel):
+    class Meta:
+        verbose_name = _('Product comment')
+        verbose_name_plural = _('Product comments')
+
+    product = models.ForeignKey(Product, related_name='comments')
+    positive_sides = models.TextField(_('Positive sides'), blank=True)
+    negative_sides = models.TextField(_('Negative sides'), blank=True)
+    is_approved = models.BooleanField(
+        _('Is approved by stuff'),
+        default=False,
+        help_text=_('Only approved comments is visible for users')
+    )

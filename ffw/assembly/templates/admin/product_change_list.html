@@ -1,0 +1,40 @@
+{% extends "admin/change_list.html" %}
+{% load staticfiles %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {# It is bad idea to load jquery like this - need to be fixed #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{% static 'admin/product-list.js' %}"> </script>
+{% endblock %}
+
+{% block content %}
+    Section:
+    <select data-role='section-filter'>
+        <option data-value="0"> --- </option>
+        {% for section in sections %}
+            <option data-value="{{ section.id }}">
+                {{ section.name }}
+            </option>
+        {% endfor %}
+    </select>
+    Category:
+    <select data-role='category-filter'>
+        <option data-value='0'> --- </option>
+        {% for category in categories %}
+            <option data-value="{{ category.id }}">
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+    Subcategory:
+    <select data-role='subcategory-filter'>
+        <option data-value='0'> --- </option>
+        {% for subcategory in subcategories %}
+            <option data-value="{{ subcategory.id }}">
+                {{ subcategory.name }}
+            </option>
+        {% endfor %}
+    </select>
+    {{ block.super }}
+{% endblock %}

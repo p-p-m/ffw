@@ -6,6 +6,25 @@
 {% block content %}
 
 <div id='cart'   data-role='cart-url' data-url="{% url 'cart' %}"></div>
+
+<div class="popup popup-comment" data-front="popup" data-role="comment-popup">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <label for="advantages">Преимущества</label>
+            <textarea name="" id="advantages" class="left-commnet" data-role="comment-positive"></textarea>
+            <label for="limitations">Недостатки</label>
+            <textarea name="" id="limitations" class="left-commnet" data-role="comment-negative"></textarea>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue" data-role="add-comment-button">Оставить отзыв</button>
+        <button class="button" data-role="comment-cancel">Отмена</button>
+    </div>
+</div>
+
 <!-- product -->
 <section class="product">
     <div class="wrap">
@@ -89,7 +108,7 @@
             <!-- info-box -->
             <div class="info-box">
                 <div class="title-line">
-                    <h1 class="product-title">{{ product.name }}</h1>
+                    <h1 class="product-title" data-role='product' data-product='{{ product.id }}'>{{ product.name }}</h1>
                     {% comment %}<span class="label new">новинка</span>{% endcomment %}
                 </div>
             </div>
@@ -211,49 +230,31 @@
                         Отзывы
                     </h3>
                     <div class="product-block-content">
-                        <div class="comment-block">
-                            {% comment %}
-                                <div class="comment-author-photo">
-                                    <img src="/static/images/tmp/avatar.png" alt="">
+                        {% for comment in product.get_approved_comments %}
+                            <div class="comment-block">
+                                <div class="comment-body">
+                                    <strong> Позитивные стороны </strong>
+                                    <article>
+                                        <p>
+                                            {{ comment.positive_sides }}
+                                        </p>
+                                    </article>
+
+                                    <strong> Негативные стороны </strong>
+                                    <article>
+                                        <p>
+                                            {{ comment.negative_sides }}
+                                        </p>
+                                    </article>
                                 </div>
-                            {% endcomment %}
-                            <div class="comment-body">
-                                <h3 class="comment-author-name">Michael Yakimenko</h3>
-                                <article>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
-                                    </p>
-                                </article>
                             </div>
-
-                        </div>
-
-                        <div class="comment-block">
-                            <div class="comment-body">
-                                <h3 class="comment-author-name">Zymud</h3>
-                                <article>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus urna sit amet tincidunt scelerisque.
-                                    </p>
-                                </article>
-                            </div>
-
-                        </div>
-
+                        {% endfor %}
+                        {% if not product.get_approved_comments %}
+                            <small>Никто еще не добавил отзыва. Будьте первыми!</small>
+                        {% endif %}
                     </div>
                     <div class="left-comment-in-box">
-                        <button class="button button-blue">Оставить отзыв</button>
-                        {% comment %}
-                            <h3 class="product-block-title comments">
-                                Оставить отзыв
-                            </h3>
-                            <div class="product-block-content">
-                                <div class="left-commnet">
-                                    <textarea name="" id="" class="left-commnet"></textarea>
-                                    <!-- TODO: Add button here -->
-                                </div>
-                            </div>
-                        {% endcomment %}
+                        <button class="button button-blue" data-role="show-comment-popup">Оставить отзыв</button>
                     </div>
                 </div>
                 <!-- /product-block -->
@@ -301,5 +302,6 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'products/comments.js' %}"> </script>
     <script src="{% static 'assembly/product.js' %}"> </script>
 {% endblock js %}

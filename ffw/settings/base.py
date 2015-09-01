@@ -109,6 +109,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'ffw', 'cart', 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'filters', 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'assembly', 'static'),
+    os.path.join(PROJECT_ROOT, 'ffw', 'products', 'static'),
     os.path.join(PROJECT_ROOT, 'ffw', 'static'),
 )
 
@@ -119,4 +120,3 @@ CONSTANCE_CONFIG = {
     'USD_RATE': (24.1, 'UAH/USD rate'),
     'EUR_RATE': (26.2, 'UAH/EUR rate'),
 }
-

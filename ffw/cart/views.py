@@ -53,7 +53,6 @@ class CartSetView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_dict = json.loads(request.POST.get('product_dict', '{}'))
-            print request
             for item in product_dict.items():
                 self._call_cart(product_pk=item[0], quant=int(item[1]))
             return self.format_response(request)
@@ -101,7 +100,6 @@ class OrderView(FormView):
         order.count = self.count
         order.total = self.total
         order.save()
-        print "Ok"
         return super(OrderView, self).form_valid(form)
 
 

@@ -91,15 +91,14 @@ class Cart(object):
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
-            print (product.pk_int, product.pk_str)
-
             self.cart['products'][product_pk] = {
                 'name': product.name,
                 'product_code': product.code,
                 'price': float(product.price),
                 'quant': quant,
-                'sum_': float(quant * product.price),
+                'sum_': float(quant * product.price)
             }
+            self.cart['products'][product_pk]
             self._calculate()
         else:
             self.remove(product_pk)

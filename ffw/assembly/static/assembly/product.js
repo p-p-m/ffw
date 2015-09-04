@@ -17,8 +17,7 @@ function initConfigrations() {
             active: $(this).find('[data-role="configuration-active"]').is(':checked'),
             priceElement: $(this).find($('[data-role="configuration-price"]')),
             countElement: $(this).find($('[data-role="configuration-count"]')),
-            activeElement: $(this).find('[data-role="configuration-active"]'),
-            pkElement: $(this).find($('[data-role="config-pk"]')).text()
+            activeElement: $(this).find('[data-role="configuration-active"]')
         };
         configuration.activeElement.on('change', calculateConfigurationsTotal);
         configuration.countElement.on('input', calculateConfigurationsTotal);
@@ -43,8 +42,6 @@ function calculateConfigurationsTotal() {
 $(document).ready(function() {
     initConfigrations();
     var commentPopup = activatePopUpBySelector($('[data-role="comment-popup"]'));
-
-    cart.url =$('div#cart').data('url');
 
     if (configurations.length === 0) {
         // product without configurations
@@ -84,26 +81,4 @@ $(document).ready(function() {
     $('[data-role="comment-cancel"]').click(function() {
         commentPopup.deactivate();
     });
-
-    $('[data-role="add-cart"]').on("click", function() {
-        var productDict = {}
-        for (var i = 0; i < configurations.length; i++) {
-            configuration = configurations[i];
-
-            if (configuration.activeElement.is(':checked')) {console.log('i1- ', typeof(configuration).pkElement, parseInt(configuration.countElement.val()))
-               productDict[configuration.pkElement] = parseInt(configuration.countElement.val())
-            };
-        };
-        console.log(productDict)
-        cart.add(productDict);
-    });
-
-    $('button#print').on("click", function() {
-         console.log( cart.count, " - ", cart.total);
-    });
-
-    $('button#clear').on("click", function() {
-          cart.clear();
-    });
-
 });

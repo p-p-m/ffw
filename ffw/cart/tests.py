@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from products.models import Subcategory, Category, Section, Product, ProductConfiguration
 
 
-
 class CartViewTest(TestCase):
+
     def setUp(self):
         section = Section.objects.create(name="Home", slug='Home')
         category = Category.objects.create(name="Electro", slug="electro", section=section)
@@ -84,4 +84,3 @@ class CartViewTest(TestCase):
         response = self.client.get(reverse("cart"))
         self.cart_session = json.loads(response.content)['cart']
         self.assertDictEqual(self.cart, self.cart_session, msg=self.msg)
-

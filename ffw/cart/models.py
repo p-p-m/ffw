@@ -88,19 +88,18 @@ class Cart(object):
         self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
 
     def set(self, product_pk, quant):
+        product = CartProduct(product_pk)
         if quant > 0:
-            product = CartProduct(product_pk)
-            self.cart['products'][product_pk] = {
+            self.cart['products'][product.pk_str] = {
                 'name': product.name,
                 'product_code': product.code,
                 'price': float(product.price),
                 'quant': quant,
                 'sum_': float(quant * product.price)
             }
-            self.cart['products'][product_pk]
             self._calculate()
         else:
-            self.remove(product_pk)
+            self.remove(product.pk_str)
 
     def remove(self, product_pk):
         product = CartProduct(product_pk)
@@ -116,4 +115,4 @@ class Cart(object):
         if product.pk_str in self.cart['products'].keys():
             quant += self.cart['products'][product.pk_str]['quant']
 
-        self.set(product_pk_str, quant)
+        self.set(product.pk_str, quant)

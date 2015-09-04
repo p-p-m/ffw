@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.views.generic import View, TemplateView, FormView
 
 from .forms import OrderForm
-from .models import Cart, OrderedProduct, Order
+from .models import Cart, OrderedProduct
 from products.models import ProductConfiguration
 
 
@@ -40,6 +40,7 @@ class CartRemoveView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_pk_list = json.loads(request.POST.get('product_pk_list', '[]'))
+
             for product_pk in product_pk_list:
                 Cart(self.cart).remove(product_pk)
             return self.format_response(request)
@@ -53,6 +54,7 @@ class CartSetView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         if request.is_ajax:
             product_dict = json.loads(request.POST.get('product_dict', '{}'))
+
             for item in product_dict.items():
                 self._call_cart(product_pk=item[0], quant=int(item[1]))
             return self.format_response(request)
@@ -105,10 +107,3 @@ class OrderView(FormView):
 
 class ThankView(TemplateView):
     template_name = 'thank.html'
-    def get(self, request, *args, **kwargs):
-        print 'in'
-        for order in Order.objects.all():
-            print order
-            for product in OrderedProduct.objects.filter(order=order):
-                print "    " , product
-        return super(ThankView,self).get(self, request, *args, **kwargs)

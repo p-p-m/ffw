@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 from products.models import Subcategory, Category, Section, Product, ProductConfiguration
 
 
-
 class CartViewTest(TestCase):
+
     def setUp(self):
         section = Section.objects.create(name="Home", slug='Home')
         category = Category.objects.create(name="Electro", slug="electro", section=section)

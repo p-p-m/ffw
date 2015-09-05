@@ -19,43 +19,63 @@ class CartViewTest(TestCase):
         ProductConfiguration.objects.create(product=product, code="code-4", price_uah=200, pk=4)
 
     def test_cart(self):
-        self._testing_cart_get()
-        # test CartSetView
-        self.msg = "CartSetView is invalid"
-        self.url_name = 'cart_set'
-        self.product_dict = {1: 2, 2: 3} #add to cart of session
-        self.product_cart = {1: 2, 2: 3}  #add to cart of test
-        self.data_cart = {'total': 250, 'count': 5} #add to cart of test
-        self._get_cart()
-        # test CartAddView
-        self.msg = "CartAddView is invalid"
-        self.url_name = 'cart_add'
-        self.product_dict = {1: 4, 2: 2, 3: 3, 4: 1} #add to cart of session
-        self.product_cart = {1: 6, 2: 5, 3: 3, 4: 1}  #add to cart of test
-        self.data_cart = {'total': 1000, 'count':15} #add to cart of test
-        self._get_cart()
-        # test CartRemoveView
-        self.msg = "CartRemoveView is invalid"
-        self.url_name = 'cart_remove'
-        self.product_dict ={1: 0, 2:0} #add to cart of session
-        self.product_cart = {3: 3, 4: 1} #add to cart of test
-        self.data_cart = {'total': 530, 'count': 4} #add to cart of test
-        self._get_cart()
-        # test CartView.post() -clear cart
-        self.msg = "CartView.post()  is invalid"
-        self.url_name = 'cart'
-        self.product_dict ={} #add to cart of session
-        self.product_cart = {} #add to cart of test
-        self.data_cart = {'total': 0, 'count': 0} #add to cart of test
-        self._get_cart()
+        #Test CartView.get(), CartSetView, CartAddView, CartRemoveView and CartView.post()
+        #self.cart - cart for control by comparing with session['cart']
+        #self.product_dict and  self.product_cart - dictionary with key=product.pk and value=quant
+        #self.data_cart - dictionary with total data for self.cart
+        #self.product_dict - use for create  session['cart']
+        #self.product_cart and self.data_cart -  use for create  self.cart
 
-    def _testing_cart_get(self):
+        #test CartView.get() - get session['cart']
         self.msg = "CartView.get()  is invalid"
         self.url_name = 'cart'
         self.cart={'products': {}, 'count': 0, 'total': 0}
         self._compare_cart()
 
+        # test CartSetView
+        self.msg = "CartSetView is invalid"
+        self.url_name = 'cart_set'
+        self.product_dict = {1: 2, 2: 3}
+        self.product_cart = {1: 2, 2: 3}
+        self.data_cart = {'total': 250, 'count': 5}
+
+        self._calc('product_dict', self.product_dict)
+
+        # test CartAddView
+        self.msg = "CartAddView is invalid"
+        self.url_name = 'cart_add'
+        self.product_dict = {1: 4, 2: 2, 3: 3, 4: 1}
+        self.product_cart = {1: 6, 2: 5, 3: 3, 4: 1}
+        self.data_cart = {'total': 1000, 'count':15}
+
+        self._calc('product_dict', self.product_dict)
+
+        # test CartRemoveView
+        self.msg = "CartRemoveView is invalid"
+        self.url_name = 'cart_remove'
+        self.product_dict ={1: 0, 2:0}
+        self.product_cart = {3: 3, 4: 1}
+        self.data_cart = {'total': 530, 'count': 4}
+        product_pk_list = [product_pk for product_pk in self.product_dict]
+
+        self._calc('product_pk_list', product_pk_list)
+
+        # test CartView.post() -clear cart
+        self.msg = "CartView.post()  is invalid"
+        self.url_name = 'cart'
+        self.product_dict ={}
+        self.product_cart = {}
+        self.data_cart = {'total': 0, 'count': 0}
+
+        self._calc('product_dict', self.product_dict)
+
+    def _calc(self, key, value):
+        self.client.post(reverse(self.url_name), {key: json.dumps(value)}) #send request.post
+        self._get_cart() #get self.cart
+        self._compare_cart() #control by comparing session['cart'] with self.cart
+
     def _get_cart(self):
+        #create cart for control by comparing with session['cart']
         self.cart={'products': {}, 'count': 0, 'total': 0}
 
         for product_pk in self.product_cart:
@@ -72,15 +92,8 @@ class CartViewTest(TestCase):
         self.cart['count'] = self.data_cart['count']
         self.cart['total'] = self.data_cart['total']
 
-        if self.url_name == 'cart_remove':
-            product_pk_list = [product_pk for product_pk in self.product_dict]
-            self.client.post(reverse(self.url_name), {'product_pk_list': json.dumps(product_pk_list)})
-        else:
-            self.client.post(reverse(self.url_name), {'product_dict': json.dumps(self.product_dict)})
-
-        self._compare_cart()
-
     def _compare_cart(self):
-        response = self.client.get(reverse("cart"))
-        self.cart_session = json.loads(response.content)['cart']
-        self.assertDictEqual(self.cart, self.cart_session, msg=self.msg)
+        #control by comparing session['cart'] with self.cart
+        response = self.client.get(reverse("cart")) #send request to get session['cart']
+        session_cart = json.loads(response.content)['cart']
+        self.assertDictEqual(self.cart, session_cart, msg=self.msg)

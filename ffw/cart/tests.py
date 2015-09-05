@@ -5,18 +5,19 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from products.models import Subcategory, Category, Section, Product, ProductConfiguration
 
+def factory( aClass, **kwargs):
+        return aClass.objects.create(**kwargs)
 
 class CartViewTest(TestCase):
 
     def setUp(self):
-        section = Section.objects.create(name="Home", slug='Home')
-        category = Category.objects.create(name="Electro", slug="electro", section=section)
-        subcategory =Subcategory.objects.create(name="Iron", slug="iron", category=category)
-        product = Product.objects.create(name="product-1", short_description = 'hdhfrj', subcategory=subcategory)
-        ProductConfiguration.objects.create(product=product, code="code-1", price_uah=20, pk=1)
-        ProductConfiguration.objects.create(product=product, code="code-2", price_uah=70, pk=2)
-        ProductConfiguration.objects.create(product=product, code="code-3", price_uah=110, pk=3)
-        ProductConfiguration.objects.create(product=product, code="code-4", price_uah=200, pk=4)
+        section = factory(Section, name="Home", slug='Home')
+        category = factory(Category, name="Electro", slug="electro", section=section)
+        subcategory = factory(Subcategory, name="Iron", slug="iron", category=category)
+        product = factory(Product, name="product-1", short_description = 'hdhfrj', subcategory=subcategory)
+
+        for code, price, pk in ['code-1', 20, 1], ['code-2', 70, 2], ['code-3', 110, 3], ['code-4', 200, 4]:
+            factory(ProductConfiguration, product=product, code=code, price_uah=price, pk=pk)
 
     def test_cart(self):
         #Test CartView.get(), CartSetView, CartAddView, CartRemoveView and CartView.post()

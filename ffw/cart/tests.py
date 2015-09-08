@@ -1,8 +1,17 @@
 # coding: utf-8
+import difflib  # for assertDictEqual in TestCaseOwn
 import json
+import pprint  # for assertDictEqual in TestCaseOwn
+
+# for assertDictEqual in TestCaseOwn
+from unittest.util import (
+    strclass, safe_repr, unorderable_list_difference,
+    _count_diff_all_purpose, _count_diff_hashable
+)
 
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+
 from products.models import Subcategory, Category, Section, Product, ProductConfiguration
 
 
@@ -10,7 +19,27 @@ def factory(aClass, **kwargs):
     return aClass.objects.create(**kwargs)
 
 
-class CartViewTest(TestCase):
+class TestCaseOwn(TestCase):
+
+    def assertDictEqual(self, d1, d2, msg=None, mode_not_equal=False):
+        self.assertIsInstance(d1, dict, 'First argument is not a dictionary')
+        self.assertIsInstance(d2, dict, 'Second argument is not a dictionary')
+
+        if d1 != d2:
+            standardMsg = '%s != %s' % (
+                safe_repr(d1, True), safe_repr(d2, True))
+            diff = ('\n' + '\n'.join(difflib.ndiff(
+                           pprint.pformat(d1).splitlines(),
+                           pprint.pformat(d2).splitlines())))
+            standardMsg = self._truncateMessage(standardMsg, diff)
+            msg = ('\n' * 2 + 'FAIL test_user_can_' + msg + '\n' * 2 + ("Expected cart:" + '\n' + json.dumps(d1) + '\n' * 2 + 'Reseived cart:' +
+                                                                        '\n' + json.dumps(d2)))
+            self.fail(self._formatMessage(msg, standardMsg))
+        else:
+            print "OK " + msg
+
+
+class CartViewTest(TestCaseOwn):
 
     def setUp(self):
         section = factory(Section, name="Home", slug='Home')
@@ -71,15 +100,14 @@ class CartViewTest(TestCase):
                                    self.expected_quant_3 * self.price_3 + self.expected_quant_4 * self.price_4)
 
         def cart_get_test():
-            # url name - 'cart_set', method get
-            self.msg = "'cart_set', method get  is invalid"
+            # method get
+            self.msg = "get_cart"
             self.url_name = 'cart'
             self.expected_cart = {'products': {}, 'count': 0, 'total': 0}
             self._compare_cart()
 
         def cart_set_test():
-            # url name - 'cart_set'
-            self.msg = "CartSetView is invalid"
+            self.msg = "set_product_to_cart"
             self.url_name = 'cart_set'
             quant_1 = 2
             quant_2 = 3
@@ -94,8 +122,7 @@ class CartViewTest(TestCase):
             self._calc('product_dict', self.product_dict)
 
         def cart_add_test():
-            # url name - 'cart_add
-            self.msg = "CartAddView is invalid"
+            self.msg = "add_product_to_cart"
             self.url_name = 'cart_add'
             quant_1 = 4
             quant_2 = 2
@@ -113,8 +140,7 @@ class CartViewTest(TestCase):
             self._calc('product_dict', self.product_dict)
 
         def cart_remove_test():
-            # url name - 'cart_remove
-            self.msg = "CartRemoveView is invalid"
+            self.msg = "remove_product_from_cart"
             self.url_name = 'cart_remove'
             _total_data(- self.expected_quant_1, - self.expected_quant_2)
             self.expected_products = {
@@ -126,8 +152,7 @@ class CartViewTest(TestCase):
                     self.product_pk_1, self.product_pk_2])
 
         def cart_clear_test():
-            # url name - 'cart_set, method post'
-            self.msg = "CartView.post()  is invalid"
+            self.msg = "clear_cart"
             self.url_name = 'cart'
             self.product_dict = {}
             self.expected_products = {}
@@ -172,4 +197,4 @@ class CartViewTest(TestCase):
         # send request to get session['cart']
         response = self.client.get(reverse("cart"))
         session_cart = json.loads(response.content)['cart']
-        self.assertDictEqual(self.expected_cart, session_cart, msg=self.msg)
+        self.assertDictEqual(self.expected_cart, session_cart, self.msg)

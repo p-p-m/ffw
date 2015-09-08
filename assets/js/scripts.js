@@ -591,7 +591,7 @@
 
         win.scroll(function() {
             highLightItem.each(function() {
-                if (win.scrollTop() >= $(this).offset().top) {
+                if (win.scrollTop() >= $(this).offset().top -100) {
                     var highLightID = $(this).attr('id');
                     menuItem.removeClass('active');
                     menuItem.each(function() {

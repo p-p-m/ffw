@@ -446,6 +446,12 @@
     }
 } // [data-front="price-input"]
 
+[data-front="cart-input-count-delete"] {
+    cursor: pointer;
+    @include inline-middle;
+    color: #e74c3c;
+} // [data-front="cart-input-count-delete"]
+
 [data-front="cart-input-count-minus"] {
     cursor: pointer;
 } // [data-front="cart-input-count-minus"]

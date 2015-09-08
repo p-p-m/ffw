@@ -89,6 +89,38 @@ class CartViewTest(TestCaseOwn):
         self.expected_quant_3 = 0
         self.expected_quant_4 = 0
 
+        def get_cart():
+            # create cart for control by comparing with session['cart']
+            self.expected_cart = {'products': {}, 'count': 0, 'total': 0}
+
+            for product_pk in self.expected_products:
+                product = ProductConfiguration.objects.get(pk=product_pk)
+                quant = self.expected_products[product.pk]
+                price = float(product.price_uah)
+                self.expected_cart['products'][str(product.pk)] = {
+                    'quant': quant,
+                    'name': product.product.name,
+                    'product_code': product.code,
+                    'price': price,
+                    'sum_': float(price * quant)}
+
+            self.expected_cart['count'] = self.expected_count
+            self.expected_cart['total'] = self.expected_total
+
+        def compare_cart():
+            # control by comparing session['cart'] with self.expected_cart
+            # send request to get session['cart']
+            response = self.client.get(reverse("cart"))
+            session_cart = json.loads(response.content)['cart']
+            self.assertDictEqual(self.expected_cart, session_cart, self.msg)
+
+        def calc(key, value):
+            self.client.post(reverse(self.url_name),
+                             {key: json.dumps(value)})  # send request.post
+            get_cart()  # get self.expected_cart
+            # control by comparing session['cart'] with self.expected_cart
+            compare_cart()
+
         def _total_data(quant_1=0, quant_2=0, quant_3=0, quant_4=0):
             self.expected_quant_1 += quant_1
             self.expected_quant_2 += quant_2
@@ -104,7 +136,7 @@ class CartViewTest(TestCaseOwn):
             self.msg = "get_cart"
             self.url_name = 'cart'
             self.expected_cart = {'products': {}, 'count': 0, 'total': 0}
-            self._compare_cart()
+            compare_cart()
 
         def cart_set_test():
             self.msg = "set_product_to_cart"
@@ -119,7 +151,7 @@ class CartViewTest(TestCaseOwn):
                 self.product_pk_1: self.expected_quant_1,
                 self.product_pk_2: self.expected_quant_2}
 
-            self._calc('product_dict', self.product_dict)
+            calc('product_dict', self.product_dict)
 
         def cart_add_test():
             self.msg = "add_product_to_cart"
@@ -137,7 +169,7 @@ class CartViewTest(TestCaseOwn):
             self.expected_products = {self.product_pk_1: self.expected_quant_1, self.product_pk_2: self.expected_quant_2,
                                       self.product_pk_3: self.expected_quant_3, self.product_pk_4: self.expected_quant_4}
 
-            self._calc('product_dict', self.product_dict)
+            calc('product_dict', self.product_dict)
 
         def cart_remove_test():
             self.msg = "remove_product_from_cart"
@@ -147,9 +179,7 @@ class CartViewTest(TestCaseOwn):
                 self.product_pk_3: self.expected_quant_3,
                 self.product_pk_4: self.expected_quant_4}
 
-            self._calc(
-                'product_pk_list', [
-                    self.product_pk_1, self.product_pk_2])
+            calc('product_pk_list', [self.product_pk_1, self.product_pk_2])
 
         def cart_clear_test():
             self.msg = "clear_cart"
@@ -159,42 +189,10 @@ class CartViewTest(TestCaseOwn):
             self.expected_total = 0
             self.expected_count = 0
 
-            self._calc('product_dict', self.product_dict)
+            calc('product_dict', self.product_dict)
 
         cart_get_test()
         cart_set_test()
         cart_add_test()
         cart_remove_test()
         cart_clear_test()
-
-    def _calc(self, key, value):
-        self.client.post(reverse(self.url_name),
-                         {key: json.dumps(value)})  # send request.post
-        self._get_cart()  # get self.expected_cart
-        # control by comparing session['cart'] with self.expected_cart
-        self._compare_cart()
-
-    def _get_cart(self):
-        # create cart for control by comparing with session['cart']
-        self.expected_cart = {'products': {}, 'count': 0, 'total': 0}
-
-        for product_pk in self.expected_products:
-            product = ProductConfiguration.objects.get(pk=product_pk)
-            quant = self.expected_products[product.pk]
-            price = float(product.price_uah)
-            self.expected_cart['products'][str(product.pk)] = {
-                'quant': quant,
-                'name': product.product.name,
-                'product_code': product.code,
-                'price': price,
-                'sum_': float(price * quant)}
-
-        self.expected_cart['count'] = self.expected_count
-        self.expected_cart['total'] = self.expected_total
-
-    def _compare_cart(self):
-        # control by comparing session['cart'] with self.expected_cart
-        # send request to get session['cart']
-        response = self.client.get(reverse("cart"))
-        session_cart = json.loads(response.content)['cart']
-        self.assertDictEqual(self.expected_cart, session_cart, self.msg)

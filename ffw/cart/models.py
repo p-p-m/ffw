@@ -110,6 +110,7 @@ class Cart(object):
 
     def set(self, product_pk, quant):
         product = CartProduct(product_pk)
+
         if quant > 0:
             self.cart['products'][product.pk_str] = {
                 'name': product.name,

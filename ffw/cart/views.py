@@ -2,7 +2,7 @@
 import json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.generic import View, TemplateView, FormView
 
 from .forms import OrderForm
@@ -45,6 +45,12 @@ class CartRemoveView(CartMixin, View):
                 request.POST.get('product_pk_list', '[]'))
 
             for product_pk in product_pk_list:
+                try:
+                    product_pk = int(product_pk)
+                except ValueError:
+                    return HttpResponseBadRequest(
+                        'Product_id expect "integer", get ' + product_pk + '"')
+
                 Cart(self.cart).remove(product_pk)
             return self.format_response(request)
 
@@ -59,7 +65,19 @@ class CartSetView(CartMixin, View):
             product_dict = json.loads(request.POST.get('product_dict', '{}'))
 
             for item in product_dict.items():
-                self._call_cart(product_pk=item[0], quant=int(item[1]))
+                try:
+                    quant = int(item[1])
+                except ValueError:
+                    return HttpResponseBadRequest(
+                        'Quntity expect "integer", get "' + item[1] + '"')
+
+                try:
+                    product_pk = int(item[0])
+                except ValueError:
+                    return HttpResponseBadRequest(
+                        'Product_id expect "integer", get ' + item[0] + '"')
+
+                self._call_cart(product_pk=product_pk, quant=quant)
             return self.format_response(request)
 
 

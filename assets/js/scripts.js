@@ -564,7 +564,9 @@
         var marginDiffs = 370;
         var win = $(window);
         var sidePanel = $('[data-front="side-panel"]');
-        var offset  = sidePanel.offset().top - marginDiffs;
+        if (sidePanel.length) {
+            var offset = sidePanel.offset().top - marginDiffs;
+        }
         var footer = $('.footer');
         var sidePanelHeight = sidePanel.height();
         var footerPosition = footer.offset().top - (sidePanel.height() + marginDiffs);

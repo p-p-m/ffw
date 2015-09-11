@@ -528,7 +528,7 @@
     }
 
     function sidePanel() {
-        var marginDiffs = 362;
+        var marginDiffs = 370;
         var win = $(window);
         var sidePanel = $('[data-front="side-panel"]');
         var offset  = sidePanel.offset().top - marginDiffs;

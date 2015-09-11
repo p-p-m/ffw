@@ -122,8 +122,8 @@
                             height: auto;
                             margin-bottom: 5px;
                             > li {
-                                display: block;
                                 background-color: #F5F5F5;
+                                @include table;
                                 + li {
                                     a {
                                         border-top: 1px solid rgb(218, 218, 218);
@@ -136,8 +136,11 @@
                                     }
                                 } // &.active
                                 > a {
+                                    @include table-cell;
+                                    vertical-align: middle;
+                                    height: 50px;
+                                    line-height: 1;
                                     transition: none;
-                                    display: block;
                                     box-sizing: border-box;
                                     width: 100%;
                                     background-color: none;

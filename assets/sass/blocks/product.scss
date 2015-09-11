@@ -271,6 +271,9 @@
                     @include inline-middle;
                 } // currency
             } // price-line
+            label {
+                cursor: pointer;
+            } // label
         } // td
     } // combain-product-list
     .combain-product-summary {

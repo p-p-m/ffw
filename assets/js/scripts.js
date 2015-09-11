@@ -296,7 +296,7 @@
                     inputValueUpdated = parseInt((inputValue - 1))
                 }
                 if (inputValue == 1 || inputValue < 0) {
-                    prevent.default;
+                    return false;
                 } else {
                     update();
                     input.val(inputValueUpdated);

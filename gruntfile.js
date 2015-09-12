@@ -41,6 +41,7 @@ module.exports = function(grunt) {
                     'bower_components/jquery-ui/jquery-ui.min.js',
                     'bower_components/jQuery-Mask-Plugin/dist/jquery.mask.min.js',
                     'bower_components/slick.js/slick/slick.js',
+                    'bower_components/tooltipster/js/jquery.tooltipster.js',
                     'assets/js/scripts.js'
                 ],
                 dest: 'static/js/production.js',
@@ -105,6 +106,12 @@ module.exports = function(grunt) {
                         dest: 'static/css/',
                         filter: 'isFile'
                     },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/tooltipster/css',
+                        src: ['*/*'],
+                        dest: 'static/css/'
+                    }
                 ],
             },
         },

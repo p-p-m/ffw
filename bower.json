@@ -9,6 +9,7 @@
     "fontawesome": "~4.3.0",
     "jQuery-Mask-Plugin": "~1.11.3",
     "jquery-ui": "~1.11.3",
-    "slick.js": "~1.4.1"
+    "slick.js": "~1.4.1",
+    "tooltipster": "~3.3.0"
   }
 }

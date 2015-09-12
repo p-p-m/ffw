@@ -655,6 +655,22 @@
         });
     }
 
+    // tool tips
+    // function toolTips() {
+    //     var tipParent = $('[data-front="tooltip"]');
+
+    //     tipParent.each(function() {
+    //         var tip = $(this).find('[data-front="tooltip-display"]');
+    //         // $(this).hover(function() {
+    //             tip.css({
+    //                 // 'top': -(tip.height() + 10),
+    //                 // 'left': '50%'
+    //                 // 'margin-left': 'x'
+    //             });
+    //         // });
+    //     });
+    // }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -682,6 +698,15 @@
         priceInput();
         regularPopup();
         equalheight('[data-view="grid"] .products-list .product');
+        $('[data-tooltip="tooltip"]').tooltipster({
+            delay: 50,
+            contentAsHTML: true,
+            functionInit: function(origin, content) {
+                content = origin.data('tip');
+                return content;
+            },
+            theme: 'tooltipster-light'
+        });
     });
 
     // all initial on window resize

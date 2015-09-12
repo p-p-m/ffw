@@ -271,6 +271,9 @@
                     @include inline-middle;
                 } // currency
             } // price-line
+            label {
+                cursor: pointer;
+            } // label
         } // td
     } // combain-product-list
     .combain-product-summary {
@@ -446,9 +449,21 @@
     }
 } // [data-front="price-input"]
 
+[data-front="cart-input-count-delete"] {
+    cursor: pointer;
+    @include inline-middle;
+    color: #e74c3c;
+} // [data-front="cart-input-count-delete"]
+
 [data-front="cart-input-count-minus"] {
     cursor: pointer;
 } // [data-front="cart-input-count-minus"]
 [data-front="cart-input-count-plus"] {
     cursor: pointer;
 } // [data-front="cart-input-count-plus"]
+
+[data-tooltip="tooltip"] {
+    color: black;
+    cursor: pointer;
+    font-size: rem(18);
+} // [data-front="tooltip"]

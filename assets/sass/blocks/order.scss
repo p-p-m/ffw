@@ -1,198 +1,57 @@
-.order-container {
-    padding: 40px 0;
-    margin: 0 auto;
-    .small-area{
-        padding-bottom: 50px;
-        .strip{
-            width: 500px;
-            background-color: #00A2E2;
-            height: 4px;
+.order-form {
+    box-sizing: border-box;
+    [class^="step-"] {
+        display: none;
+        &.active {
             display: block;
-            margin: 0 auto;
-            position: relative;
-            .disk {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                background-color: #C8F0FF;
-                position: absolute;
-                border: 1px solid #00A2E2;
-                &:nth-child(1) {
-                    top: -13px;
-                } // &:nth-child(1)
-                &:nth-child(2) {
-                    top: -13px;
-                    right: 50%;
-                    margin-left: -15px;
-                } // &:nth-child(2)
-                &:nth-child(3) {
-                    top: -13px;
-                    right: 0;
-                } // &:nth-child(3)
-                .fa {
-                    display: none;
-                } // fa
-                &.active {
-                    background-color: #00A2E2;
-                    color: white;
-                    .fa {
-                        display: block;
-                        padding-top: 7px;
-                        text-align: center;
-                        font-size: rem(15);
-                    } // fa
-                } // &.active
-            } // disk
-            .view-title {
-                position: absolute;
-                font-family: 'PT Sans Narrow';
-                font-size: rem(28);
-                color: #000000;
-                line-height: 1;
-                &:nth-child(1) {
-                    top: -65px;
-                    left: -30px;
-                } // &:nth-child(1)
-                &:nth-child(2) {
-                    top: -65px;
-                    left: 190px;
-                } // &:nth-child(2)
-                &:nth-child(3) {
-                    top: -65px;
-                    right: -18px;;
-                } // &:nth-child(3)
-            } // view-title
-        } // strip
-    } // small-area
-    .big-area {
-        margin: 0 auto;
-        width: 660px;
-        background-color: white;
-        box-shadow: 0 1px 2px 0 rgba(164, 161, 161, 0.5);
-        padding: 30px 0;
-        .order-form {
-            margin: 15px;
-            box-sizing: border-box;
-            [class^="step-"] {
-                display: none;
-                &.active {
-                    display: block;
-                } // &.active
-            } // [class^="step-"]
-            .step-1, .step-2 {
-                @include clearfix;
-                fieldset {
-                    padding: 5px 0;
-                    margin: 0;
-                    border: none;
-                    label {
-                        font-family: Arial;
+        } // &.active
+    } // [class^="step-"]
+    .step-1, .step-2 {
+        @include clearfix;
+        fieldset {
+            padding: 5px 0;
+            margin: 0;
+            border: none;
+            label {
+                font-family: Arial;
+                font-size: rem(16);
+                display: block;
+                width: 240px;
+                float: left;
+                text-align: right;
+            } // label
+            .input {
+                width: calc(100% - 240px);
+                float: right;
+                box-sizing: border-box;
+                padding-left: 10px;
+                .normal-select {
+                    width: 100%;
+                    &:after {
+                        color: #828282;
+                        content: '\f107';
+                        font: normal normal normal 24px/1 FontAwesome;
+                        text-rendering: auto;
+                        -webkit-font-smoothing: antialiased;
+                        position: absolute;
+                        right: 4px;
+                        top: 0px;
+                        pointer-events: none;
+                    } // &:after
+                    select {
                         font-size: rem(16);
-                        display: block;
-                        width: 240px;
-                        float: left;
-                        text-align: right;
-                    } // label
-                    .input {
-                        width: calc(100% - 240px);
-                        float: right;
-                        box-sizing: border-box;
-                        padding-left: 10px;
-                        padding-right: 20px;
-                        .normal-select {
-                            border-bottom: 1px solid gray;
-                            width: 100%;
-                            &:after {
-                                color: #828282;
-                                content: '\f107';
-                                font: normal normal normal 24px/1 FontAwesome;
-                                text-rendering: auto;
-                                -webkit-font-smoothing: antialiased;
-                                position: absolute;
-                                right: 4px;
-                                top: 0px;
-                                pointer-events: none;
-                            } // &:after
-                            select {
-                                font-size: rem(16);
-                                color: #828282;
-                            } // select
-                        } // normal-select
-                    } // input
-                    input[type="text"],
-                    input[type="tel"],
-                    input[type="email"] {
-                        border: none;
-                        border-bottom: 1px solid gray;
-                        width: 100%;
-                        color: rgb(130, 130, 130);
-                        font-size: rem(16);
-                        line-height: 1.2;
-                        padding-bottom: 4px;
-                    } // input[type="text"]
-                } // fieldset
-            } // step-1, step-2
-            .step-3 {
-                @include clearfix;
-                .column {
-                    ul {
-                        @include clear-list;
-                        &.radio-list {
-                            li + li {
-                                margin-top: 10px;
-                            } // li + li
-                            li {
-                                a {
-                                    color: gray;
-                                    width: calc(100% - 30px);
-                                    @include inline-top;
-                                    line-height: 1.2;
-                                    cursor: pointer;
-                                    display: block;
-                                    width: 100%;
-                                    line-height: 1;
-                                    box-sizing: border-box;
-                                    padding: 10px;
-                                    border-radius: 4px;
-                                    text-decoration: none;
-                                    &.active {
-                                        color: black;
-                                    } // &.active
-                                } // a
-                            } // li
-                        } // &.radio-list
-                    } // ul
-                    &.first {
-                        width: 220px;
-                        font-family: Arial;
-                        font-size: rem(16);
-                        float: left;
-                    } // &.first
-                    &.second {
-                        width: calc(100% - 240px);
-                        float: right;
-                        font-family: Arial;
-                        font-size: rem(16);
-                        line-height: 1.5;
-                        h4 {
-                            font-weight: bold;
-                            margin-top: 0px;
-                        } // h4
-                        .order-tab {
-                            box-sizing: border-box;
-                            padding: 10px;
-                        } // order-tab
-                    } // &.second
-                } // column
-            } // step-3
-        } // order-form
-    } // big-area
-    .buttons {
-        margin: 30px 0;
-        text-align: center;
-        button {
-            vertical-align: middle;
-            position: relative;
-        } // button
-    } // buttons
-} // order
+                        color: #828282;
+                    } // select
+                } // normal-select
+            } // input
+            input[type="text"],
+            input[type="tel"],
+            input[type="email"] {
+                padding: 6px 5px;
+            } // input[type="text"]
+        } // fieldset
+    } // step-1, step-2
+    .order-button {
+        text-align: right;
+    } // order-button
+} // order-form

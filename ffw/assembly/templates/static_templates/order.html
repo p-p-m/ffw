@@ -4,166 +4,345 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
-<div class="view-title-box">
-    <div class="wrap">
-        <h1 class="view-title">Оформление заказа</h1>
+<div class="flash-popup">
+    <div class="content">
+        Some message
+        <button class="button close"></button>
     </div>
 </div>
-
-<!-- order-container -->
-<div class="order-container">
-    <div class="wrap">
-        <!-- strip -->
-        <div class="small-area">
-            <div class="strip" data-role="decor-line">
-                <div class="disk active" data-role="decor-disk-1">
-                    <i class="fa fa-check"></i>
-                </div>
-                <div class="disk" data-role="decor-disk-2">
-                    <i class="fa fa-check"></i>
-                </div>
-                <div class="disk" data-role="decor-disk-3">
-                    <i class="fa fa-check"></i>
-                </div>
-                <div>
-                    <h1 class="view-title">Контакты</h1>
-                    <h1 class="view-title">Доставка</h1>
-                    <h1 class="view-title">Оплата</h1>
-                </div>
+{% comment %}
+<!-- popup -->
+<div class="popup" data-front="popup">
+    <article class="descriptoin">
+        Test text. Put here something.
+    </article>
+    <div class="buttons">
+        <button class="button button-blue">Cancel</button>
+        <button class="button button-blue">Yes!</button>
+    </div>
+</div>
+<!-- /popup -->
+{% endcomment %}
+<!-- This popup with radio choises -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup" style="display: none;">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="radios">
+        <label for="positive-comment">
+            <input id="positive-comment" name="pos-neg" type="radio">
+            Положительный
+        </label>
+        <label for="negative-comment">
+            <input id="negative-comment" name="pos-neg" type="radio">
+            Негативный
+        </label>
+    </div>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <textarea name="" id="" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
             </div>
         </div>
-        <!-- /strip -->
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
+<!-- This popup with 2 fields -->
+<!-- popup -->
+<div class="popup popup-comment" data-front="popup">
+    <h3 class="product-block-title comments">
+        Оставить отзыв о товаре
+    </h3>
+    <div class="product-block-content">
+        <div class="left-commnet">
+            <label for="advantages">Преимущества</label>
+            <textarea name="" id="advantages" class="left-commnet"></textarea>
+            <label for="limitations">Недостатка</label>
+            <textarea name="" id="limitations" class="left-commnet"></textarea>
+            <div class="login-for-comment simple-text">
+                <span>Что бы опубликовать отзыв <a href="#">войдите</a> используя свой логин и пароль </span>
+            </div>
+        </div>
+    </div>
+    <div class="buttons">
+    <button class="button button-blue">Publish!</button>
+        <button class="button">Cancel</button>
+    </div>
+</div>
+<!-- /popup -->
 
-        <!-- form -->
-        <form action="" data-role="order-form">
-            <div class="big-area">
-                <div class="order-form">
-
-                    <!-- step-1 -->
-                    <div class="step-1 active" data-role="order-step-1">
-                        <fieldset>
-                            <label>Телефон:</label>
-                            <div class="input">
-                                <input type="tel">
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Имя:</label>
-                            <div class="input">
-                                <input type="text">
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Email:</label>
-                            <div class="input">
-                                <input type="email">
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Сообщение:</label>
-                            <div class="input">
-                                <textarea name="" id=""></textarea>
-                            </div>
-                        </fieldset>
-                    </div>
-                    <!-- /step-1 -->
-                    <!-- step-2 -->
-                    <div class="step-2" data-role="order-step-2">
-                        <fieldset>
-                            <label>Способ доставки:</label>
-                            <div class="input">
-                                <div class="custom-select normal-select">
-                                    <select name="" id="">
-                                        <option value="">Some option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Перевозчик:</label>
-                            <div class="input">
-                                <div class="custom-select normal-select">
-                                    <select name="" id="">
-                                        <option value="">Some option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Способ оплаты:</label>
-                            <div class="input">
-                                <div class="custom-select normal-select">
-                                    <select name="" id="">
-                                        <option value="">Some option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Адрес доставки:</label>
-                            <div class="input">
-                                <div class="custom-select normal-select">
-                                    <select name="" id="">
-                                        <option value="">Some option</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset>
-                            <label>Получатель:</label>
-                            <div class="input">
-                                <input type="text">
-                            </div>
-                        </fieldset>
-                    </div>
-                    <!-- /step-2 -->
-                    <div class="step-3" data-role="order-step-3">
-                        <div class="column first">
-                            <ul class="radio-list">
-                                <li>
-                                    <a href="#clearing" data-role="tab-trigger">Безналичный расчет</a>
-                                </li>
-                                <li>
-                                    <a href="#card" data-role="tab-trigger">Оплата картой Visa\MasterCard</a>
-                                </li>
-                                <li>
-                                    <a href="#whenget" data-role="tab-trigger">Оплата при получении</a>
-                                </li>
-                            </ul>
+<!-- product -->
+<section class="product">
+    <div class="wrap">
+        <div class="filters-in-view" data-front="side-panel">
+            <div class="produc-side-block">
+                <ul class="product-guides">
+                    <li>
+                        <a href="#display-cart" data-front="scroll-to" class="guide-icon guide-description">Корзина</a>
+                    </li>
+                    <li>
+                        <a href="#order-cart" data-front="scroll-to" class="guide-icon choice">Оформить заказ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="products-in-view">
+            <div class="product-blocks">
+                <!-- product-block -->
+                <div class="product-block" id="display-cart">
+                    <h3 class="product-block-title">
+                        Корзина
+                    </h3>
+                    <div class="product-block-content">
+                        <table class="combain-product-list">
+                            <tr>
+                                <th>Наименование</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                                <th></th>
+                            </tr>
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                            <!-- item -->
+                            <tr>
+                                <td>
+                                    <span class="name">Item name</span>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input class="count" type="number" value="1" min="1"
+                                            data-front="price-input-count"
+                                            data-role="configuration-count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span class="price">340,00</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span data-front="cart-input-count-delete">
+                                        <i class="fa fa-times-circle"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+                        </table>
+                        <!-- combain-product-summary -->
+                        <div class="combain-product-summary">
+                            Всего наименований 1 на сумму 37 грн.
                         </div>
-
-                        <div class="column second">
-                            <div id="clearing" class="order-tab active" data-role="tab">
-                                <h4>Реквизиты для оплаты заказа</h4>
-                                <h4>Итого к оплате: 400грн.</h4>
-                                <p>
-                                    Банк: фил. КБ "Приватбанк" Зап. Рег. Управ.<br>
-                                    Расчетный счет: 2600578391884<br>
-                                    ОКПО (ЭДРПОУ): 67584930<br>
-                                    МФО: 333100<br>
-                                    Назначение платежа: оплата заказа №014420
-                                </p>
-                            </div>
-                            <div id="card" class="order-tab" data-role="tab">
-                                фы
-                            </div>
-                            <div id="whenget" class="order-tab" data-role="tab">
-                                <p>
-                                    Оплата при получении курьеру.
-                                </p>
-                            </div>
+                        <!-- /combain-product-summary -->
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="order-cart">
+                    <h3 class="product-block-title">
+                        Оформить заказ
+                    </h3>
+                    <div class="order-form">
+                        <div class="step-1 active" data-role="order-step-1">
+                            <fieldset>
+                                <label>Телефон:</label>
+                                <div class="input">
+                                    <input type="tel">
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label>Имя:</label>
+                                <div class="input">
+                                    <input type="text">
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label>Email:</label>
+                                <div class="input">
+                                    <input type="email">
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <label>Сообщение:</label>
+                                <div class="input">
+                                    <textarea name="" id=""></textarea>
+                                </div>
+                            </fieldset>
+                            <fieldset class="order-button">
+                                <button class="button button-blue add-to-cart">Оформить заказ</button>
+                            </fieldset>
                         </div>
                     </div>
                 </div>
+                <!-- /product-block -->
             </div>
-            <div class="buttons">
-                <button form="" type="submit" class="button" data-trigger="prev">Назад</button>
-                <button form="" type="submit" class="button button-blue" data-trigger="next">продолжить</button>
-                <button form="" type="submit" class="button button-blue" data-trigger="finish">Оформить заказ</button>
-            </div>
-        </form>
-        <!-- /form -->
+        </div>
     </div>
-</div>
-<!-- /order-container -->
+</section>
+<!-- /product -->
 {% endblock %}

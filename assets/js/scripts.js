@@ -9,6 +9,39 @@
         }
     }
 
+    // equal height
+    function equalheight(container) {
+
+        var currentTallest = 0,
+        currentRowStart = 0,
+        rowDivs = new Array(),
+        $el,
+        topPosition = 0;
+
+        $(container).each(function() {
+
+            $el = $(this);
+            $($el).height('auto')
+            topPostion = $el.position().top;
+
+            if (currentRowStart != topPostion) {
+                for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                    rowDivs[currentDiv].height(currentTallest);
+                }
+                rowDivs.length = 0; // empty the array
+                currentRowStart = topPostion;
+                currentTallest = $el.height();
+                rowDivs.push($el);
+            } else {
+                rowDivs.push($el);
+                currentTallest = (currentTallest < $el.height()) ? ($el.height()) : (currentTallest);
+            }
+            for (currentDiv = 0 ; currentDiv < rowDivs.length ; currentDiv++) {
+                    rowDivs[currentDiv].height(currentTallest);
+            }
+        });
+    }
+
     // Tabs
     function Tabs() {
         var tabContainer = $('[data-role="tab"]');
@@ -296,7 +329,7 @@
                     inputValueUpdated = parseInt((inputValue - 1))
                 }
                 if (inputValue == 1 || inputValue < 0) {
-                    prevent.default;
+                    return false;
                 } else {
                     update();
                     input.val(inputValueUpdated);
@@ -528,12 +561,15 @@
     }
 
     function sidePanel() {
+        var marginDiffs = 370;
         var win = $(window);
         var sidePanel = $('[data-front="side-panel"]');
+        if (sidePanel.length) {
+            var offset = sidePanel.offset().top - marginDiffs;
+        }
         var footer = $('.footer');
-        var offset  = sidePanel.offset();
         var sidePanelHeight = sidePanel.height();
-        var footerPosition = footer.offset().top - sidePanel.height();
+        var footerPosition = footer.offset().top - (sidePanel.height() + marginDiffs);
 
 
         if (window.matchMedia('(min-width : 768px)').matches) {
@@ -544,7 +580,7 @@
                         "top": 'auto',
                         "bottom": 0
                     });
-                } else if (win.scrollTop() > offset.top) {
+                } else if (win.scrollTop() > offset) {
                     sidePanel.css({
                         "position": "fixed",
                         "top": 0,
@@ -590,7 +626,7 @@
 
         win.scroll(function() {
             highLightItem.each(function() {
-                if (win.scrollTop() >= $(this).offset().top) {
+                if (win.scrollTop() >= $(this).offset().top -100) {
                     var highLightID = $(this).attr('id');
                     menuItem.removeClass('active');
                     menuItem.each(function() {
@@ -619,6 +655,22 @@
         });
     }
 
+    // tool tips
+    // function toolTips() {
+    //     var tipParent = $('[data-front="tooltip"]');
+
+    //     tipParent.each(function() {
+    //         var tip = $(this).find('[data-front="tooltip-display"]');
+    //         // $(this).hover(function() {
+    //             tip.css({
+    //                 // 'top': -(tip.height() + 10),
+    //                 // 'left': '50%'
+    //                 // 'margin-left': 'x'
+    //             });
+    //         // });
+    //     });
+    // }
+
     // document ready
     $(window).on('load', function() {
         topBanners();
@@ -645,6 +697,16 @@
         sideScroll();
         priceInput();
         regularPopup();
+        equalheight('[data-view="grid"] .products-list .product');
+        $('[data-tooltip="tooltip"]').tooltipster({
+            delay: 50,
+            contentAsHTML: true,
+            functionInit: function(origin, content) {
+                content = origin.data('tip');
+                return content;
+            },
+            theme: 'tooltipster-light'
+        });
     });
 
     // all initial on window resize

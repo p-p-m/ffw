@@ -115,15 +115,21 @@ input[type="tel"],
 input[type="number"]  {
     width: 100%;
     box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
     border-color: transparent;
-    border-bottom: 1px solid #979797;
+    border: 1px solid #D0D0D0;
+    font-size: rem(16);
 }
 
 textarea {
     width: 100%;
     box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
     border-color: transparent;
-    border-bottom: 1px solid #979797;
+    border: 1px solid #D0D0D0;
+    font-size: rem(16);
 }
 
 .disabled {

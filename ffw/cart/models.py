@@ -17,7 +17,7 @@ class Order(TimeStampedModel):
     name = models.CharField(_('Name'), max_length=255)
     email = models.EmailField(_('E-mail'), max_length=125)
     phone = models.CharField(_('Phone'), max_length=125)
-    contacts = models.CharField(_('Additional communication'), max_length=255, blank=True)
+    contacts = models.TextField(_('Additional contacts'), blank=True)
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9, default=0)
     count = models.IntegerField(_('Quantity'), default=0)
 

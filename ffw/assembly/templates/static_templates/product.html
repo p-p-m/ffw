@@ -4,10 +4,10 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
-<div class="flash-popup">
+<div class="flash-popup" data-front="flash-popup">
     <div class="content">
-        Some message
-        <button class="button close"></button>
+        <span data-front="message-content"></span>
+        <button class="button close" data-front="close-flash"></button>
     </div>
 </div>
 {% comment %}

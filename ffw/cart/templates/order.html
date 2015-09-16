@@ -1,59 +1,134 @@
-<!--For test only-->
+{% extends 'base.html' %}
 
 {% load staticfiles %}
 {% load i18n %}
 
 
-<!DOCTYPE html>
-<html lang="ru-RU">
+{% block content %}
+<!-- product -->
+<section class="product">
+    <div class="wrap">
+        {% comment %}
+        <div class="filters-in-view" data-front="side-panel">
+            <div class="produc-side-block">
+                <ul class="product-guides">
+                    <li>
+                        <a href="#display-cart" data-front="scroll-to" class="guide-icon guide-description">Корзина</a>
+                    </li>
+                    <li>
+                        <a href="#order-cart" data-front="scroll-to" class="guide-icon choice">Оформить заказ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endcomment %}
+        <div class="products-in-view">
+            <div class="product-blocks">
+                <!-- product-block -->
+                <div class="product-block" id="display-cart">
+                    <h3 class="product-block-title">
+                        Корзина
+                    </h3>
+                    <div class="product-block-content">
+                        <table class="combain-product-list">
+                            <tr>
+                                <th>Товар</th>
+                                <th>Количество</th>
+                                <th>Цена</th>
+                                <th></th>
+                            </tr>
+                            <!-- item -->
+                            {% for key, value in request.session.cart.products.items %}
+                                <tr data-role={{ key }}>
+                                    <td>
+                                        <span class="name">{{ value.name }} ({{ value.code }})</span>
+                                    </td>
+                                    <td>
+                                        <div data-front="price-input">
+                                            <span data-front="cart-input-count-minus">
+                                                <i class="fa fa-minus-circle"></i>
+                                            </span>
+                                            <input class="count" type="number" value="{{ value.quant }}" min="1"
+                                                data-front="price-input-count"
+                                                id={{ key }} data-role='quant'  data-pk= {{ key }} value={{ value.quant }}>
+                                            <span data-front="cart-input-count-plus">
+                                                <i class="fa fa-plus-circle"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="price-line">
+                                            <span class="price" data-role={{key}}_sum>{{value.sum_}}</span>
+                                            <span class="currency">грн.</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span data-front="cart-input-count-delete">
+                                            <i class="fa fa-times-circle" data-role='remove' data-value='{{ key }}'></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <!-- /item -->
+                        </table>
+                        <!-- combain-product-summary -->
+                        <div class="combain-product-summary">
+                            Заказано товаров <span data-role='count'>{{ cart.count }}</span> на сумму <span data-role='total'>{{ cart.total }}</span> грн.
+                        </div>
+                        <!-- /combain-product-summary -->
+                    </div>
+                </div>
+                <!-- /product-block -->
+                <!-- product-block -->
+                <div class="product-block" id="order-cart" data-role="order-block">
+                    <h3 class="product-block-title">
+                        Оформить заказ
+                    </h3>
+                    <form action='.' method='post' data-role='order-form'>{% csrf_token %}
+                        <div class="order-form">
+                            <div class="step-1 active" data-role="order-step-1">
+                                <fieldset>
+                                    <label>Имя:</label>
+                                    <div class="input">
+                                        <input id='id_name' name='name' type="text" required>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <label>Телефон:</label>
+                                    <div class="input">
+                                        <input id="id_phone" name="phone" type="tel" data-role="phone-mask" required>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <label>Email:</label>
+                                    <div class="input">
+                                        <input id="id_email" type="email" name="email">
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <label>Дополнительная информация:</label>
+                                    <div class="input">
+                                        <textarea id="id_contacts" name="contacts"></textarea>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="order-button">
+                                    <input type="submit" value="Оформить заказ" class="button button-blue" />
+                                </fieldset>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /product-block -->
+            </div>
+        </div>
+    </div>
+</section>
 
-    <head>
-        <meta charset="utf-8">
-        <title>Корзина</title>
-    </head>
+{% endblock content %}
 
-    <body>
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <div id='cart'   data-role='cart-url' data-url="{% url 'cart' %}"></div>
-        <table border="1">
-            <caption>Корзина</caption>
-            <tr>
-                <th>Товар</th>
-                <th>Кол-во</th>
-                <th>Код</th>
-                <th>Цена</th>
-                <th>Сумма</th>
-                <th></th>
-            </tr>
-
-            {% for key,value in cart.products.items %}
-                <tr data-role= {{key}} >
-                    <td data-role='name'>{{value.name}}</td>
-                    <td><input class="quant" id={{key}} data-role='quant'  data-pk= {{key}} value={{value.quant}}></td>
-                    <td>{{value.product_code}}</td>
-                    <td >{{value.price}}</td>
-                    <td data-role={{key}}_sum>{{value.sum_}}</td>
-                    <td><button data-role='remove' value={{key}}> Удалить</button></td>
-                </tr>
-            {% endfor %}
-
-        </table> <br/>
-
-        <button data-role='clear'>Очистить корзину   </button>
-
-       <form action="." method="post">{% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Оформить заказ" ><br>
-        </form>
-            <div> Заказано товаров, шт: <span data-role='count'>{{cart.count}}</span></div>
-            <div> на сумму, грн: <span data-role='total'>{{cart.total}}</span></div>
-
-    </body>
-</html>
-
-{% block basejs %}
+{% block js %}
     <script src="{% static 'cart/cart.js' %}"> </script>
     <script src="{% static 'cart/order.js' %}"> </script>
-{% endblock basejs %}
+{% endblock js %}
 
 

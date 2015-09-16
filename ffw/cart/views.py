@@ -1,8 +1,10 @@
 #  -*- coding: utf-8 -*-
 import json
 
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, TemplateView, FormView
 
 from .forms import OrderForm
@@ -31,7 +33,7 @@ class CartView(CartMixin, View):
     def post(self, request, *args, **kwargs):
         """ Clear cart """
         if request.is_ajax:
-            self.cart ={'products': {}, 'total': 0, 'count': 0}
+            self.cart = {'products': {}, 'total': 0, 'count': 0}
             return self.format_response(request)
 
 
@@ -51,11 +53,11 @@ class CartSetView(CartMixin, View):
         Cart(self.cart).set(product_pk, quant)
 
     def post(self, request, *args, **kwargs):
-        if request.is_ajax:
+        if request.is_ajax():
             product_dict = json.loads(request.POST.get('product_dict', '{}'))
 
-            for item in product_dict.items():
-                self._call_cart(product_pk=item[0], quant=int(item[1]))
+            for pk, quantity in product_dict.items():
+                self._call_cart(product_pk=pk, quant=int(quantity))
             return self.format_response(request)
 
 
@@ -69,15 +71,7 @@ class OrderView(FormView):
     form_class = OrderForm
 
     def get_success_url(self):
-        return reverse('thank')
-
-    def __init__(self):
-        super(OrderView, self).__init__()
-        self.success_url = self.get_success_url()
-
-    def get_context_data(self, **kwargs):
-        context = super(OrderView, self).get_context_data(**kwargs)
-        return context
+        return reverse('home')
 
     def form_valid(self, form):
         order = form.save()
@@ -101,7 +95,16 @@ class OrderView(FormView):
         order.count = self.count
         order.total = self.total
         order.save()
+
+        self.request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
+        messages.info(self.request, _('Order was successfully created. Our manager will contact you during the day.'))
         return super(OrderView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['is_cart_page'] = True
+        messages.info(self.request, _('Order was successfully created. Our manager will contact you during the day.'))
+        return context
 
 
 class ThankView(TemplateView):

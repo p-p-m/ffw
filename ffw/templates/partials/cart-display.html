@@ -39,13 +39,13 @@
         <div data-role="cart-items">
             <!-- cart-items -->
             <div class="cart-items" id="cart_value">
-                {% for key, value in request.session.products.items %}
+                {% for key, value in request.session.cart.products.items %}
                      {% include 'items/cart-item.html' %}
-               {%endfor%}                
+                {% endfor %}
             </div>
             <!-- /cart-items -->
             <div class="total-display">
-                {{ request.session.count_cart }} товара на сумму <strong>{{ request.session.sum_cart }}</strong> грн.
+                {{ request.session.cart.count }} товара на сумму <strong>{{ request.session.cart.count }}</strong> грн.
             </div>
             <div class="cart-buttons">
                 <button class="button button-blue order">Купить</button>

@@ -57,7 +57,7 @@
                                     <i class="fa fa-plus-circle"></i>
                                 </span>
                             </span>
-                            <button class="button button-blue add-to-cart">Купить</button>
+                            <button class="button button-blue add-to-cart" data-role="product-add-to-cart" data-product-pk="{{ product.configurations.all.0.pk }}">В корзину</button>
                         </div>
                     </div>
                 {% endif %}
@@ -65,8 +65,8 @@
             {% if not product.configurations.count > 1 and product.get_display_price_uah %}
                 <div class="produc-side-block">
                     <div class="by-one-click-side">
-                        <input type="text" data-role="phone-mask">
-                        <button class="button button-blue">Купить в один клик</button>
+                        {% comment %} <input type="text" data-role="phone-mask"> {% endcomment %}
+                        <button class="button button-blue order" data-role="product-buy-in-one-click">Купить в один клик</button>
                     </div>
                 </div>
             {% endif %}
@@ -112,11 +112,11 @@
             <!-- /info-box -->
             <div class="product-blocks">
                 <!-- description -->
-                <div class="product-block">
-                    <!-- <h3 class="product-block-title description">
-                        Описание
-                    </h3> -->
+                <div class="product-block" <div class="product-block" id="description">
                     <br/>
+                    <h3 class="product-block-title description">
+                        Описание
+                    </h3>
                     <div class="product-block-content">
                         <article class="description">
                             {{ product.description }}
@@ -139,7 +139,7 @@
                                 </tr>
                                 {% for configuration in product.configurations.all %}
                                     <!-- item -->
-                                    <tr data-role="configuration">
+                                    <tr data-role="configuration" data-configuration-id="{{ configuration.id }}">
                                         <td>
                                             <label for="checksubitem-{{ forloop.counter }}">
                                                 <input id="checksubitem-{{ forloop.counter }}" type="checkbox" data-role="configuration-active">
@@ -173,7 +173,9 @@
                             </table>
                             <!-- combain-product-summary -->
                             <div class="combain-product-summary">
-                                Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн. <button class="button button-blue add-to-cart">Купить</button>
+                                Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн.
+                                <button class="button button-blue order" data-role="configurations-buy-in-one-click">Купить в один клик</button>
+                                <button class="button button-blue add-to-cart" data-role="configurations-add-to-cart">В корзину</button>
                             </div>
                             <!-- /combain-product-summary -->
                         </div>
@@ -185,15 +187,16 @@
                     <div class="product-block" id="charachteristics">
                         <h3 class="product-block-title comments">
                             Харакетеристики
-                            <span data-tooltip="tooltip" data-tip="Some explenation">
-                                <i class="fa fa-question-circle"></i>
-                            </span>
                         </h3>
                         <table class="chars">
                             {% for attribute in product.get_attributes %}
                                 {% if attribute.value %}
                                     <tr>
-                                        <td>{{ attribute.name }}</td>
+                                        <td>{{ attribute.name }}
+                                            <span data-tooltip="tooltip" data-tip="{{ attribute.description }}">
+                                                <i class="fa fa-question-circle"></i>
+                                            </span>
+                                        </td>
                                         <td>{{ attribute.pretty_value }}</td>
                                     </tr>
                                 {% endif %}

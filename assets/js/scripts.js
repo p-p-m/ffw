@@ -709,8 +709,8 @@
             },
             theme: 'tooltipster-light'
         });
-        // close flash message basic trigger
         $('[data-front="close-flash"]').click(function() {
+            var flash = activateFlashPopUp();
             flash.deactivate();
         });
     });

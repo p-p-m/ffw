@@ -707,6 +707,10 @@
             },
             theme: 'tooltipster-light'
         });
+        // close flash message basic trigger
+        $('[data-front="close-flash"]').click(function() {
+            flash.deactivate();
+        });
     });
 
     // all initial on window resize
@@ -740,6 +744,40 @@ function activatePopUpBySelector(selector) {
     return {
         activate: function() {
             el.addClass('active');
+        },
+        deactivate: function() {
+            el.removeClass('active');
+        }
+    };
+}
+
+/*
+
+activate flash message popup
+
+var flash = activateFlashPopUp();
+flash.activate('Some message');
+flash.deactivate();
+
+or
+
+$('[data-front="close-flash"]').click(function() {
+    flash.deactivate();
+});
+
+or other trigger
+
+*/
+function activateFlashPopUp() {
+    var el = $('[data-front="flash-popup"]');
+    var message = message;
+    return {
+        activate: function(message) {
+            el.find('[data-front="message-content"]').text(message);
+            el.addClass('active');
+            setTimeout(function() {
+                el.removeClass('active');
+            }, 2500);
         },
         deactivate: function() {
             el.removeClass('active');

@@ -99,7 +99,8 @@ $(document).ready(function() {
             positive = $('[data-role="comment-positive"]').val(),
             negative = $('[data-role="comment-negative"]').val();
         comments.add(positive, negative, productId, function() {
-            alert('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
+            var flash = activateFlashPopUp();
+            flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
         });
         commentPopup.deactivate();
     });
@@ -114,7 +115,8 @@ $(document).ready(function() {
 
     $('[data-role="configurations-add-to-cart"]').click(function() {
         addConfigurationsToCart(function() {
-            alert('Product successfully added to cart!');
+            localStorage.message = 'Товар успешно добавлен в корзину.';
+            location.reload();
         });
     });
 
@@ -126,7 +128,8 @@ $(document).ready(function() {
 
     $('[data-role="product-add-to-cart"]').click(function() {
         addProductToCart(function() {
-            alert('Product successfully added to cart!');
+            localStorage.message = 'Товар успешно добавлен в корзину.';
+            location.reload();
         });
     });
 

@@ -37,19 +37,17 @@
             </form>
         </div>
         <div data-role="cart-items">
-            <!-- cart-items -->
-            <div class="cart-items" id="cart_value">
-                {% for key, value in request.session.cart.products.items %}
-                     {% include 'items/cart-item.html' %}
-                {% endfor %}
-            </div>
-            <!-- /cart-items -->
             <div class="total-display">
-                {{ request.session.cart.count }} товара на сумму <strong>{{ request.session.cart.count }}</strong> грн.
+                {% if request.session.cart.count == 0 %}
+                В корзине нет товаров
+                {% elif request.session.cart.count == 1 %}
+                В корзине один товар со стоимостью <strong>{{ request.session.cart.total }}</strong> грн.
+                {% else %}
+                В корзине {{ request.session.cart.count }} товара с общей суммой в <strong>{{ request.session.cart.total }}</strong> грн.
+                {% endif %}
             </div>
             <div class="cart-buttons">
-                <button class="button button-blue order">Купить</button>
-                <button class="button button-blue one-click" data-role="trigger-one-click">в один клик</button>
+                <a href="/cart/order/"><button class="button button-blue order">Перейти к оформлению заказа</button></a>
             </div>
         </div>
     </div>

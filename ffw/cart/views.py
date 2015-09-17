@@ -103,7 +103,6 @@ class OrderView(FormView):
     def get_context_data(self, **kwargs):
         context = super(OrderView, self).get_context_data(**kwargs)
         context['is_cart_page'] = True
-        messages.info(self.request, _('Order was successfully created. Our manager will contact you during the day.'))
         return context
 
 

@@ -5,6 +5,8 @@
     background-color: white;
     box-shadow: 4px 4px 0px -1px rgb(187, 217, 228);
     border: 1px solid #98C6D8;
+    max-height: 500px;
+    overflow-y: scroll;
     @include slide-down;
     @include bp(xs) {
         width: 80%;
@@ -18,6 +20,48 @@
         color: #5C5C5C;
         margin-bottom: 20px;
     } // description
+    .buy-list {
+        .combain-product-list {
+            tr {
+                + tr {
+                    border-top: 1px solid #DBDBDB;
+                }
+            } // tr
+            th, td {
+                padding: 10px 4px;
+            } // th, td
+            th {
+                &.hidden {
+                    visibility: hidden;
+                } // &.hidden
+            } // th
+            td {
+                &.buy-button {
+                    text-align: right;
+                } // add-to-cart
+                .count {
+                    width: 60px;
+                } // count
+                .button-blue {
+                    font-size: rem(14);
+                    text-transform: none;
+                    padding: 4px 8px;
+                } // button-blue
+                .price-line {
+                    .price {
+                        @include inline-middle;
+                        color: #417505;
+                    } // price
+                    .currency {
+                        @include inline-middle;
+                    } // currency
+                } // price-line
+                label {
+                    cursor: pointer;
+                } // label
+            } // td
+        } // combain-product-list
+    } // buy-list
     .buttons {
         text-align: center;
     } // buttons

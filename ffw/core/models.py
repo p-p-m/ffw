@@ -20,7 +20,6 @@ class ImageFieldWaterMark(models.ImageField):
         self.mark_text = mark_text
         self.font = font
         kwargs['upload_to'] = safe_upload
-        print 'kwargs', kwargs, 'verbose_name, name', verbose_name, name
         super(ImageFieldWaterMark, self).__init__(verbose_name, name, width_field=None, height_field=None, **kwargs)
 
     def pre_save(self, model_instance, add):

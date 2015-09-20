@@ -14,6 +14,8 @@ from django.core.urlresolvers import reverse
 
 from products.models import Subcategory, Category, Section, Product, ProductConfiguration
 
+from .forms import OrderForm
+
 
 def factory(aClass, **kwargs):
     return aClass.objects.create(**kwargs)

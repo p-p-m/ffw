@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.forms import ModelForm, Textarea, TextInput
 
-from models import Order
+from .models import Order
 
 
 class OrderForm(ModelForm):

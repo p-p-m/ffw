@@ -652,7 +652,7 @@
             'top': '50%',
             'position': 'fixed',
             'z-index': 9999,
-            'margin-top': -((popupHeight/2) + 100),
+            'margin-top': -popupHeight/2,
             'margin-left': -popupWidth/2
         });
     }

@@ -17,13 +17,15 @@ function initConfigrations() {
             active: $(this).find('[data-role="configuration-active"]').is(':checked'),
             priceElement: $(this).find($('[data-role="configuration-price"]')),
             countElement: $(this).find($('[data-role="configuration-count"]')),
-            activeElement: $(this).find('[data-role="configuration-active"]')
+            activeElement: $(this).find('[data-role="configuration-active"]'),
+            pk: parseInt($(this).attr('data-configuration-id')),
         };
         configuration.activeElement.on('change', calculateConfigurationsTotal);
-        configuration.countElement.on('input', calculateConfigurationsTotal);
+        configuration.countElement.on('change', calculateConfigurationsTotal);
         configurations.push(configuration);
     });
 }
+
 
 function calculateConfigurationsTotal() {
     totalCount = 0;
@@ -32,12 +34,40 @@ function calculateConfigurationsTotal() {
         configuration = configurations[i];
         if (configuration.activeElement.is(':checked')) {
             totalCount += 1;
-            totalPrice += parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
+            configurationPrice = parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
+            totalPrice += configurationPrice;
+            configuration.priceElement.text(configurationPrice);
         }
     }
     $('[data-role="configurations-total-count"]').text(totalCount);
     $('[data-role="configurations-total-price"]').text(totalPrice);
 }
+
+function addConfigurationsToCart(callback) {
+    var selectedConfigurations = {};
+    for (var i = 0; i < configurations.length; i++) {
+        configuration = configurations[i];
+        if (configuration.activeElement.is(':checked')) {
+            selectedConfigurations[configuration.pk] = parseInt(configuration.countElement.val());
+        }
+    }
+    if (Object.keys(selectedConfigurations).length !== 0) {
+        cart.add(selectedConfigurations, callback);
+    } else {
+        alert('Нужно выбрать хотя бы одну конфигурацию продукта.');
+    }
+}
+
+
+function addProductToCart(callback) {
+    var pk = parseInt($('[data-role="product-add-to-cart"]').attr('data-product-pk')),
+        count = $('[data-role="product-count"]').val();
+
+    var selectedProduct = {};
+    selectedProduct[pk] = count;
+    cart.add(selectedProduct, callback);
+}
+
 
 $(document).ready(function() {
     initConfigrations();
@@ -69,7 +99,8 @@ $(document).ready(function() {
             positive = $('[data-role="comment-positive"]').val(),
             negative = $('[data-role="comment-negative"]').val();
         comments.add(positive, negative, productId, function() {
-            alert('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов');
+            var flash = activateFlashPopUp();
+            flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
         });
         commentPopup.deactivate();
     });
@@ -80,6 +111,32 @@ $(document).ready(function() {
 
     $('[data-role="comment-cancel"]').click(function() {
         commentPopup.deactivate();
+    });
+
+    $('[data-role="configurations-add-to-cart"]').click(function() {
+        addConfigurationsToCart(function() {
+            localStorage.message = 'Товар успешно добавлен в корзину.';
+            location.reload();
+        });
+    });
+
+    $('[data-role="configurations-buy-in-one-click"]').click(function() {
+        addConfigurationsToCart(function() {
+            window.location.href = "/cart/order/";
+        });
+    });
+
+    $('[data-role="product-add-to-cart"]').click(function() {
+        addProductToCart(function() {
+            localStorage.message = 'Товар успешно добавлен в корзину.';
+            location.reload();
+        });
+    });
+
+    $('[data-role="product-buy-in-one-click"]').click(function() {
+        addProductToCart(function() {
+            window.location.href = "/cart/order/";
+        });
     });
 
 });

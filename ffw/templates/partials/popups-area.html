@@ -1,6 +1,6 @@
-<div class="flash-popup" data-front="flash-popup">
+<div class="flash-popup {% if active %}active{% endif %}" data-front="flash-popup" front-trigger="active">
     <div class="content">
-        <span data-front="message-content"></span>
+        <span data-front="message-content">{{ message }}</span>
         <button class="button close" data-front="close-flash"></button>
     </div>
 </div>

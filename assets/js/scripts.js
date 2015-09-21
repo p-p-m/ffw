@@ -318,21 +318,23 @@
             plus.click(function() {
                 var inputValue = parseInt(input.val());
                 function update() {
-                    inputValueUpdated = parseInt((inputValue + 1))
+                    inputValueUpdated = parseInt((inputValue + 1));
                 }
                 update();
                 input.val(inputValueUpdated);
+                input.trigger('change');
             });
             minus.click(function() {
                 inputValue = parseInt(input.val());
                 function update() {
-                    inputValueUpdated = parseInt((inputValue - 1))
+                    inputValueUpdated = parseInt((inputValue - 1));
                 }
                 if (inputValue == 1 || inputValue < 0) {
                     return false;
                 } else {
                     update();
                     input.val(inputValueUpdated);
+                    input.trigger('change');
                 }
             });
         });
@@ -698,6 +700,15 @@
         priceInput();
         regularPopup();
         equalheight('[data-view="grid"] .products-list .product');
+        $('[data-front="close-flash"]').click(function() {
+            var flash = activateFlashPopUp();
+            flash.deactivate();
+        });
+        if (localStorage.message) {
+            var flash = activateFlashPopUp();
+            flash.activate(localStorage.message);
+            localStorage.removeItem("message");
+        }
         $('[data-tooltip="tooltip"]').tooltipster({
             delay: 50,
             contentAsHTML: true,
@@ -706,10 +717,6 @@
                 return content;
             },
             theme: 'tooltipster-light'
-        });
-        $('[data-front="close-flash"]').click(function() {
-            var flash = activateFlashPopUp();
-            flash.deactivate();
         });
     });
 
@@ -773,11 +780,11 @@ function activateFlashPopUp() {
     var message = message;
     return {
         activate: function(message) {
-            el.find('[data-front="message-content"]').text(message);
+            el.find('[data-front="message-content"]').html(message);
             el.addClass('active');
             setTimeout(function() {
                 el.removeClass('active');
-            }, 2500);
+            }, 2500 * 3);
         },
         deactivate: function() {
             el.removeClass('active');

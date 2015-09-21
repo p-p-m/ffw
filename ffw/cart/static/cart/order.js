@@ -1,35 +1,34 @@
 
 $(document).ready(function() {
 
-    cart.url =$('div#cart').data('url');
-    cart.get()
     var order = {
         'setProduct': function(data) {
             product = cart.products[data.productPk];
             var name = data.productPk + '_sum';
-            $(order.selector_role(name)).text(product.sum_ );
+            $(order.selectorRole(name)).text(product.sum_);
             order.setTotalData();
         },
         'setTotalData': function() {
             $('[data-role="count"]').text(cart.count);
             $('[data-role="total"]').text(cart.total);
+            checkOrderAvailability();
         },
 
-        'selector_role': function(name) {
-            return '[data-role=' + '"' + name  + '"'+ "]"
+        'selectorRole': function(name) {
+            return '[data-role=' + '"' + name  + '"'+ "]";
         }
      };
 
     $('[data-role="remove"]').on('click', function() {
-        var productPk = this.value;
+        var productPk = $(this).attr('data-value');
         if (confirm("Удалить товар из корзины?")) {
-            $(order.selector_role(productPk)).remove();
+            $(order.selectorRole(productPk)).remove();
             var productPkList = [productPk,];
-            cart.remove(productPkList, callback=order.setTotalData);
-        };
+            cart.remove(productPkList, order.setTotalData);
+        }
    });
 
-    $('[data-role="quant"]').on('input', function() {
+    $('[data-role="quant"]').on('change', function() {
        var productPk = this.id;
        var quant = this.value;
        order.productPk = productPk;
@@ -42,4 +41,14 @@ $(document).ready(function() {
     $('[data-role="clear"]').on('click', function() {
         cart.clear(order.setTotalData);
     });
+
+    function checkOrderAvailability() {
+        console.log(parseFloat($('[data-role="count"]').text()));
+        if (parseFloat($('[data-role="count"]').text()) === 0) {
+            $('[data-role="order-block"]').hide();
+        }
+    }
+
+    checkOrderAvailability();
+
 });

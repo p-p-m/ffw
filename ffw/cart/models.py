@@ -15,11 +15,12 @@ class Order(TimeStampedModel):
         verbose_name_plural = _('Orders')
 
     name = models.CharField(_('Name'), max_length=255)
-    email = models.EmailField(_('E-mail'), max_length=125)
+    email = models.EmailField(_('E-mail'), max_length=125, blank=True)
     phone = models.CharField(_('Phone'), max_length=125)
-    contacts = models.CharField(_('Additional communication'), max_length=255, blank=True)
+    contacts = models.TextField(_('Additional contacts'), blank=True)
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9, default=0)
     count = models.IntegerField(_('Quantity'), default=0)
+    is_resolved = models.BooleanField(_('Is order resolved'), default=False)
 
     def __str__(self):
         return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
@@ -95,6 +96,7 @@ class Cart(object):
                 'name': product.name,
                 'product_code': product.code,
                 'price': float(product.price),
+                'code': product.code,
                 'quant': quant,
                 'sum_': float(quant * product.price),
             }
@@ -114,4 +116,10 @@ class Cart(object):
         product = CartProduct(product_pk)
 
         if product.pk_str in self.cart['products'].keys():
-            quant += self.cart['products'][product.pk_str]['quant']
+            self.cart['products'][product.pk_str]['quant'] += quant
+            self.cart['products'][product.pk_str]['sum_'] = float(
+                self.cart['products'][product.pk_str]['quant'] * product.price)
+        else:
+            self.set(product_pk, quant)
+
+        self._calculate()

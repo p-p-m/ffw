@@ -48,16 +48,16 @@ var cart = {
     'products': {},
     'total': 0,
     'count': 0,
-    'url': '',
+    'url': '/cart/',
     'updateCartAndCallback': function(data, callback) {
-            var obj = $.parseJSON(data);
-            cart.count = obj.cart.count;
-            cart.total = obj.cart.total;
-            cart.products = obj.cart.products;
+        var obj = $.parseJSON(data);
+        cart.count = obj.cart.count;
+        cart.total = obj.cart.total;
+        cart.products = obj.cart.products;
 
-            if (callback) {
-                callback();
-            }
+        if (callback) {
+            callback();
+        }
     },
     'set': function(product_dict, callback) {
         cart.csrf();

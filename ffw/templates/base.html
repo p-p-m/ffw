@@ -27,8 +27,15 @@
 <![endif]-->
 </head>
 <body>
+{% for message in messages %}
+    {% with active=True %}
+    {% include 'partials/popups-area.html' %}
+    {% endwith %}
+{% endfor %}
  <!-- menus -->
+
 {% include 'partials/popups-area.html' %}
+
 {% include 'partials/mobile-menu.html' %}
 {% include 'partials/menu.html' %}
 {% include 'partials/search.html' %}

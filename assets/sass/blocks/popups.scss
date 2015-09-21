@@ -64,7 +64,25 @@
     } // buy-list
     .buttons {
         text-align: center;
+        margin-top: 20px;
     } // buttons
+    .by-one-click {
+        margin-top: 20px;
+        @include bp(xs) {
+            display: none;
+        } // xs
+        input[type="text"] {
+            margin-bottom: 10px;
+            border: 1px solid #D1D1D1;
+            border-radius: 2px;
+            // text-align: center;
+            font-size: rem(16);
+            padding: 4px 8px;
+        } // input[type="text"]
+        button {
+            width: 100%;
+        } // button
+    } // by-one-click-side
 } // popup
 
 .popup-comment {

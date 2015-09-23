@@ -1,34 +1,3 @@
-.breadcrumps {
-    margin: 20px 0 40px 0;
-    @include bp(xs) {
-        display: none;
-    } // xs
-    ul {
-        @include clear-list-inline;
-        li + li {
-            &:before {
-                @include clear-list-inline;
-                content: '\f0da';
-                font: normal normal normal 12px/1 FontAwesome;
-                text-rendering: auto;
-                -webkit-font-smoothing: antialiased;
-                -moz-osx-font-smoothing: grayscale;
-            } // &.before
-        } // li + li
-        li {
-            a {
-                color: #1B5191;
-                font-size: rem(12);
-                text-transform: uppercase;
-            } // a
-            span {
-                color: #5C5C5C;
-                font-size: rem(14);
-            } // span
-        } // li
-    } // ul
-} // breadcrumps
-
 .product {
     margin-bottom: 20px;
     .wrap {

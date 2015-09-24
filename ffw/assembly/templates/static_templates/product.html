@@ -5,7 +5,7 @@
 
 {% block content %}
 <!-- buy list popup -->
-<div class="popup" data-front="popup" style="display: block; transform: translate(0, 0); z-index: 9999; opacity: 1;">
+<div class="popup" data-front="popup" style="display: none; transform: translate(0, 0); z-index: 9999; opacity: 1;">
     <article class="description">
         You are already bought some item(s)
     </article>
@@ -260,6 +260,14 @@
 <!-- product -->
 <section class="product">
     <div class="wrap">
+        <!-- breadcrumps -->
+        <div class="breadcrumps">
+            <ul>
+                <li><a href="#">Some path</a></li>
+                <li><span>Some here!</span></li>
+            </ul>
+        </div>
+        <!-- /breadcrumps -->
         <div class="filters-in-view" data-front="side-panel">
             <div class="produc-side-block">
                 <div class="product-image">

@@ -109,7 +109,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'bower_components/tooltipster/css',
-                        src: ['*/*'],
+                        src: ['*/*', 'tooltipster.css'],
                         dest: 'static/css/'
                     }
                 ],

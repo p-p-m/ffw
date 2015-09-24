@@ -120,4 +120,5 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_CONFIG = {
     'USD_RATE': (24.1, 'UAH/USD rate'),
     'EUR_RATE': (26.2, 'UAH/EUR rate'),
+    'ADMIN_EMAILS': ('email1@example.com, email2@example.com', 'Emails of site administrators'),
 }

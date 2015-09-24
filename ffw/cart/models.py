@@ -1,11 +1,16 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import threading
+
 from django.db import models
+from django.conf import settings
+from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 from .exceptions import CartException
+from constance import config
 from products.models import ProductConfiguration
 
 
@@ -24,6 +29,47 @@ class Order(TimeStampedModel):
 
     def __str__(self):
         return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+
+    def _get_user_message(self):
+        # TODO: implement normal message
+        return "Test user message"
+
+    def _get_admin_message(self):
+        # TODO: implement normal message
+        return "Test admin message"
+
+    def send_customer_email(self):
+        if self.email:
+            thr = threading.Thread(
+                target=send_mail,
+                args=(
+                    'Waterfilters order #{}'.format(self.id),
+                    self._get_user_message(),
+                    settings.EMAIL_HOST_USER,
+                    [self.email],
+                ),
+                kwargs={
+                    'fail_silently': True
+                },
+            )
+            thr.start()
+        return thr
+
+    def send_admin_email(self):
+        thr = threading.Thread(
+            target=send_mail,
+            args=(
+                'Waterfilters order #{}'.format(self.id),
+                self._get_admin_message(),
+                settings.EMAIL_HOST_USER,
+                [email.strip() for email in config.ADMIN_EMAILS.split(',')],
+            ),
+            kwargs={
+                'fail_silently': True
+            },
+        )
+        thr.start()
+        return thr
 
 
 class OrderedProduct(models.Model):

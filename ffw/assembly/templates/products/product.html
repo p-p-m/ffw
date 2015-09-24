@@ -193,9 +193,11 @@
                                 {% if attribute.value %}
                                     <tr>
                                         <td>{{ attribute.name }}
-                                            <span data-tooltip="tooltip" data-tip="{{ attribute.description }}">
-                                                <i class="fa fa-question-circle"></i>
-                                            </span>
+                                            {% if attribute.characteristic.description %}
+                                                <span data-tooltip="tooltip" data-tip="{{ attribute.characteristic.description }}">
+                                                    <i class="fa fa-question-circle"></i>
+                                                </span>
+                                            {% endif %}
                                         </td>
                                         <td>{{ attribute.pretty_value }}</td>
                                     </tr>

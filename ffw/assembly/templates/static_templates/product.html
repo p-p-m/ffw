@@ -4,6 +4,205 @@
 {% get_media_prefix as MEDIA_PREFIX %}
 
 {% block content %}
+<!-- buy list popup -->
+<div class="popup" data-front="popup" style="display: none; transform: translate(0, 0); z-index: 9999; opacity: 1;">
+    <article class="description">
+        You are already bought some item(s)
+    </article>
+    <div class="buy-list">
+        <!-- this table for single item -->
+        <table class="combain-product-list">
+            <tr>
+                <th>Наименование</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Simple item</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+        </table>
+        <!-- this table for multiply item -->
+        <table class="combain-product-list">
+            <!-- item -->
+            <tr>
+                <td colspan="3">
+                    <span class="name">Some combained item</span>
+                </td>
+            </tr>
+            <!-- /item -->
+            <tr>
+                <th>Наименование</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+            <!-- item -->
+            <tr>
+                <td>
+                    <span class="name">Item name</span>
+                </td>
+                <td>
+                    1
+                </td>
+                <td>
+                    <div class="price-line">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                </td>
+            </tr>
+            <!-- /item -->
+        </table>
+    </div>
+    <div class="buttons">
+        <button class="button button-blue">Оформить заказ</button>
+    </div>
+    <div class="by-one-click">
+        <input type="text" data-role="phone-mask">
+        <button class="button button-blue">Купить в один клик</button>
+    </div>
+</div>
+<!-- /buy list popup -->
 <!-- This popup with radio choises -->
 <!-- popup -->
 <div class="popup popup-comment" data-front="popup" style="display: none;">
@@ -61,6 +260,14 @@
 <!-- product -->
 <section class="product">
     <div class="wrap">
+        <!-- breadcrumps -->
+        <div class="breadcrumps">
+            <ul>
+                <li><a href="#">Some path</a></li>
+                <li><span>Some here!</span></li>
+            </ul>
+        </div>
+        <!-- /breadcrumps -->
         <div class="filters-in-view" data-front="side-panel">
             <div class="produc-side-block">
                 <div class="product-image">

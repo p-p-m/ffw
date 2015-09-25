@@ -1,6 +1,6 @@
 
 {% if product.configurations.count > 1 %}
-<div style="height: 450px;">
+<div style="height: 420px;">
     <article class="description">
         <strong>Модификации товара {{ product.name }}</strong>
         <hr>
@@ -9,6 +9,7 @@
     <div class="buy-list">
         <section class="product">
             <div class="product-block-content">
+                <div {% if product.configurations.count > 3 %} style='overflow-y: scroll; height: 180px;' {% endif %}>
                 <table class="combain-product-list">
                     <tr>
                         <th style="width:70%">Наименование</th>
@@ -49,6 +50,7 @@
                         <!-- /item -->
                     {% endfor %}
                 </table>
+                </div>
                 <!-- combain-product-summary -->
                 <div class="combain-product-summary">
                     Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн.

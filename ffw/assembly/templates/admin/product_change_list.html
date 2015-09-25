@@ -13,7 +13,7 @@
     <select data-role='section-filter'>
         <option data-value="0"> --- </option>
         {% for section in sections %}
-            <option data-value="{{ section.id }}">
+            <option data-value="{{ section.id }}" {% if section.id == selected_section_id %} selected {% endif %}>
                 {{ section.name }}
             </option>
         {% endfor %}
@@ -22,7 +22,7 @@
     <select data-role='category-filter'>
         <option data-value='0'> --- </option>
         {% for category in categories %}
-            <option data-value="{{ category.id }}">
+            <option data-value="{{ category.id }}" {% if category.id == selected_category_id %} selected {% endif %}>
                 {{ category.name }}
             </option>
         {% endfor %}
@@ -31,7 +31,7 @@
     <select data-role='subcategory-filter'>
         <option data-value='0'> --- </option>
         {% for subcategory in subcategories %}
-            <option data-value="{{ subcategory.id }}">
+            <option data-value="{{ subcategory.id }}" {% if subcategory.id == selected_subcategory_id %} selected {% endif %}>
                 {{ subcategory.name }}
             </option>
         {% endfor %}

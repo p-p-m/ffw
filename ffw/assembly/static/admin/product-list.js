@@ -36,8 +36,8 @@ function setGetParameter(paramName, paramValue, url) {
     url = url || window.location.href;
     if (url.indexOf(paramName + '=') >= 0)
     {
-        var prefix = url.substring(0, url.indexOf(paramName)),
-        suffix = url.substring(url.indexOf(paramName));
+        var prefix = url.substring(0, url.indexOf(paramName + '=')),
+        suffix = url.substring(url.indexOf(paramName + '='));
 
         suffix = suffix.substring(suffix.indexOf('=') + 1);
         suffix = (suffix.indexOf('&') >= 0) ? suffix.substring(suffix.indexOf('&')) : '';

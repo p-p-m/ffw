@@ -1,3 +1,52 @@
+// price input
+function priceInput() {
+    var item = $('[data-front="price-input"]')
+
+    item.each(function() {
+        var input = $(this).find('[data-front="price-input-count"]');
+        var plus = $(this).find('[data-front="cart-input-count-plus"]');
+        var minus = $(this).find('[data-front="cart-input-count-minus"]');
+
+        plus.click(function() {
+            var inputValue = parseInt(input.val());
+            function update() {
+                inputValueUpdated = parseInt((inputValue + 1));
+            }
+            update();
+            input.val(inputValueUpdated);
+            input.trigger('change');
+        });
+        minus.click(function() {
+            inputValue = parseInt(input.val());
+            function update() {
+                inputValueUpdated = parseInt((inputValue - 1));
+            }
+            if (inputValue == 1 || inputValue < 0) {
+                return false;
+            } else {
+                update();
+                input.val(inputValueUpdated);
+                input.trigger('change');
+            }
+        });
+    });
+}
+
+// popup
+function regularPopup() {
+    var popup = $('[data-front="popup"]');
+    var popupHeight = popup.height();
+    var popupWidth = popup.width();
+    popup.css({
+        'left': '50%',
+        'top': '50%',
+        'position': 'fixed',
+        'z-index': 9999,
+        'margin-top': -popupHeight/2,
+        'margin-left': -popupWidth/2
+    });
+}
+
 (function($) {
 
     // functions
@@ -306,39 +355,7 @@
         });
     }
 
-    // price input
-    function priceInput() {
-        var item = $('[data-front="price-input"]')
 
-        item.each(function() {
-            var input = $(this).find('[data-front="price-input-count"]');
-            var plus = $(this).find('[data-front="cart-input-count-plus"]');
-            var minus = $(this).find('[data-front="cart-input-count-minus"]');
-
-            plus.click(function() {
-                var inputValue = parseInt(input.val());
-                function update() {
-                    inputValueUpdated = parseInt((inputValue + 1));
-                }
-                update();
-                input.val(inputValueUpdated);
-                input.trigger('change');
-            });
-            minus.click(function() {
-                inputValue = parseInt(input.val());
-                function update() {
-                    inputValueUpdated = parseInt((inputValue - 1));
-                }
-                if (inputValue == 1 || inputValue < 0) {
-                    return false;
-                } else {
-                    update();
-                    input.val(inputValueUpdated);
-                    input.trigger('change');
-                }
-            });
-        });
-    }
 
     // Cart behavior
     // Count items
@@ -642,21 +659,6 @@
 
     }
 
-    // popup
-    function regularPopup() {
-        var popup = $('[data-front="popup"]');
-        var popupHeight = popup.height();
-        var popupWidth = popup.width();
-        popup.css({
-            'left': '50%',
-            'top': '50%',
-            'position': 'fixed',
-            'z-index': 9999,
-            'margin-top': -popupHeight/2,
-            'margin-left': -popupWidth/2
-        });
-    }
-
     // tool tips
     // function toolTips() {
     //     var tipParent = $('[data-front="tooltip"]');
@@ -699,7 +701,9 @@
         sideScroll();
         priceInput();
         regularPopup();
-        equalheight('[data-view="grid"] .products-list .product');
+        $('.products-view').css('display', 'block');
+        // equalheight('[data-view="grid"] .products-list .product');
+
         $('[data-front="close-flash"]').click(function() {
             var flash = activateFlashPopUp();
             flash.deactivate();

@@ -5,201 +5,122 @@
 
 {% block content %}
 <!-- buy list popup -->
-<div class="popup" data-front="popup" style="display: none; transform: translate(0, 0); z-index: 9999; opacity: 1;">
+<div class="popup" data-front="popup" style="display: block; transform: translate(0, 0); z-index: 9999; opacity: 1; width:900px; overflow:none;">
     <article class="description">
         You are already bought some item(s)
     </article>
     <div class="buy-list">
-        <!-- this table for single item -->
-        <table class="combain-product-list">
-            <tr>
-                <th>Наименование</th>
-                <th>Количество</th>
-                <th>Цена</th>
-            </tr>
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Simple item</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-        </table>
-        <!-- this table for multiply item -->
-        <table class="combain-product-list">
-            <!-- item -->
-            <tr>
-                <td colspan="3">
-                    <span class="name">Some combained item</span>
-                </td>
-            </tr>
-            <!-- /item -->
-            <tr>
-                <th>Наименование</th>
-                <th>Количество</th>
-                <th>Цена</th>
-            </tr>
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-            <!-- item -->
-            <tr>
-                <td>
-                    <span class="name">Item name</span>
-                </td>
-                <td>
-                    1
-                </td>
-                <td>
-                    <div class="price-line">
-                        <span class="price">340,00</span>
-                        <span class="currency">грн.</span>
-                    </div>
-                </td>
-            </tr>
-            <!-- /item -->
-        </table>
-    </div>
-    <div class="buttons">
-        <button class="button button-blue">Оформить заказ</button>
-    </div>
-    <div class="by-one-click">
-        <input type="text" data-role="phone-mask">
-        <button class="button button-blue">Купить в один клик</button>
+        <section class="product">
+            <div class="product-block-content">
+                <div style="overflow-y:scroll; height:200px;">
+                    <table class="combain-product-list">
+                        <tbody><tr>
+                            <th style="width:70%">Наименование</th>
+                            <th style="width:15%">Количество</th>
+                            <th style="width:15%">Цена</th>
+                        </tr>
+
+                            <!-- item -->
+                            <tr data-configuration-id="1" data-role="configuration">
+                                <td>
+                                    <label for="checksubitem-1">
+                                        <input type="checkbox" data-role="configuration-active" id="checksubitem-1">
+                                        <span class="name">pc-0-0-0
+                                            <small>brand: B2, width: 50 (m), weight: 200 (kg)</small>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input type="number" data-role="configuration-count" data-front="price-input-count" min="1" value="1" class="count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span data-role="configuration-price" class="price">10</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+
+                            <!-- item -->
+                            <tr data-configuration-id="2" data-role="configuration">
+                                <td>
+                                    <label for="checksubitem-2">
+                                        <input type="checkbox" data-role="configuration-active" id="checksubitem-2">
+                                        <span class="name">pc-0-0-1
+                                            <small>brand: B2, width: 20 (m), weight: 200 (kg)</small>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input type="number" data-role="configuration-count" data-front="price-input-count" min="1" value="1" class="count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span data-role="configuration-price" class="price">20</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+
+                            <!-- item -->
+                            <tr data-configuration-id="3" data-role="configuration">
+                                <td>
+                                    <label for="checksubitem-3">
+                                        <input type="checkbox" data-role="configuration-active" id="checksubitem-3">
+                                        <span class="name">pc-0-0-2
+                                            <small>brand: B5, width: 10 (m), weight: 400 (kg)</small>
+                                        </span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div data-front="price-input">
+                                        <span data-front="cart-input-count-minus">
+                                            <i class="fa fa-minus-circle"></i>
+                                        </span>
+                                        <input type="number" data-role="configuration-count" data-front="price-input-count" min="1" value="1" class="count">
+                                        <span data-front="cart-input-count-plus">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-line">
+                                        <span data-role="configuration-price" class="price">30</span>
+                                        <span class="currency">грн.</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- /item -->
+
+                    </tbody></table>
+                </div>
+                <!-- combain-product-summary -->
+                <div class="combain-product-summary">
+                    Всего наименований <span data-role="configurations-total-count">0</span> на сумму <span data-role="configurations-total-price">0</span> грн.
+                    <button data-role="configurations-buy-in-one-click" class="button button-blue order">Купить в один клик</button>
+                    <button data-role="configurations-add-to-cart" class="button button-blue add-to-cart">В корзину</button>
+                </div>
+                <!-- /combain-product-summary -->
+            </div>
+        </section>
     </div>
 </div>
 <!-- /buy list popup -->

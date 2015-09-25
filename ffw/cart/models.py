@@ -31,11 +31,11 @@ class Order(TimeStampedModel):
         return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
 
     def _get_user_message(self):
-        # TODO: implement normal message
+
         return "Test user message"
 
     def _get_admin_message(self):
-        # TODO: implement normal message
+
         return "Test admin message"
 
     def send_customer_email(self):

@@ -4,7 +4,8 @@ var productList = {
     activate: function() {
         // select sort button
         var urlVars = getUrlVars(),
-            vm = this;
+            vm = this,
+            productPopup = activatePopUpBySelector($('[data-role="product-popup"]'));
         if ("sort_by" in urlVars) {
             $('[data-role="sort-item"][data-sort="' + urlVars.sort_by + '"]').addClass('active');
         }
@@ -22,6 +23,22 @@ var productList = {
             vm.page = 1;
             vm.inspectShowMoreButton();
         });
+
+        $('[data-role="buy"]').click(function() {
+            $.ajax({
+                url: $(this).attr('data-product-url'),
+            }).done(function(data) {
+                $('[data-role="product-popup"]').html(data);
+                productPopup.activate();
+                $('[data-role="buy-cancel"]').click(function() {
+                    productPopup.deactivate();
+                });
+                initProductBuyFeatures();
+                regularPopup();
+                priceInput();
+            });
+        });
+
     },
 
     sort: function() {

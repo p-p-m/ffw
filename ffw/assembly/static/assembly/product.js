@@ -2,7 +2,7 @@ var configurations = [];
 
 
 function initSinglePriceCalculation(priceForOneProduct, productPriceElement, productCountElement) {
-    productCountElement.on('input', function() {
+    productCountElement.on('change', function() {
         productPriceElement.text(priceForOneProduct * $(this).val());
     });
     if (productCountElement.val() > 1) {
@@ -32,11 +32,11 @@ function calculateConfigurationsTotal() {
     totalPrice = 0;
     for (var i = 0; i < configurations.length; i++) {
         configuration = configurations[i];
+        configurationPrice = parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
+        configuration.priceElement.text(configurationPrice);
         if (configuration.activeElement.is(':checked')) {
             totalCount += 1;
-            configurationPrice = parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
             totalPrice += configurationPrice;
-            configuration.priceElement.text(configurationPrice);
         }
     }
     $('[data-role="configurations-total-count"]').text(totalCount);
@@ -68,10 +68,8 @@ function addProductToCart(callback) {
     cart.add(selectedProduct, callback);
 }
 
-
-$(document).ready(function() {
-    initConfigrations();
-    var commentPopup = activatePopUpBySelector($('[data-role="comment-popup"]'));
+function initProductBuyFeatures() {
+     initConfigrations();
 
     if (configurations.length === 0) {
         // product without configurations
@@ -93,25 +91,6 @@ $(document).ready(function() {
 
         calculateConfigurationsTotal();
     }
-    // comments
-    $('[data-role="add-comment-button"]').click(function() {
-        var productId = $('[data-role="product"]').attr('data-product'),
-            positive = $('[data-role="comment-positive"]').val(),
-            negative = $('[data-role="comment-negative"]').val();
-        comments.add(positive, negative, productId, function() {
-            var flash = activateFlashPopUp();
-            flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
-        });
-        commentPopup.deactivate();
-    });
-
-    $('[data-role="show-comment-popup"]').click(function() {
-        commentPopup.activate();
-    });
-
-    $('[data-role="comment-cancel"]').click(function() {
-        commentPopup.deactivate();
-    });
 
     $('[data-role="configurations-add-to-cart"]').click(function() {
         addConfigurationsToCart(function() {
@@ -137,6 +116,32 @@ $(document).ready(function() {
         addProductToCart(function() {
             window.location.href = "/cart/order/";
         });
+    });
+}
+
+
+$(document).ready(function() {
+    initProductBuyFeatures();
+    var commentPopup = activatePopUpBySelector($('[data-role="comment-popup"]'));
+
+    // comments
+    $('[data-role="add-comment-button"]').click(function() {
+        var productId = $('[data-role="product"]').attr('data-product'),
+            positive = $('[data-role="comment-positive"]').val(),
+            negative = $('[data-role="comment-negative"]').val();
+        comments.add(positive, negative, productId, function() {
+            var flash = activateFlashPopUp();
+            flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
+        });
+        commentPopup.deactivate();
+    });
+
+    $('[data-role="show-comment-popup"]').click(function() {
+        commentPopup.activate();
+    });
+
+    $('[data-role="comment-cancel"]').click(function() {
+        commentPopup.deactivate();
     });
 
 });

@@ -148,4 +148,7 @@ class ProductView(View):
 
     def get(self, request, product):
         product = get_object_or_404(products_models.Product.objects.select_related('images'), slug=product)
-        return render(request, 'products/product.html', {'product': product})
+        if not request.is_ajax():
+            return render(request, 'products/product.html', {'product': product})
+        else:
+            return render(request, 'products/product_buy_popup.html', {'product': product})

@@ -6,10 +6,29 @@
 
 {% block content %}
 
+<div class="popup popup-comment" data-front="popup" data-role="product-popup" style="width:900px;">
+</div>
+
 <div>
     <!-- view-title-box -->
     <div class="view-title-box with-filters">
         <div class="wrap">
+            <!-- breadcrumps -->
+            <div class="breadcrumps">
+                <ul>
+                    <li><a href="/">Главная страница</a></li>
+                    {% if selected_section %}
+                        <li><a href="{% url 'products' section=selected_section.slug %}">{{ selected_section.name }}</a></li>
+                    {% endif %}
+                    {% if selected_category %}
+                        <li><a href="{% url 'products' section=selected_section.slug category=selected_category.slug %}">{{ selected_category.name }}</a></li>
+                    {% endif %}
+                    {% if selected_subcategory %}
+                        <li><span>{{ selected_subcategory.name }}</span></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /breadcrumps -->
             <h1 class="view-title">
                 {% if selected_subcategory %}
                     {{ selected_subcategory.name }}
@@ -46,7 +65,7 @@
 {% comment %}
 This code duplicates filters creation that slows page rendering. It should be rewritten in more efficient way
 {% endcomment %}
-<div class="products-view">
+<div class="products-view" style="display:none;">
     <!-- products-list-box -->
     <div class="products-list-box" data-role="products-view" data-view="grid">
         <div class="wrap">
@@ -57,7 +76,7 @@ This code duplicates filters creation that slows page rendering. It should be re
                         <div class="filter-body">{% include 'filters/filter.html' %}</div>
                     </div>
                 {% endfor %}
-                <button class="button button-blue filter-submit" fron-state="reload-state">Show products</button>
+                <button class="button button-blue filter-submit" fron-state="reload-state">Отфильтровать</button>
             </div>
             <div class="products-in-view">
                 <ul class="products-list" data-role="products-table" data-view-type="grid">
@@ -68,7 +87,7 @@ This code duplicates filters creation that slows page rendering. It should be re
                     {% endwith %}
                 </ul>
                 <div style="text-align: center; width: 100%;" data-role="show-more-block">
-                    <button class="button button-blue filter-submit" data-role="show-more">Show more...</button>
+                    <button class="button button-blue filter-submit" data-role="show-more">Показать еще товары...</button>
                 </div>
             </div>
         </div>
@@ -86,7 +105,7 @@ This code duplicates filters creation that slows page rendering. It should be re
                         <div class="filter-body">{% include 'filters/filter.html' %}</div>
                     </div>
                 {% endfor %}
-                <button class="button button-blue filter-submit" fron-state="reload-state">Show products</button>
+                <button class="button button-blue filter-submit" fron-state="reload-state">Отфильтровать</button>
             </div>
             <div class="products-in-view">
                 <ul class="products-list" data-role="products-table" data-view-type="list">
@@ -97,7 +116,7 @@ This code duplicates filters creation that slows page rendering. It should be re
                     {% endwith %}
                 </ul>
                 <div style="text-align: center; width: 100%;" data-role="show-more-block">
-                    <button class="button button-blue filter-submit" data-role="show-more">Show more...</button>
+                    <button class="button button-blue filter-submit" data-role="show-more">Показать еще товары...</button>
                 </div>
             </div>
         </div>
@@ -111,4 +130,5 @@ This code duplicates filters creation that slows page rendering. It should be re
 {% block js %}
     <script src="{% static 'filters/filters.js' %}"> </script>
     <script src="{% static 'assembly/product-list.js' %}"> </script>
+    <script src="{% static 'assembly/product.js' %}"> </script>
 {% endblock js %}

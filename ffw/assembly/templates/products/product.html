@@ -25,6 +25,18 @@
 <!-- product -->
 <section class="product">
     <div class="wrap">
+        <!-- breadcrumps -->
+        <div class="breadcrumps">
+            <ul>
+                <li><a href="/">Главная страница</a></li>
+                <li><a href="{% url 'products' section=product.subcategory.category.section.slug %}">{{ product.subcategory.category.section.name }}</a></li>
+                <li><a href="{% url 'products' section=product.subcategory.category.section.slug category=product.subcategory.category.slug %}">{{ product.subcategory.category.name }}</a></li>
+                <li><a href="{% url 'products' section=product.subcategory.category.section.slug category=product.subcategory.category.slug subcategory=product.subcategory.slug %}">{{ product.subcategory.name }}</a></li>
+                <li><span>{{ product.name }}</span></li>
+            </ul>
+        </div>
+        <!-- /breadcrumps -->
+
         <div class="filters-in-view" data-front="side-panel">
             <div class="produc-side-block">
                 {% if product.get_first_image %}
@@ -128,7 +140,7 @@
                     <!-- modifications -->
                     <div class="product-block" id="product-choises">
                         <h3 class="product-block-title item-choice">
-                            Выбор модификаций продукта
+                            Выбор модификаций товара
                         </h3>
                         <div class="product-block-content">
                             <table class="combain-product-list">

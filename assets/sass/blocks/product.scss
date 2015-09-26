@@ -59,12 +59,6 @@
         .price-line {
             text-align: center;
             &.in-side {
-                // [data-front="price-input"] {
-                //     @include table;
-                //     > * {
-                //         @include table-cell;
-                //     }
-                // } // [data-front="price-input"]
                 button {
                     margin-top: 8px;
                 } // button

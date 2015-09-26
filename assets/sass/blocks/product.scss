@@ -49,6 +49,8 @@
             } // input[type="text"]
             button {
                 width: 100%;
+                font-size: 14px;
+                padding-bottom: 6px;
             } // button
         } // by-one-click-side
         .product-image {
@@ -63,6 +65,9 @@
                 //         @include table-cell;
                 //     }
                 // } // [data-front="price-input"]
+                button {
+                    margin-top: 8px;
+                } // button
             }
             .price {
                 @include inline-middle;

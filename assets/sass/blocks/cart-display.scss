@@ -208,3 +208,13 @@
         } // &.required-expl
     } // fieldset
 } // one-click-order
+
+.product {
+    .products-in-view {
+        &.cart-order-page {
+            float: none;
+            width: 80%;
+            margin: auto;
+        } // cart-order-page
+    } // products-in-view
+} // product

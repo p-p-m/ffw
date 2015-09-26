@@ -96,6 +96,8 @@ class OrderView(FormView):
         order.total = self.total
         order.save()
 
+        order.send_customer_email()
+        order.send_admin_email()
         self.request.session['cart'] = {'products': {}, 'total': 0, 'count': 0}
         messages.info(self.request, _('Order was successfully created. Our manager will contact you during the day.'))
         return super(OrderView, self).form_valid(form)

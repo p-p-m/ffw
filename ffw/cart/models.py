@@ -14,6 +14,7 @@ from constance import config
 from products.models import ProductConfiguration
 
 
+# TODO: rewrite messages
 class Order(TimeStampedModel):
     class Meta:
         verbose_name = _('Order')
@@ -31,19 +32,46 @@ class Order(TimeStampedModel):
         return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
 
     def _get_user_message(self):
-
-        return "Test user message"
+        return (
+            "Успешно оформлен заказ на сайте ffw. Номер заказа {}. Cумма заказа {} грн.\n\n"
+            "Детали заказа:\n"
+            "{}\n\n"
+            "Наши контакты:\n"
+            "(044) 510-91-03\n"
+            "(067) 417-00-21\n"
+            "(050) 520-00-21\n"
+            "Email: info@waterproff.ua\n"
+        ).format(
+            self.pk,
+            self.total,
+            '\n'.join([p.to_representaion() for p in self.products.all()]),
+        )
 
     def _get_admin_message(self):
-
-        return "Test admin message"
+        return (
+            "Получен новый заказ на сайте ffw. На сумму {} грн.\n\n"
+            "Детали заказа:\n"
+            "{}\n\n"
+            "Контакты заказчика:\n"
+            "Имя: {}\n"
+            "Email: {}\n"
+            "Телефон: {}\n"
+            "Другие контакты: {}\n"
+        ).format(
+            self.total,
+            '\n'.join([p.to_representaion() for p in self.products.all()]),
+            self.name,
+            self.email,
+            self.phone,
+            self.contacts
+        )
 
     def send_customer_email(self):
         if self.email:
             thr = threading.Thread(
                 target=send_mail,
                 args=(
-                    'Waterfilters order #{}'.format(self.id),
+                    'Успешно оформлен заказ на сайте ffw. Номер заказа: {}'.format(self.id),
                     self._get_user_message(),
                     settings.EMAIL_HOST_USER,
                     [self.email],
@@ -59,7 +87,7 @@ class Order(TimeStampedModel):
         thr = threading.Thread(
             target=send_mail,
             args=(
-                'Waterfilters order #{}'.format(self.id),
+                'Новый заказ на сайте ffw. Номер заказа: {}'.format(self.id),
                 self._get_admin_message(),
                 settings.EMAIL_HOST_USER,
                 [email.strip() for email in config.ADMIN_EMAILS.split(',')],
@@ -79,7 +107,7 @@ class OrderedProduct(models.Model):
 
     order = models.ForeignKey(Order, verbose_name='Order', related_name='products')
     # XXX: This FK provides circular dependency in applications cart and products. We need to use abstract product
-    # from cart settings
+    # from cart settings. Also FK should be nullable
     product = models.ForeignKey(ProductConfiguration, verbose_name='Product', related_name='ordered_product')
     name = models.CharField(_('Name'), max_length=127)
     code = models.CharField(_('Code'), max_length=127)
@@ -90,6 +118,10 @@ class OrderedProduct(models.Model):
     def __str__(self):
         return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
                 str(self.quant) + " " + str(self.total))
+
+    def to_representaion(self):
+        return ' - {} ({}): количество: {}, сумма {}, (цена за единицу продукта {});'.format(
+            self.name, self.code, self.quant, self.total, self.price)
 
 
 class CartProduct(object):

@@ -600,7 +600,7 @@ function regularPopup() {
     }
 
     function sidePanel() {
-        var marginDiffs = 370;
+        var marginDiffs = 0;
         var win = $(window);
         var sidePanel = $('[data-front="side-panel"]');
         if (sidePanel.length) {

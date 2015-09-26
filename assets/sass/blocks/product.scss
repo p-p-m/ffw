@@ -254,6 +254,9 @@
         .button-blue {
             float: right;
         } // button-blue
+        .button-blue + .button-blue {
+            margin-right: 15px;
+        } // .button-blue + .button-blue
     } // combain-product-summary
     .comment-block {
         + .comment-block {

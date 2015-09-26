@@ -49,6 +49,8 @@
             } // input[type="text"]
             button {
                 width: 100%;
+                font-size: 14px;
+                padding-bottom: 6px;
             } // button
         } // by-one-click-side
         .product-image {
@@ -57,12 +59,9 @@
         .price-line {
             text-align: center;
             &.in-side {
-                // [data-front="price-input"] {
-                //     @include table;
-                //     > * {
-                //         @include table-cell;
-                //     }
-                // } // [data-front="price-input"]
+                button {
+                    margin-top: 8px;
+                } // button
             }
             .price {
                 @include inline-middle;
@@ -254,6 +253,9 @@
         .button-blue {
             float: right;
         } // button-blue
+        .button-blue + .button-blue {
+            margin-right: 15px;
+        } // .button-blue + .button-blue
     } // combain-product-summary
     .comment-block {
         + .comment-block {

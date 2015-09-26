@@ -66,38 +66,49 @@ class Order(TimeStampedModel):
             self.contacts
         )
 
+    # TODO: Make this call async.
     def send_customer_email(self):
         if self.email:
-            thr = threading.Thread(
-                target=send_mail,
-                args=(
-                    'Успешно оформлен заказ на сайте ffw. Номер заказа: {}'.format(self.id),
-                    self._get_user_message(),
-                    settings.EMAIL_HOST_USER,
-                    [self.email],
-                ),
-                kwargs={
-                    'fail_silently': True
-                },
+            send_mail(
+                'Успешно оформлен заказ на сайте ffw. Номер заказа: {}'.format(self.id),
+                self._get_user_message(),
+                settings.EMAIL_HOST_USER,
+                [self.email],
             )
-            thr.start()
-        return thr
+        # if self.email:
+        #     thr = threading.Thread(
+        #         target=send_mail,
+        #         args=(
+        #             'Успешно оформлен заказ на сайте ffw. Номер заказа: {}'.format(self.id),
+        #             self._get_user_message(),
+        #             settings.EMAIL_HOST_USER,
+        #             [self.email],
+        #         ),
+        #         kwargs={
+        #             'fail_silently': True
+        #         },
+        #     )
+        #     thr.start()
+        # return thr
 
     def send_admin_email(self):
-        thr = threading.Thread(
-            target=send_mail,
-            args=(
-                'Новый заказ на сайте ffw. Номер заказа: {}'.format(self.id),
-                self._get_admin_message(),
-                settings.EMAIL_HOST_USER,
-                [email.strip() for email in config.ADMIN_EMAILS.split(',')],
-            ),
-            kwargs={
-                'fail_silently': True
-            },
+        send_mail(
+            'Новый заказ на сайте ffw. Номер заказа: {}'.format(self.id),
+            self._get_admin_message(),
+            settings.EMAIL_HOST_USER,
+            [email.strip() for email in config.ADMIN_EMAILS.split(',')],
         )
-        thr.start()
-        return thr
+        # thr = threading.Thread(
+        #     target=send_mail,
+        #     args=(
+
+        #     ),
+        #     kwargs={
+        #         'fail_silently': True
+        #     },
+        # )
+        # thr.start()
+        # return thr
 
 
 class OrderedProduct(models.Model):

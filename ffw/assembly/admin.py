@@ -26,7 +26,7 @@ class BaseFilterInline(admin.TabularInline):
 
         if db_field.name == 'characteristic':
             if request._obj_ is not None:
-                field.queryset = request._obj_.characteristics.filter(is_default=False).all()
+                field.queryset = request._obj_.characteristics.all()
             else:
                 field.queryset = field.queryset.none()
 
@@ -40,17 +40,17 @@ class BaseFilterInline(admin.TabularInline):
 
 class NumericAttributeFilterInline(BaseFilterInline):
     model = assembly_models.NumericAttributeFilter
-    fields = ('name', 'characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
+    fields = ('characteristic', 'max_value', 'min_value', 'is_auto_update', 'priority')
 
 
 class ChoicesAttributeFilterInline(BaseFilterInline):
     model = assembly_models.ChoicesAttributeFilter
-    fields = ('name', 'characteristic', 'choices', 'is_auto_update', 'priority')
+    fields = ('characteristic', 'choices', 'is_auto_update', 'priority')
 
 
 class IntervalsAttributeFilterInline(BaseFilterInline):
     model = assembly_models.IntervalsAttributeFilter
-    fields = ('name', 'characteristic', 'intervals', 'priority')
+    fields = ('characteristic', 'intervals', 'priority')
 
 
 class CharacteristicAdmin(admin.ModelAdmin):

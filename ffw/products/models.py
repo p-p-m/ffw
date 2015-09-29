@@ -36,7 +36,6 @@ class Characteristic(models.Model):
     rating = models.FloatField(
         _('Rating'), default=4.0,
         help_text=_('Characteristic with higher ratings will be displayed first'))
-    is_default = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

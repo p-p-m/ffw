@@ -74,8 +74,8 @@ class NumericFilterMixin(FilterMixin):
 
     def base_update(self, field):
         max_and_min = self.get_queryset().aggregate(models.Max(field), models.Min(field))
-        new_max_value = max_and_min['{}__max'.format(field)]
-        new_min_value = max_and_min['{}__min'.format(field)]
+        new_max_value = max_and_min['{}__max'.format(field)] or 0
+        new_min_value = max_and_min['{}__min'.format(field)] or 0
         if self.min_value != new_min_value or self.max_value != new_max_value:
             self.min_value = new_min_value
             self.max_value = new_max_value

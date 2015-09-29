@@ -1,18 +1,6 @@
 from . import models
 
 
-def add_new_default_characteristics_to_all_sections(sender, instance=None, created=False, **kwargs):
-    if created and instance.is_default:
-        for section in models.Section.objects.all():
-            section.characteristics.through.objects.create(characteristic=instance, section=section)
-
-
-def add_default_characteristics_to_new_section(sender, instance=None, created=False, **kwargs):
-    if created:
-        for c in models.Characteristic.objects.filter(is_default=True):
-            instance.characteristics.through.objects.create(characteristic=c, section=instance)
-
-
 def calculate_price_attributes(sender, instance=None, **kwargs):
     product = instance.product
     product.recalculate_prices()
@@ -31,3 +19,43 @@ def disconnect_attributes_from_characteristics_on_subcategory_change(sender, ins
     if models.Product.objects.filter(id=product.id).exclude(subcategory=product.subcategory).exists():
         for attribute in models.ProductAttribute.objects.filter(product_configuration__product=product):
             attribute.connect_with_characteristic(subcategory=product.subcategory, save=True)
+
+
+def add_characteristic_to_category_subcategories(sender, instance, created=False, **kwargs):
+    if created:
+        for subcategory in instance.category.subcategories.all():
+            models.SubcategoryCharacteristic.objects.get_or_create(
+                characteristic=instance.characteristic,
+                subcategory=subcategory
+            )
+
+
+def remove_characteristic_from_category_subcategories(sender, instance, **kwargs):
+    (models.SubcategoryCharacteristic.objects
+     .filter(characteristic=instance.characteristic, subcategory__in=instance.category.subcategories.all())
+     .delete())
+
+
+def add_characteristic_to_section_categories_and_subcategories(sender, instance, created=False, **kwargs):
+    if created:
+        for category in instance.section.categories.all():
+            models.CategoryCharacteristic.objects.get_or_create(
+                characteristic=instance.characteristic,
+                category=category
+            )
+
+        for subcategory in models.Subcategory.objects.filter(category__in=instance.section.categories.all()):
+            models.SubcategoryCharacteristic.objects.get_or_create(
+                characteristic=instance.characteristic,
+                subcategory=subcategory
+            )
+
+
+def remove_characteristic_from_section_categories_and_subcategories(sender, instance, **kwargs):
+    (models.CategoryCharacteristic.objects
+     .filter(characteristic=instance.characteristic, category__in=instance.section.categories.all())
+     .delete())
+
+    (models.SubcategoryCharacteristic.objects
+     .filter(characteristic=instance.characteristic, subcategory__category__in=instance.section.categories.all())
+     .delete())

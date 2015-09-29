@@ -81,6 +81,10 @@ class BaseCharacteristicFilter(BaseFilter):
     def get_attribute_query(self):
         return models.Q(attributes__name=self.characteristic.name)
 
+    def save(self, *args, **kwargs):
+        self.name = self.characteristic.name
+        return super(BaseCharacteristicFilter, self).save(*args, **kwargs)
+
 
 class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
 
@@ -100,7 +104,8 @@ class NumericAttributeFilter(NumericFilterMixin, BaseCharacteristicFilter):
 
     def get_queryset(self):
         products = self.get_related_products()
-        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)
+        return products_models.ProductAttribute.objects.filter(
+            product_configuration__product__in=products, characteristic=self.characteristic)
 
 
 class ChoicesAttributeFilter(ChoicesFilterMixin, BaseCharacteristicFilter):
@@ -125,7 +130,8 @@ class ChoicesAttributeFilter(ChoicesFilterMixin, BaseCharacteristicFilter):
 
     def get_queryset(self):
         products = self.get_related_products()
-        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)
+        return products_models.ProductAttribute.objects.filter(
+            product_configuration__product__in=products, characteristic=self.characteristic)
 
 
 class IntervalsAttributeFilter(IntervalsFilterMixin, BaseCharacteristicFilter):
@@ -147,4 +153,5 @@ class IntervalsAttributeFilter(IntervalsFilterMixin, BaseCharacteristicFilter):
 
     def get_queryset(self):
         products = self.get_related_products()
-        return products_models.ProductAttribute.objects.filter(product_configuration__product__in=products)
+        return products_models.ProductAttribute.objects.filter(
+            product_configuration__product__in=products, characteristic=self.characteristic)

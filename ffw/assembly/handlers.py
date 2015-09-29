@@ -58,3 +58,50 @@ def delete_filters_on_characteristic_disconnection_with_subcategory(sender, inst
 def autocreate_price_filter_for_section(sender, instance, created=False, **kwargs):
     if created:
         models.NumericPriceFilter.objects.create(name='Цена', section=instance, is_auto_update=True, priority=100)
+
+
+def autocreate_price_filter_for_category(sender, instance, created=False, **kwargs):
+    if created:
+        models.NumericPriceFilter.objects.create(name='Цена', category=instance, is_auto_update=True, priority=100)
+
+
+def autocreate_price_filter_for_subcategory(sender, instance, created=False, **kwargs):
+    if created:
+        models.NumericPriceFilter.objects.create(name='Цена', subcategory=instance, is_auto_update=True, priority=100)
+
+
+def propagate_filter_to_subcategories_and_categories(sender, instance, created=False, **kwargs):
+    if created:
+        if instance.section is not None:
+            for category in instance.section.categories.all():
+                sender.objects.get_or_create(
+                    name=instance.name,
+                    characteristic=instance.characteristic,
+                    category=category,
+                    is_auto_update=instance.is_auto_update,
+                )
+
+        if instance.category is not None:
+            for subcategory in instance.category.subcategories.all():
+                sender.objects.get_or_create(
+                    name=instance.name,
+                    characteristic=instance.characteristic,
+                    subcategory=subcategory,
+                    is_auto_update=instance.is_auto_update,
+                )
+
+
+def delete_filters_from_related_subcategories_and_categories(sender, instance, created=False, **kwargs):
+    if instance.section is not None:
+        (sender.objects
+         .filter(name=instance.name,
+                 characteristic=instance.characteristic,
+                 category__in=instance.section.categories.all())
+         .delete())
+
+    if instance.category is not None:
+        (sender.objects
+         .filter(name=instance.name,
+                 characteristic=instance.characteristic,
+                 subcategory__in=instance.category.subcategories.all())
+         .delete())

@@ -25,18 +25,6 @@ class ProductsConfig(AppConfig):
             dispatch_uid='products.handlers.calculate_price_attributes',
         )
 
-        signals.post_save.connect(
-            handlers.add_default_characteristics_to_new_section,
-            sender=models.Section,
-            dispatch_uid='products.handlers.add_default_characteristics_to_new_section'
-        )
-
-        signals.post_save.connect(
-            handlers.add_new_default_characteristics_to_all_sections,
-            sender=models.Characteristic,
-            dispatch_uid='products.handlers.add_new_default_characteristics_to_all_categories',
-        )
-
         signals.pre_save.connect(
             handlers.connect_attribute_with_characteristic,
             sender=models.ProductAttribute,
@@ -47,4 +35,28 @@ class ProductsConfig(AppConfig):
             handlers.disconnect_attributes_from_characteristics_on_subcategory_change,
             sender=models.Product,
             dispatch_uid='products.handlers.disconnect_attributes_from_characteristics_on_subcategory_change'
+        )
+
+        signals.post_save.connect(
+            handlers.add_characteristic_to_category_subcategories,
+            sender=models.CategoryCharacteristic,
+            dispatch_uid='products.handlers.add_characteristic_to_category_subcategories'
+        )
+
+        signals.pre_delete.connect(
+            handlers.remove_characteristic_from_category_subcategories,
+            sender=models.CategoryCharacteristic,
+            dispatch_uid='products.handlers.remove_characteristic_from_category_subcategories'
+        )
+
+        signals.post_save.connect(
+            handlers.add_characteristic_to_section_categories_and_subcategories,
+            sender=models.SectionCharacteristic,
+            dispatch_uid='products.handlers.add_characteristic_to_section_categories_and_subcategories'
+        )
+
+        signals.pre_delete.connect(
+            handlers.remove_characteristic_from_section_categories_and_subcategories,
+            sender=models.SectionCharacteristic,
+            dispatch_uid='products.handlers.remove_characteristic_from_section_categories_and_subcategories'
         )

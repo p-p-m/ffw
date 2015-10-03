@@ -125,11 +125,11 @@ class OrderedProduct(models.Model):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
     def __str__(self):
-        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
-                str(self.quant) + " " + str(self.total))
+        return u'Product with id: {}'.format(self.product.id)
 
     def to_representaion(self):
-        return u'product with id: {}'.format(self.product.id)
+        return ' - {} ({}): количество: {}, сумма {}, (цена за единицу продукта {});'.format(
+            self.name, self.code, self.quant, self.total, self.price)
 
 
 class CartProduct(object):

@@ -180,8 +180,8 @@ class Product(TimeStampedModel):
         _('Product rating'), default=4, validators=[MinValueValidator(0), MaxValueValidator(5)],
         help_text=_('Number between 0 and 5 that will be used for default sorting on products page. Products with '
                     'higher numbers will be displayed higher'))
-    price_min = models.DecimalField(_('Max price in UAH'), null=True, max_digits=10, decimal_places=2)
-    price_max = models.DecimalField(_('Min price in UAH'), null=True, max_digits=10, decimal_places=2)
+    price_min = models.DecimalField(_('Min price in UAH'), null=True, max_digits=10, decimal_places=2)
+    price_max = models.DecimalField(_('Max price in UAH'), null=True, max_digits=10, decimal_places=2)
 
     materials = models.ForeignKey(Subcategory, verbose_name=_('Consumables and accessories'), null=True, blank=True)
 
@@ -286,7 +286,8 @@ class ProductConfiguration(models.Model):
         verbose_name_plural = _('Product configurations')
 
     product = models.ForeignKey(Product, verbose_name=_('Product'), related_name='configurations')
-    code = models.CharField(_('Code'), max_length=127, unique=True)
+    code = models.CharField(_('Code'), max_length=127)
+    article = models.CharField(_('Article'), max_length=127, blank=True)
     is_active = models.BooleanField(_('Is active'), default=True)
     price_uah = models.DecimalField(_('Price in UAH'), null=True, max_digits=10, decimal_places=2)
     price_eur = models.DecimalField(_('Price in EUR'), null=True, max_digits=10, decimal_places=2)

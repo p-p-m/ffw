@@ -1,8 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import threading
-
 from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
@@ -29,7 +27,7 @@ class Order(TimeStampedModel):
     is_resolved = models.BooleanField(_('Is order resolved'), default=False)
 
     def __str__(self):
-        return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+        return 'order #{}'.format(self.id)
 
     def _get_user_message(self):
         return (
@@ -131,8 +129,7 @@ class OrderedProduct(models.Model):
                 str(self.quant) + " " + str(self.total))
 
     def to_representaion(self):
-        return ' - {} ({}): количество: {}, сумма {}, (цена за единицу продукта {});'.format(
-            self.name, self.code, self.quant, self.total, self.price)
+        return u'product with id: {}'.format(self.product.id)
 
 
 class CartProduct(object):

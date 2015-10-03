@@ -9,7 +9,9 @@ import re
 
 from django import forms
 from django.contrib import admin
+from django.contrib.admin.models import LogEntry
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.forms import widgets
 from django.utils.functional import curry
 from django_summernote.admin import SummernoteModelAdmin
@@ -123,11 +125,11 @@ class SubcategoryAdmin(BaseCategoryAdmin):
 
 
 class ProductConfigurationForm(forms.ModelForm):
-    attributes = forms.CharField(label='Attributes', widget=widgets.Textarea(attrs={'rows': 4, 'cols': 58}))
+    attributes = forms.CharField(label='Attributes', widget=widgets.Textarea(attrs={'rows': 4, 'cols': 70}))
 
     class Meta:
         model = products_models.ProductConfiguration
-        fields = ['code', 'price_uah', 'price_usd', 'price_eur', 'is_active']
+        fields = ['code', 'article', 'price_uah', 'price_usd', 'price_eur', 'is_active']
 
     def __init__(self, *args, **kwargs):
         super(ProductConfigurationForm, self).__init__(*args, **kwargs)
@@ -180,9 +182,12 @@ class ProductConfigurationInline(admin.TabularInline):
     form = ProductConfigurationForm
     fieldsets = (
         (None, {
-            'fields': ('code', 'attributes', 'is_active', 'price_uah', 'price_usd', 'price_eur',),
+            'fields': ('code', 'article', 'attributes', 'is_active', 'price_uah', 'price_usd', 'price_eur',),
         }),
     )
+    formfield_overrides = {
+        models.CharField: {'widget': widgets.TextInput(attrs={'size': '15'})},
+    }
 
     def get_max_num(self, request, obj=None, **kwargs):
         if obj is None:
@@ -198,7 +203,8 @@ class ProductConfigurationInline(admin.TabularInline):
         formset = super(ProductConfigurationInline, self).get_formset(request, obj, **kwargs)
         if request._obj_ is not None:
             characteristics = request._obj_.get_characteristics()
-            s = '\n'.join('{}:            {}            ({})'.format(c.name, c.default_value, c.units) for c in characteristics)
+            s = '\n'.join('{}:            {}            ({})'.format(
+                c.name, c.default_value, c.units) for c in characteristics)
             initial = [{
                 'attributes': s,
             }] * 4
@@ -280,9 +286,16 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ('-created',)
 
 
+class LogEntryAdmin(admin.ModelAdmin):
+    model = LogEntry
+    list_display = ('change_message', 'object_repr', 'action_time')
+    ordering = ('-action_time',)
+
+
 admin.site.register(products_models.Section, SectionAdmin)
 admin.site.register(products_models.Category, CategoryAdmin)
 admin.site.register(products_models.Subcategory, SubcategoryAdmin)
 admin.site.register(products_models.Product, ProductAdmin)
 admin.site.register(products_models.Characteristic, CharacteristicAdmin)
 admin.site.register(products_models.Comment, CommentAdmin)
+admin.site.register(LogEntry, LogEntryAdmin)

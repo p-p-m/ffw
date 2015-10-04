@@ -253,7 +253,7 @@ class ProductAdmin(SummernoteModelAdmin):
     def preview(self, obj):
         if obj.id is None:
             return
-        return '<strong><a href="' + obj.get_url() + '" target="_blank"> Project on site </a></strong>'
+        return '<strong><a href="' + obj.get_url() + '" target="_blank"> Product on site </a></strong>'
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}

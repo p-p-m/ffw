@@ -72,7 +72,13 @@ This code duplicates filters creation that slows page rendering. It should be re
             <div class="filters-in-view">
                 {% for filter in filters %}
                     <div class="single-filter-box">
-                        <h3 class="filter-title">{{ filter.name }}</h3>
+                        <h3 class="filter-title">{{ filter.name }}
+                            {% if filter.characteristic.description %}
+                                <span data-tooltip="tooltip" data-tip="{{ filter.characteristic.description }}">
+                                    <i class="fa fa-question-circle"></i>
+                                </span>
+                            {% endif %}
+                        </h3>
                         <div class="filter-body">{% include 'filters/filter.html' %}</div>
                     </div>
                 {% endfor %}
@@ -101,7 +107,13 @@ This code duplicates filters creation that slows page rendering. It should be re
             <div class="filters-in-view">
                 {% for filter in filters %}
                     <div class="single-filter-box">
-                        <h3 class="filter-title">{{ filter.name }}</h3>
+                        <h3 class="filter-title">{{ filter.name }}
+                            {% if filter.characteristic.description %}
+                                <span data-tooltip="tooltip" data-tip="{{ filter.characteristic.description }}">
+                                    <i class="fa fa-question-circle"></i>
+                                </span>
+                            {% endif %}
+                        </h3>
                         <div class="filter-body">{% include 'filters/filter.html' %}</div>
                     </div>
                 {% endfor %}

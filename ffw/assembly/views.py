@@ -1,6 +1,7 @@
 # coding: utf-8
 import json
 
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import View, ListView
@@ -63,7 +64,7 @@ class ProductListView(ListView):
         if sort_form.is_valid():
             queryset = sort_form.sort(queryset)
         else:
-            queryset = queryset.order_by('-rating')
+            queryset = queryset.annotate(null_price=Count('price_min')).order_by('-null_price', '-rating')
 
         return queryset
 

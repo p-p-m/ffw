@@ -46,6 +46,31 @@
                 В корзине {{ request.session.cart.count }} товара с общей суммой в <strong>{{ request.session.cart.total }}</strong> грн.
                 {% endif %}
             </div>
+            <div class="cart-items">
+                {% for item in request.session.cart.products %}
+                <div class="cart-item">
+                    <div class="cart-item-cell name">
+                        <div class="item-name">{{ item.title }}</div>
+                    </div>
+                    <div class="cart-item-cell price">
+                        <span class="price">340,00</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                    <div class="cart-item-cell count-updater" data-role="cart-item">
+                        <span class="count-button" data-role="cart-item-count-plus">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
+                        <input type="text" class="count" value="1" data-role="cart-item-count">
+                        <span class="count-button" data-role="cart-item-count-minus">
+                            <i class="fa fa-minus-circle"></i>
+                        </span>
+                        <span class="count-button remove" data-role="cart-item-count-delete">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
             <div class="cart-buttons">
                 <a href="/cart/order/"><button class="button button-blue order">Перейти к оформлению заказа</button></a>
             </div>

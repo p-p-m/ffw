@@ -380,16 +380,21 @@ function regularPopup() {
     // Cart behavior
     // Count items
     function cartItemCountUpdate() {
-        var item = $('[data-role="cart-item"]')
+        var item = $('[frontend-role="cart-item"]')
 
         item.each(function() {
-            var input = $(this).find('[data-role="cart-item-count"]');
-            var plus = $(this).find('[data-role="cart-item-count-plus"]');
-            var minus = $(this).find('[data-role="cart-item-count-minus"]');
-            var itemDelete = $(this).find('[data-role="cart-item-count-delete"]');
+            var input = $(this).find('[frontend-role="cart-item-count"]');
+            var plus = $(this).find('[frontend-role="cart-item-count-plus"]');
+            var minus = $(this).find('[frontend-role="cart-item-count-minus"]');
+            var itemDelete = $(this).find('[frontend-role="cart-item-count-delete"]');
 
-            minus.hide();
-            itemDelete.show();
+            if (parseInt(input.val()) == 1) {
+                minus.hide();
+                itemDelete.show();
+            } else {
+                minus.show();
+                itemDelete.hide();
+            }
 
             plus.click(function() {
                 var inputValue = parseInt(input.val());
@@ -402,7 +407,9 @@ function regularPopup() {
                 }
                 update();
                 input.val(inputValueUpdated);
+                input.trigger('change');
             });
+
             minus.click(function() {
                 inputValue = parseInt(input.val());
                 function update() {
@@ -414,6 +421,7 @@ function regularPopup() {
                 }
                 update();
                 input.val(inputValueUpdated);
+                input.trigger('change');
             });
         });
     }

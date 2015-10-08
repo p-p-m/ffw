@@ -10,16 +10,22 @@
     </h3>
     <div class="product-block-content">
         <div class="left-commnet">
+            <label>Имя:</label>
+            <input type="text" data-role="comment-username" name="name" id="id_name">
+            <label for="comments">Коментарии</label>
+            <textarea name="" id="comments" class="left-commnet" data-role="comment-comments"></textarea>
             <label for="advantages">Преимущества</label>
             <textarea name="" id="advantages" class="left-commnet" data-role="comment-positive"></textarea>
             <label for="limitations">Недостатки</label>
             <textarea name="" id="limitations" class="left-commnet" data-role="comment-negative"></textarea>
         </div>
     </div>
+    <div style="color:red; display:none;" data-role="no-username-error">Поле "имя" - обязательное для заполнения</div>
     <div class="buttons">
     <button class="button button-blue" data-role="add-comment-button">Оставить отзыв</button>
         <button class="button" data-role="comment-cancel">Отмена</button>
     </div>
+    <br>
 </div>
 
 <!-- product -->
@@ -261,17 +267,20 @@
                         {% for comment in product.get_approved_comments %}
                             <div class="comment-block">
                                 <div class="comment-body">
-                                    <strong> Позитивные стороны </strong>
+                                    <h3 class="comment-author-name"> {{ comment.username }} <small> ({{ comment.created | date:"d.m.Y" }}) </small></h3>
                                     <article>
                                         <p>
-                                            {{ comment.positive_sides }}
+                                            {{ comment.comments }}
                                         </p>
                                     </article>
-
-                                    <strong> Негативные стороны </strong>
                                     <article>
                                         <p>
-                                            {{ comment.negative_sides }}
+                                            <strong>Позитивные стороны:&nbsp;</strong>{{ comment.positive_sides }}
+                                        </p>
+                                    </article>
+                                    <article>
+                                        <p>
+                                            <strong>Негативные стороны:&nbsp;</strong>{{ comment.negative_sides }}
                                         </p>
                                     </article>
                                 </div>
@@ -308,10 +317,12 @@
                                             <div class="img-box" align="center">
                                                 <img src="{{ material.get_first_image.image_small_thumbnail.url }}" alt="">
                                             </div>
+                                            {% if material.price %}
                                             <div class="price-tag">
                                                 <span class="price">{{ material.get_display_price_uah }}</span>
                                                 <span class="currency">грн.</span>
                                             </div>
+                                            {% endif %}
                                         </a>
                                     </li>
                                     <!-- /product-box -->

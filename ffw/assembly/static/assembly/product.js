@@ -137,9 +137,18 @@ $(document).ready(function() {
     // comments
     $('[data-role="add-comment-button"]').click(function() {
         var productId = $('[data-role="product"]').attr('data-product'),
+            username = $('[data-role="comment-username"]').val(),
+            user_comments = $('[data-role="comment-comments"]').val(),
             positive = $('[data-role="comment-positive"]').val(),
             negative = $('[data-role="comment-negative"]').val();
-        comments.add(positive, negative, productId, function() {
+
+        if (!username) {
+            $('[data-role="no-username-error"]').css('display', 'block');
+        } else {
+            $('[data-role="no-username-error"]').css('display', 'none');
+        }
+
+        comments.add(username, user_comments, positive, negative, productId, function() {
             var flash = activateFlashPopUp();
             flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
         });

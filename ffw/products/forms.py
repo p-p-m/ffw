@@ -26,4 +26,4 @@ class CommentForm(forms.ModelForm):
 
     class Meta(object):
         model = models.Comment
-        fields = ('positive_sides', 'negative_sides', 'product')
+        fields = ('username', 'comments', 'positive_sides', 'negative_sides', 'product')

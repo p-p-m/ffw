@@ -424,6 +424,8 @@ class Comment(TimeStampedModel):
         verbose_name_plural = _('Product comments')
 
     product = models.ForeignKey(Product, related_name='comments')
+    username = models.CharField(max_length=128)
+    comments = models.TextField(_('Comments'), blank=True)
     positive_sides = models.TextField(_('Positive sides'), blank=True)
     negative_sides = models.TextField(_('Negative sides'), blank=True)
     is_approved = models.BooleanField(

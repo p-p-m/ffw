@@ -1,6 +1,9 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import math
+import time
+
 from django.db import models
 from django.conf import settings
 from django.core.mail import send_mail
@@ -171,20 +174,26 @@ class Cart(object):
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['total'] = sum([v['sum_'] for v in self.cart['products'].values()])
         self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
+        self.cart['ordered_products'] = sorted(self.cart['products'].values(), key=lambda x: x['added'], reverse=True)
 
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
 
+            frac, whole = math.modf(float(product.price))
+            converter = float if frac else int
+
             self.cart['products'][product_pk] = {
+                'pk': product_pk,
                 'name': product.name,
                 'product_code': product.code,
-                'price': float(product.price),
+                'price': converter(product.price),
                 'code': product.code,
                 'quant': quant,
-                'sum_': float(quant * product.price),
+                'sum_': converter(quant * product.price),
+                'added': time.time(),
             }
             self._calculate()
         else:

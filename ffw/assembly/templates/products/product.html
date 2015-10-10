@@ -10,20 +10,26 @@
     </h3>
     <div class="product-block-content">
         <div class="left-commnet">
+            <label>Имя:</label>
+            <input type="text" data-role="comment-username" name="name" id="id_name">
+            <label for="comments">Коментарии</label>
+            <textarea name="" id="comments" class="left-commnet" data-role="comment-comments"></textarea>
             <label for="advantages">Преимущества</label>
             <textarea name="" id="advantages" class="left-commnet" data-role="comment-positive"></textarea>
             <label for="limitations">Недостатки</label>
             <textarea name="" id="limitations" class="left-commnet" data-role="comment-negative"></textarea>
         </div>
     </div>
+    <div style="color:red; display:none;" data-role="no-username-error">Поле "имя" - обязательное для заполнения</div>
     <div class="buttons">
     <button class="button button-blue" data-role="add-comment-button">Оставить отзыв</button>
         <button class="button" data-role="comment-cancel">Отмена</button>
     </div>
+    <br>
 </div>
 
 <!-- product -->
-<section class="product">
+<section class="product" style="-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none;-o-user-select:none;" unselectable="on" onselectstart="return false;" onmousedown="return false;">
     <div class="wrap">
         <!-- breadcrumps -->
         <div class="breadcrumps">
@@ -131,7 +137,7 @@
                     </h3>
                     <div class="product-block-content">
                         <article class="description">
-                            {{ product.description }}
+                            {{ product.description | safe }}
                         </article>
                     </div>
                 </div>
@@ -145,9 +151,11 @@
                         <div class="product-block-content">
                             <table class="combain-product-list">
                                 <tr>
-                                    <th style="width:70%">Наименование</th>
-                                    <th style="width:15%">Количество</th>
-                                    <th style="width:15%">Цена</th>
+                                    <th style="width:48%">Наименование</th>
+                                    <th style="width:14%">Артикул</th>
+                                    <th style="width:14%">Количество</th>
+                                    <th style="width:12%">Цена</th>
+                                    <th style="width:12%">Сумма</th>
                                 </tr>
                                 {% for configuration in product.configurations.all %}
                                     <!-- item -->
@@ -161,11 +169,16 @@
                                             </label>
                                         </td>
                                         <td>
+                                            <label for="checksubitem-{{ forloop.counter }}">
+                                                <span class="name">{{ configuration.article }}</span>
+                                            </label>
+                                        </td>
+                                        <td>
                                             <div data-front="price-input">
                                                 <span data-front="cart-input-count-minus">
                                                     <i class="fa fa-minus-circle"></i>
                                                 </span>
-                                                <input class="count" type="number" value="1" min="1"
+                                                <input class="count" type="number" value="0" min="0"
                                                     data-front="price-input-count"
                                                     data-role="configuration-count">
                                                 <span data-front="cart-input-count-plus">
@@ -176,6 +189,12 @@
                                         <td>
                                             <div class="price-line">
                                                 <span class="price" data-role="configuration-price">{{ configuration.price_uah }}</span>
+                                                <span class="currency">грн.</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="price-line">
+                                                <span class="price" data-role="configuration-sum">0</span>
                                                 <span class="currency">грн.</span>
                                             </div>
                                         </td>
@@ -248,17 +267,20 @@
                         {% for comment in product.get_approved_comments %}
                             <div class="comment-block">
                                 <div class="comment-body">
-                                    <strong> Позитивные стороны </strong>
+                                    <h3 class="comment-author-name"> {{ comment.username }} <small> ({{ comment.created | date:"d.m.Y" }}) </small></h3>
                                     <article>
                                         <p>
-                                            {{ comment.positive_sides }}
+                                            {{ comment.comments }}
                                         </p>
                                     </article>
-
-                                    <strong> Негативные стороны </strong>
                                     <article>
                                         <p>
-                                            {{ comment.negative_sides }}
+                                            <strong>Позитивные стороны:&nbsp;</strong>{{ comment.positive_sides }}
+                                        </p>
+                                    </article>
+                                    <article>
+                                        <p>
+                                            <strong>Негативные стороны:&nbsp;</strong>{{ comment.negative_sides }}
                                         </p>
                                     </article>
                                 </div>
@@ -295,10 +317,12 @@
                                             <div class="img-box" align="center">
                                                 <img src="{{ material.get_first_image.image_small_thumbnail.url }}" alt="">
                                             </div>
+                                            {% if material.price %}
                                             <div class="price-tag">
                                                 <span class="price">{{ material.get_display_price_uah }}</span>
                                                 <span class="currency">грн.</span>
                                             </div>
+                                            {% endif %}
                                         </a>
                                     </li>
                                     <!-- /product-box -->

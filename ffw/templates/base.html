@@ -18,6 +18,16 @@
 <link rel="stylesheet" type="text/css" href="/static/css/themes/tooltipster-light.css">
 <link rel="stylesheet" type="text/css" href="/static/css/style.css">
 
+<style>
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+</style>
+
+
 {% block css %}{% endblock %}
 
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -59,6 +69,7 @@
     <!-- csrf -->
     <script src="/static/csrf.js"></script>
     <!-- cart -->
+    <script src="{% static 'cart/order.js' %}"> </script>
     <script src="{% static 'cart/cart.js' %}"> </script>
 {% endblock basejs %}
 

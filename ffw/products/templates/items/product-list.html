@@ -3,23 +3,23 @@
     <a href="{{ item.get_url }}" class="product product-list">
         <div class="list-image">
             <div class="img-box">
-                <img src="{% if item.images.exists %}{{ item.get_first_image.image.url }}{% endif %}" alt="">
+                <img src="{% if item.images.exists %}{{ item.get_first_image.image_small_thumbnail.url }}{% endif %}" alt="">
             </div>
         </div>
         <div class="list-content">
             <div class="title-line">
                 <h2 class="title">{{ item.name }} | {{ item.code }}</h2>
             </div>
+            <div class="description"></div>
             <div class="description">
                 {{ item.short_description }}
             </div>
-            <div class="description">
-                {{ item.description }}
-            </div>
             <div class="price-tag">
+                {% if item.price_min %}
                 <span class="price">{{ item.get_display_price_uah  }}</span>
                 <span class="currency">грн.</span>
-                <button class="button button-blue add-to-cart">Купить</button>
+                {% endif %}
+                <button class="button button-blue add-to-cart" data-role="buy" data-product-url="{{ item.get_url }}">Купить</button>
             </div>
         </div>
     </a>

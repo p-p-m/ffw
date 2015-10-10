@@ -36,15 +36,39 @@
                 </div>
             </form>
         </div>
-        <div data-role="cart-items">
+        <div frontend-role="cart-items">
             <div class="total-display">
                 {% if request.session.cart.count == 0 %}
                 В корзине нет товаров
-                {% elif request.session.cart.count == 1 %}
-                В корзине один товар со стоимостью <strong>{{ request.session.cart.total }}</strong> грн.
                 {% else %}
-                В корзине {{ request.session.cart.count }} товара с общей суммой в <strong>{{ request.session.cart.total }}</strong> грн.
+                В корзине всего товаров: <strong data-role="cart-count">{{ request.session.cart.count }}</strong>, общей суммой в <strong data-role="cart-total">{{ request.session.cart.total }}</strong> грн.
                 {% endif %}
+            </div>
+            <hr>
+            <div class="cart-items" frontend-role="cart-items">
+                {% for item in request.session.cart.ordered_products %}
+                <div class="cart-item" data-role="{{ item.pk }}" {% if forloop.counter > 3 %} style="display:none;" {% endif %} data-visible="{% if forloop.counter > 3 %}false{% else %}true{% endif %}">
+                    <div class="cart-item-cell name">
+                        <div class="item-name">{{ item.name }} ({{ item.code }})</div>
+                    </div>
+                    <div class="cart-item-cell price">
+                        <span class="price" data-role="{{ item.pk }}_sum">{{ item.sum_ }}</span>
+                        <span class="currency">грн.</span>
+                    </div>
+                    <div class="cart-item-cell count-updater" frontend-role="cart-item">
+                        <span class="count-button" frontend-role="cart-item-count-plus">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
+                        <input data-product-id="{{ item.pk }}" type="text" class="count" data-role="quant" value="{{ item.quant }}" frontend-role="cart-item-count">
+                        <span class="count-button" frontend-role="cart-item-count-minus">
+                            <i class="fa fa-minus-circle"></i>
+                        </span>
+                        <span class="count-button remove" frontend-role="cart-item-count-delete" data-value="{{ item.pk }}" data-role="remove">
+                            <i class="fa fa-plus-circle"></i>
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
             <div class="cart-buttons">
                 <a href="/cart/order/"><button class="button button-blue order">Перейти к оформлению заказа</button></a>

@@ -45,7 +45,32 @@ class AssemblyConfig(AppConfig):
         )
 
         signals.post_save.connect(
+            handlers.autocreate_price_filter_for_category,
+            sender=products_models.Category,
+            dispatch_uid='assembly.handlers.autocreate_price_filter_for_category'
+        )
+
+        signals.post_save.connect(
+            handlers.autocreate_price_filter_for_subcategory,
+            sender=products_models.Subcategory,
+            dispatch_uid='assembly.handlers.autocreate_price_filter_for_subcategory'
+        )
+
+        signals.post_save.connect(
             handlers.update_price_filter_on_price_change,
             sender=products_models.ProductConfiguration,
             dispatch_uid='assembly.handlers.update_price_filter_on_price_change'
         )
+
+        for model in handlers.ATTRIBUTE_FILTER_MODELS:
+            signals.post_save.connect(
+                handlers.propagate_filter_to_subcategories_and_categories,
+                sender=model,
+                dispatch_uid='assembly.handlers.propagate_filter_to_subcategories_and_categories',
+            )
+
+            signals.post_delete.connect(
+                handlers.delete_filters_from_related_subcategories_and_categories,
+                sender=model,
+                dispatch_uid='assembly.handlers.delete_filters_from_related_subcategories_and_categories',
+            )

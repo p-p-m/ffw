@@ -41,11 +41,11 @@
             <!-- cart -->
             <div class="info-block cart">
                 <a class="cart-display-link" data-role="cart-display-trigger">
-                    <div class="cart-count" data-role="cart-display-trigger-count">{{ request.session.cart.count }}</div>
+                    <div class="cart-count" data-role="cart-count">{{ request.session.cart.count }}</div>
                     <div class="cart-info">
                         <span class="text-cart">В корзине</span>
                         <span>товаров на сумму</span>
-                        <span class="sum" data-role="cart-products-count">{{ request.session.cart.total }} грн.</span>
+                        <span class="sum"> <b data-role="cart-total">{{ request.session.cart.total }}</b> грн. </span>
                     </div>
                 </a>
             </div>

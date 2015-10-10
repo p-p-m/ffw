@@ -12,9 +12,11 @@
                 <div {% if product.configurations.count > 3 %} style='overflow-y: scroll; height: 180px;' {% endif %}>
                 <table class="combain-product-list">
                     <tr>
-                        <th style="width:70%">Наименование</th>
-                        <th style="width:15%">Количество</th>
-                        <th style="width:15%">Цена</th>
+                        <th style="width:48%">Наименование</th>
+                        <th style="width:14%">Артикул</th>
+                        <th style="width:14%">Количество</th>
+                        <th style="width:12%">Цена</th>
+                        <th style="width:12%">Сумма</th>
                     </tr>
                     {% for configuration in product.configurations.all %}
                         <!-- item -->
@@ -28,11 +30,16 @@
                                 </label>
                             </td>
                             <td>
+                                <label for="checksubitem-{{ forloop.counter }}">
+                                    <span class="name">{{ configuration.article }}</span>
+                                </label>
+                            </td>
+                            <td>
                                 <div data-front="price-input">
                                     <span data-front="cart-input-count-minus">
                                         <i class="fa fa-minus-circle"></i>
                                     </span>
-                                    <input class="count" type="number" value="1" min="1"
+                                    <input class="count" type="number" value="0" min="0"
                                         data-front="price-input-count"
                                         data-role="configuration-count">
                                     <span data-front="cart-input-count-plus">
@@ -43,6 +50,12 @@
                             <td>
                                 <div class="price-line">
                                     <span class="price" data-role="configuration-price">{{ configuration.price_uah }}</span>
+                                    <span class="currency">грн.</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="price-line">
+                                    <span class="price" data-role="configuration-sum">0</span>
                                     <span class="currency">грн.</span>
                                 </div>
                             </td>

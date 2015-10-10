@@ -1,7 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import threading
+import math
+import time
 
 from django.db import models
 from django.conf import settings
@@ -29,7 +30,7 @@ class Order(TimeStampedModel):
     is_resolved = models.BooleanField(_('Is order resolved'), default=False)
 
     def __str__(self):
-        return str(self.pk) + " " + self.name + " " + str(self.count) + " " + str(self.total)
+        return 'order #{}'.format(self.id)
 
     def _get_user_message(self):
         return (
@@ -127,8 +128,7 @@ class OrderedProduct(models.Model):
     total = models.DecimalField(_('Total'), decimal_places=2, max_digits=9)
 
     def __str__(self):
-        return (str(self.pk) + " " + self.name + " " + self.product.code + " " + str(self.price) + " " +
-                str(self.quant) + " " + str(self.total))
+        return u'Product with id: {}'.format(self.product.id)
 
     def to_representaion(self):
         return ' - {} ({}): количество: {}, сумма {}, (цена за единицу продукта {});'.format(
@@ -174,20 +174,26 @@ class Cart(object):
 
     def _calculate(self):
         """ Recalculate product quantity and sum """
-        self.cart['total'] = float(round(sum([v['sum_'] for v in self.cart['products'].values()]), 2))
+        self.cart['total'] = sum([v['sum_'] for v in self.cart['products'].values()])
         self.cart['count'] = sum([v['quant'] for v in self.cart['products'].values()])
+        self.cart['ordered_products'] = sorted(self.cart['products'].values(), key=lambda x: x['added'], reverse=True)
 
     def set(self, product_pk, quant):
         if quant > 0:
             product = CartProduct(product_pk)
 
+            frac, whole = math.modf(float(product.price))
+            converter = float if frac else int
+
             self.cart['products'][product_pk] = {
+                'pk': product_pk,
                 'name': product.name,
                 'product_code': product.code,
-                'price': float(product.price),
+                'price': converter(product.price),
                 'code': product.code,
                 'quant': quant,
-                'sum_': float(quant * product.price),
+                'sum_': converter(quant * product.price),
+                'added': time.time(),
             }
             self._calculate()
         else:

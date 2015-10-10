@@ -44,7 +44,7 @@
                                             </span>
                                             <input class="count" type="number" value="{{ value.quant }}" min="1"
                                                 data-front="price-input-count"
-                                                id={{ key }} data-role='quant'  data-pk= {{ key }} value={{ value.quant }}>
+                                                data-product-id="{{ key }}" data-role='quant'  data-pk= {{ key }} value={{ value.quant }}>
                                             <span data-front="cart-input-count-plus">
                                                 <i class="fa fa-plus-circle"></i>
                                             </span>
@@ -67,7 +67,7 @@
                         </table>
                         <!-- combain-product-summary -->
                         <div class="combain-product-summary">
-                            Заказано товаров <span data-role='count'>{{ cart.count }}</span> на сумму <span data-role='total'>{{ cart.total }}</span> грн.
+                            Заказано товаров <span data-role="cart-count">{{ cart.count }}</span> на сумму <span data-role="cart-total">{{ cart.total }}</span> грн.
                         </div>
                         <!-- /combain-product-summary -->
                     </div>
@@ -122,7 +122,6 @@
 
 {% block js %}
     <script src="{% static 'cart/cart.js' %}"> </script>
-    <script src="{% static 'cart/order.js' %}"> </script>
 {% endblock js %}
 
 

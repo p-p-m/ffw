@@ -4,4 +4,4 @@ from . import models
 
 
 def get_filter_models():
-    return [m for m in django_models.get_models() if isinstance(m, models.FilterMixin)]
+    return [m for m in django_models.get_models() if issubclass(m, models.FilterMixin)]

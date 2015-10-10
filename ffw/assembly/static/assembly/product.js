@@ -16,11 +16,21 @@ function initConfigrations() {
             priceForOneConfiguration: parseFloat($(this).find($('[data-role="configuration-price"]')).text()),
             active: $(this).find('[data-role="configuration-active"]').is(':checked'),
             priceElement: $(this).find($('[data-role="configuration-price"]')),
+            sumElement: $(this).find($('[data-role="configuration-sum"]')),
             countElement: $(this).find($('[data-role="configuration-count"]')),
             activeElement: $(this).find('[data-role="configuration-active"]'),
             pk: parseInt($(this).attr('data-configuration-id')),
         };
-        configuration.activeElement.on('change', calculateConfigurationsTotal);
+        configuration.activeElement.on('change', function() {
+            if ($(this).is(':checked')) {
+                if (configuration.countElement.val() == 0) {
+                    configuration.countElement.val(1);
+                }
+            } else {
+                configuration.countElement.val(0);
+            }
+            calculateConfigurationsTotal()
+        });
         configuration.countElement.on('change', calculateConfigurationsTotal);
         configurations.push(configuration);
     });
@@ -32,11 +42,11 @@ function calculateConfigurationsTotal() {
     totalPrice = 0;
     for (var i = 0; i < configurations.length; i++) {
         configuration = configurations[i];
-        configurationPrice = parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
-        configuration.priceElement.text(configurationPrice);
+        configurationSum = parseInt(configuration.countElement.val()) * configuration.priceForOneConfiguration;
+        configuration.sumElement.text(configurationSum);
         if (configuration.activeElement.is(':checked')) {
             totalCount += 1;
-            totalPrice += configurationPrice;
+            totalPrice += configurationSum;
         }
     }
     $('[data-role="configurations-total-count"]').text(totalCount);
@@ -84,7 +94,7 @@ function initProductBuyFeatures() {
             configuration = configurations[i];
             initSinglePriceCalculation(
                 configuration.priceForOneConfiguration,
-                configuration.priceElement,
+                configuration.sumElement,
                 configuration.countElement
             );
         }
@@ -127,9 +137,18 @@ $(document).ready(function() {
     // comments
     $('[data-role="add-comment-button"]').click(function() {
         var productId = $('[data-role="product"]').attr('data-product'),
+            username = $('[data-role="comment-username"]').val(),
+            user_comments = $('[data-role="comment-comments"]').val(),
             positive = $('[data-role="comment-positive"]').val(),
             negative = $('[data-role="comment-negative"]').val();
-        comments.add(positive, negative, productId, function() {
+
+        if (!username) {
+            $('[data-role="no-username-error"]').css('display', 'block');
+        } else {
+            $('[data-role="no-username-error"]').css('display', 'none');
+        }
+
+        comments.add(username, user_comments, positive, negative, productId, function() {
             var flash = activateFlashPopUp();
             flash.activate('Коментарий успешно отправлен на рассмотрение. Он будет добавлен на сайт в течении нескольких часов.');
         });

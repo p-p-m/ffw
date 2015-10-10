@@ -722,8 +722,7 @@ function regularPopup() {
         priceInput();
         regularPopup();
         $('.products-view').css('display', 'block');
-        // equalheight('[data-view="grid"] .products-list .product');
-
+        equalheight('[data-view="grid"] .products-list .product');
         $('[data-front="close-flash"]').click(function() {
             var flash = activateFlashPopUp();
             flash.deactivate();
@@ -748,6 +747,7 @@ function regularPopup() {
     $(window).on('resize', function() {
         CartDisplay();
         sidePanel();
+        equalheight('[data-view="grid"] .products-list .product');
     });
 
 

@@ -163,7 +163,8 @@
                                         <td>
                                             <label for="checksubitem-{{ forloop.counter }}">
                                                 <input id="checksubitem-{{ forloop.counter }}" type="checkbox" data-role="configuration-active">
-                                                <span class="name">{{ configuration.code }}
+                                                <span class="name">
+                                                    <span class="name-name">{{ configuration.code }}</span>
                                                     <small>{{configuration.get_formatted_unique_attributes}}</small>
                                                 </span>
                                             </label>

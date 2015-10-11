@@ -222,6 +222,7 @@
             &.buy-button {
                 text-align: right;
             } // add-to-cart
+            vertical-align: middle;
             .count {
                 width: 60px;
             } // count
@@ -241,6 +242,13 @@
             } // price-line
             label {
                 cursor: pointer;
+                .name-name {
+                    font-weight: 700;
+                } // name-name
+                small {
+                    display: block;
+                    color: #A0A0A0;
+                }
             } // label
         } // td
     } // combain-product-list

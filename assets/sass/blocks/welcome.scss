@@ -104,12 +104,15 @@
                 .phones {
                     margin-bottom: 10px;
                     display: block;
+                    color: #636363;
+                    font-weight: 700;
+                    font-size: rem(14);
                     &:before {
                         content: '\f095';
                         font: normal normal normal 14px/1 FontAwesome;
                         text-rendering: auto;
                         -webkit-font-smoothing: antialiased;
-                        color: #c1c1c1;
+                        // color: #c1c1c1;
                         float: left;
                     } // &:before
                 } // phones
